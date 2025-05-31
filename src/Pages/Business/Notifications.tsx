@@ -1,5 +1,5 @@
 import React from "react";
-import "./notifications.css"; // adjust if your CSS path is different
+import "./Notifications.css"; // adjust if your CSS path is different
 import Navbar from "../../components/navbar copy/Navbar";
 import Sidebar_2 from "../../components/Sidebar_2/Sidebar_2";
 
