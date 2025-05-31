@@ -1,0 +1,823 @@
+```css :root {
+  --primary-purple: #8a5bc6;
+  --right-width: 30%;
+  --primary-purple-light: #a77bdd;
+  --transition-speed: 0.3s;
+}
+
+/* Container for the login screen */
+.auth-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden; /* Hide any overflow */
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+/* Left (white) side */
+.auth-left {
+  width: calc(100% - var(--right-width));
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Right (purple) side */
+.auth-right {
+  width: var(--right-width);
+  background-color: var(--primary-purple);
+  position: relative;
+  overflow: visible; /* Changed from hidden to visible */
+}
+
+/* Illustration on the purple side */
+.auth-illustration {
+  position: absolute;
+  top: 10%;
+  left: 0;
+  transform: translate(-35%, -10%);
+  width: 180%;
+  max-width: none;
+  z-index: 10; /* Added z-index to ensure it's above other elements */
+}
+
+/* Animated illustration */
+.animate-illustration {
+  animation: floatImage 5s ease-in-out infinite;
+}
+
+@keyframes floatImage {
+  0% {
+    transform: translate(-35%, -10%);
+  }
+  50% {
+    transform: translate(-33%, -8%);
+  }
+  100% {
+    transform: translate(-35%, -10%);
+  }
+}
+
+/* Logo (top-left) */
+.brand-logo {
+  color: var(--primary-purple);
+  font-size: 28px;
+  font-weight: 700;
+  margin: 20px 0 0 20px; /* Add margin to position it properly in the top-left corner */
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20; /* Ensure it's above other elements */
+}
+
+/* Animated logo */
+.animate-logo {
+  animation: fadeInDown 0.8s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Center the main form content below the logo */
+.login-page .auth-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 40%;
+  margin: -13% 0 0 14%;
+  transform: scale(1.13);
+  transform-origin: top center;
+  position: relative; /* Added position */
+  z-index: 5; /* Added z-index to ensure proper stacking */
+}
+
+/* Form animation */
+.form-enter {
+  animation: formFadeIn 0.8s ease-out;
+}
+
+@keyframes formFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(1.1) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.13) translateY(0);
+  }
+}
+
+/* Headings and text */
+.auth-heading {
+  color: #2c3e50;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.auth-subtitle {
+  color: #7f8c8d;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+/* Form container */
+.auth-form {
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Labels and inputs in the login form */
+.custom-label {
+  color: #2c3e50;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.custom-input-container {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.custom-input-field {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #bdc3c7;
+  border-radius: 12px;
+  font-size: 13px;
+  background: #ffffff;
+  transition: all var(--transition-speed) ease;
+}
+
+.custom-input-field:focus {
+  outline: none;
+  border-color: var(--primary-purple);
+  box-shadow: 0 0 0 2px rgba(138, 91, 198, 0.2);
+}
+
+/* Input animation */
+.input-animate {
+  transition: all var(--transition-speed) ease;
+}
+
+.input-animate:focus {
+  transform: translateY(-2px);
+}
+
+/* Eye icon for password visibility */
+.custom-eye-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #7f8c8d;
+  cursor: pointer;
+  transition: color var(--transition-speed) ease;
+}
+
+.custom-eye-icon:hover {
+  color: var(--primary-purple);
+}
+
+/* Forgot password link */
+.custom-forgot-link {
+  color: var(--primary-purple);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+  margin: 6px 0 12px;
+  transition: all var(--transition-speed) ease;
+}
+
+/* Hover effect for links */
+.hover-effect:hover {
+  color: var(--primary-purple-light);
+  transform: translateX(3px);
+}
+
+/* Primary button styling */
+.custom-primary-button {
+  background: var(--primary-purple);
+  color: #ffffff;
+  border-radius: 25px;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: all var(--transition-speed) ease;
+  margin-bottom: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.custom-primary-button:hover {
+  background-color: var(--primary-purple-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(138, 91, 198, 0.3);
+}
+
+/* Button animation */
+.button-pulse {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(138, 91, 198, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(138, 91, 198, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(138, 91, 198, 0);
+  }
+}
+
+/* Override for sign-in button */
+.sign-in-button {
+  width: 94% !important;
+  margin: 0 auto 12px;
+}
+
+/* Social sign-in section */
+.social-section {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.social-text {
+  color: #7f8c8d;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.social-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #bdc3c7;
+  border-radius: 25px;
+  padding: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+}
+
+/* Button hover animation */
+.button-hover:hover {
+  background: #f8f8f8;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.social-icon {
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+/* "Don't have an account?" text */
+.register-text {
+  color: #7f8c8d;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 6px;
+}
+
+.register-link {
+  color: var(--primary-purple);
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-speed) ease;
+}
+
+/* Error message styling with improved animation */
+.error-message {
+  color: red;
+  font-size: 12px; /* Reduced from 14px to 12px */
+  margin: 5px 0;
+  text-align: left; /* Changed from center to left for better alignment */
+  animation: fadeInSmooth 0.5s ease; /* Added smooth animation */
+  max-height: 100px; /* For smooth transition */
+  transition: all 0.4s ease-in-out; /* Smooth transition */
+  opacity: 1;
+}
+
+@keyframes fadeInSmooth {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 100px;
+  }
+}
+
+/* -- Modal Overlay and Content -- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  padding: 40px 50px;
+  border-radius: 20px;
+  width: 450px;
+  min-height: 320px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Close button for modal */
+.modal-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #95a5a6;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background: #f1f1f1;
+  color: #2c3e50;
+  transform: rotate(90deg);
+}
+
+/* Modal Animation Classes */
+.modal-enter {
+  animation: modalEnter 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+.modal-exit {
+  animation: modalExit 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -40%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes modalExit {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -60%) scale(0.9);
+  }
+}
+
+/* Modal text styling */
+.modal-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.modal-subtitle {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+/* Label inside modal */
+.modal-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2c3e50;
+  display: block;
+  text-align: left;
+  margin-bottom: 6px;
+}
+
+/* Shared modal input style */
+.modal-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1.5px solid #bdc3c7;
+  border-radius: 12px;
+  font-size: 14px;
+  background: #ffffff;
+  transition: all var(--transition-speed) ease;
+}
+
+.modal-input:focus {
+  outline: none;
+  border-color: var(--primary-purple);
+  box-shadow: 0 0 0 2px rgba(138, 91, 198, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Container for input + eye icon */
+.modal-input-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+/* Eye icon for modal password fields */
+.modal-eye-icon {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: #7f8c8d;
+  cursor: pointer;
+  transition: color var(--transition-speed) ease;
+}
+
+.modal-eye-icon:hover {
+  color: var(--primary-purple);
+}
+
+/* Modal button styling */
+.modal-button {
+  background: var(--primary-purple);
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 12px;
+  width: 96% !important;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  text-transform: none;
+}
+
+.modal-button:hover {
+  background-color: var(--primary-purple-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(138, 91, 198, 0.3);
+}
+
+/* Blur effect when modal open */
+.blur {
+  filter: blur(5px);
+  transition: filter 0.3s ease;
+}
+
+/* --- OTP Inputs --- */
+.otp-input-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.otp-input {
+  width: 40px;
+  height: 50px;
+  text-align: center;
+  font-size: 18px;
+  border: 1.5px solid #bdc3c7;
+  border-radius: 12px;
+  transition: all var(--transition-speed) ease;
+}
+
+.otp-input:focus {
+  outline: none;
+  border-color: var(--primary-purple);
+  box-shadow: 0 0 0 2px rgba(138, 91, 198, 0.2);
+  transform: translateY(-3px);
+}
+
+/* "Resend code" button */
+.resend-button {
+  background: none;
+  border: none;
+  color: var(--primary-purple);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all var(--transition-speed) ease;
+}
+
+.resend-button:hover {
+  opacity: 0.8;
+  transform: translateX(3px);
+}
+
+/* --- Spinner Overlay Styles --- */
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+  animation: fadeIn 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.spinner-icon {
+  font-size: 100px;
+  color: #8a5bc6;
+  animation: spin 1s linear infinite;
+  filter: drop-shadow(0 0 10px rgba(138, 91, 198, 0.5));
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .auth-container {
+    flex-direction: row;
+    width: 100%;
+    min-height: 100vh;
+  }
+  .auth-left {
+    width: calc(100% - var(--right-width));
+    padding: 15px;
+  }
+  .auth-right {
+    width: var(--right-width);
+    overflow: visible; /* Changed from hidden to visible for mobile view too */
+  }
+  .auth-illustration {
+    top: 10%;
+    left: 0;
+    transform: translate(-30%, -10%);
+    width: 150%;
+    z-index: 10; /* Added z-index for mobile view */
+  }
+  .brand-logo {
+    margin: 15px;
+    font-size: 26px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .login-page .auth-content {
+    width: 90%;
+    margin: -30px 0 0 11%;
+    transform: scale(1.13);
+    transform-origin: top center;
+    position: relative; /* Added position for mobile */
+    z-index: 5; /* Added z-index for mobile */
+  }
+  .modal-content {
+    width: 90%;
+    padding: 24px 30px;
+    min-height: auto;
+  }
+  .modal-title {
+    font-size: 20px;
+  }
+  /* Adjust error message size for mobile */
+  .error-message {
+    font-size: 11px;
+  }
+}
+
+/* Shake animation for error states */
+.error-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+/* Button ripple effect */
+.custom-primary-button::after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  transform: scale(10, 10);
+  opacity: 0;
+  transition: transform 0.5s, opacity 0.8s;
+}
+
+.custom-primary-button:active::after {
+  transform: scale(0, 0);
+  opacity: 0.3;
+  transition: 0s;
+}
+
+/* Focus states with animations */
+input:focus,
+button:focus {
+  animation: focusAnimation 0.5s ease;
+}
+
+@keyframes focusAnimation {
+  0% {
+    box-shadow: 0 0 0 0 rgba(138, 91, 198, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 5px rgba(138, 91, 198, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 0 3px rgba(138, 91, 198, 0.3);
+  }
+}
+
+/* Character counter animation for inputs */
+.modal-input-container::after {
+  content: attr(data-length);
+  position: absolute;
+  bottom: -18px;
+  right: 5px;
+  font-size: 12px;
+  color: #7f8c8d;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal-input-container:focus-within::after {
+  opacity: 1;
+}
+
+/* Password strength indicator animation */
+.password-strength {
+  height: 5px;
+  background: #eee;
+  border-radius: 3px;
+  margin-bottom: 15px;
+  position: relative;
+  overflow: hidden;
+}
+
+.password-strength-meter {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-weak {
+  width: 33%;
+  background-color: #e74c3c;
+}
+
+.strength-medium {
+  width: 66%;
+  background-color: #f39c12;
+}
+
+.strength-strong {
+  width: 100%;
+  background-color: #27ae60;
+}
+
+/* Toast notification animations */
+.toast-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #fff;
+  padding: 15px 25px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  z-index: 1200;
+}
+
+.toast-show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.toast-success {
+  border-left: 5px solid #27ae60;
+}
+
+.toast-error {
+  border-left: 5px solid #e74c3c;
+}
+
+.toast-info {
+  border-left: 5px solid #3498db;
+}
+
+/* Loading dots animation for buttons */
+.loading-dots::after {
+  content: "";
+  animation: loadingDots 1.5s infinite;
+}
+
+@keyframes loadingDots {
+  0% {
+    content: "";
+  }
+  25% {
+    content: ".";
+  }
+  50% {
+    content: "..";
+  }
+  75% {
+    content: "...";
+  }
+  100% {
+    content: "";
+  }
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

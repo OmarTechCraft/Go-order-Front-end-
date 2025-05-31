@@ -1,0 +1,337 @@
+:root {
+  --primary-purple: #8a5bc6;
+  --right-width: 30%;
+}
+
+/* Container for the login screen */
+.auth-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+/* Left (white) side */
+.auth-left {
+  width: calc(100% - var(--right-width));
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Right (purple) side */
+.auth-right {
+  width: var(--right-width);
+  background-color: var(--primary-purple);
+  position: relative;
+}
+
+/* Illustration on the purple side */
+.auth-illustration {
+  position: absolute;
+  top: 10%;
+  left: 0;
+  transform: translate(-35%, -10%);
+  width: 180%;
+  max-width: none;
+}
+
+/* Logo (top-left) */
+.brand-logo {
+  color: var(--primary-purple);
+  font-size: 28px;
+  font-weight: 700;
+  margin: 20px 30px;
+}
+
+/* Center the main form content below the logo */
+.auth-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  margin-left: -19%; /* Shifts content 11% from left */
+  margin-top: -4%; /* Moved up to position elements higher */
+}
+
+/* Headings and text */
+.auth-heading {
+  color: #2c3e50;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.auth-subtitle {
+  color: #7f8c8d;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+/* Form container with reduced width */
+.auth-form {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Labels and inputs */
+.custom-label {
+  color: #2c3e50;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 2px;
+  display: block;
+}
+
+.custom-input-container {
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.custom-input-field {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #bdc3c7;
+  border-radius: 12px;
+  font-size: 14px;
+  background: #ffffff;
+  transition: border-color 0.3s ease;
+}
+
+.custom-input-field:focus {
+  outline: none;
+  border-color: var(--primary-purple);
+  box-shadow: 0 0 0 2px rgba(138, 91, 198, 0.2);
+}
+
+/* Eye icon for password visibility */
+.custom-eye-icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #7f8c8d;
+  cursor: pointer;
+}
+
+/* Primary button styling */
+.custom-primary-button {
+  background: var(--primary-purple);
+  color: #ffffff;
+  border-radius: 25px;
+  padding: 8px;
+  width: 100%;
+  border: none;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: opacity 0.3s ease;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-primary-button:hover {
+  opacity: 0.9;
+}
+
+/* Register button with narrower width */
+.register-button {
+  width: 50% !important;
+  margin: 0 auto;
+  padding: 8px 12px !important;
+}
+
+/* Social sign-up section */
+.social-section {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.social-text {
+  color: #7f8c8d;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.social-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #bdc3c7;
+  border-radius: 25px;
+  padding: 6px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.social-btn:hover {
+  background: #f8f8f8;
+}
+
+.social-icon {
+  font-size: 16px;
+  color: #2c3e50;
+}
+
+/* "Already have an account?" text */
+.register-text {
+  color: #7f8c8d;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.register-link {
+  color: var(--primary-purple);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Upload button styling */
+.custom-upload-button {
+  width: 90%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1.5px solid var(--primary-purple);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--primary-purple);
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.custom-upload-button:hover {
+  background: var(--primary-purple);
+  color: #fff;
+}
+
+/* Hidden file input */
+.file-input {
+  display: none;
+}
+
+/* Vehicle Type text box styling (same as custom-select) */
+.custom-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #bdc3c7;
+  border-radius: 12px;
+  font-size: 14px;
+  background: #ffffff;
+  transition: border-color 0.3s ease;
+}
+
+.custom-select:focus {
+  outline: none;
+  border-color: var(--primary-purple);
+  box-shadow: 0 0 0 2px rgba(138, 91, 198, 0.2);
+}
+
+/* Image preview styling */
+.thumbnail-preview {
+  width: 180px;
+  margin-top: 8px;
+  border: 1px solid #bdc3c7;
+  border-radius: 12px;
+}
+
+/* Two-column layout for form rows */
+.form-row {
+  display: flex;
+  gap: 8%;
+  margin-bottom: 8px;
+}
+
+.form-group {
+  flex: 1;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .auth-container {
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  .auth-left {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .auth-right {
+    width: 100%;
+    min-height: 300px;
+  }
+
+  .auth-illustration {
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .brand-logo {
+    margin: 10px;
+    font-size: 26px;
+  }
+
+  .auth-content {
+    padding: 0 10px;
+    margin-left: 0;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .register-button {
+    width: 70% !important;
+  }
+}
+
+/* --- Spinner Overlay Styles --- */
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+}
+
+.spinner-icon {
+  font-size: 100px;
+  color: #8a5bc6;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,349 @@
+/* Dashboard.css */
+:root {
+  --primary-color: #bb41d0;
+  --secondary-color: #8a5bc6;
+  --light-purple: #c9b5e2;
+  --light-purple-bg: #f0e6ff;
+  --dark-text: #32343e;
+  --medium-gray: #9c9ba6;
+  --light-gray: #f8f9fa;
+  --border-color: #e8eaed;
+  --yellow: #ffd900;
+  --red: #ff1f1f;
+  --green: #4caf50;
+  --orange: #ffc107;
+  --blue: #2d3ae7;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.dashboard-wrapper {
+  display: flex;
+  width: 100%;
+  position: relative;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 204px; /* Width of the sidebar */
+  padding: 24px;
+  min-height: 100vh;
+}
+
+.dashboard {
+  width: 100%;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+/* Total Revenue Section */
+.total-revenue-section {
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--dark-text);
+}
+
+.time-filters {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-btn {
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--light-gray);
+  color: var(--medium-gray);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 200px;
+  margin-bottom: 100px; /* Increased to shift down the metric cards */
+}
+
+.revenue-chart {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.data-point {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.data-point-value {
+  background-color: var(--dark-text);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.data-point-marker {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: white;
+  border: 2px solid var(--primary-color);
+}
+
+.data-point-line {
+  width: 2px;
+  height: 64px;
+  background-color: var(--primary-color);
+}
+
+.chart-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-size: 12px;
+  color: var(--medium-gray);
+  margin-top: 8px;
+}
+
+/* Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.metric-card {
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.metric-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.metric-icon.users {
+  background-color: var(--light-purple-bg);
+  color: var(--primary-color);
+}
+
+.metric-icon.sales {
+  background-color: rgba(255, 193, 7, 0.2);
+  color: var(--orange);
+}
+
+.metric-icon.clicks {
+  background-color: rgba(255, 31, 31, 0.2);
+  color: var(--red);
+}
+
+.metric-icon.items {
+  background-color: var(--light-gray);
+  color: var(--dark-text);
+}
+
+.metric-label {
+  font-size: 14px;
+  color: var(--medium-gray);
+  margin-bottom: 4px;
+}
+
+.metric-value {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.metric-change {
+  font-size: 12px;
+}
+
+.metric-change.positive {
+  color: var(--green);
+}
+
+.metric-change.negative {
+  color: var(--red);
+}
+
+/* Card Title Section */
+.card-title-section {
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.card-title-section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.card-section {
+  margin-bottom: 24px;
+}
+
+.card-section-header {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.card-section-header.blue {
+  color: var(--blue);
+}
+
+.wallet-icon {
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.card-section-value {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.card-section-subtext {
+  font-size: 14px;
+  color: var(--medium-gray);
+  font-weight: 400;
+}
+
+.card-divider {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 24px 0;
+}
+
+.card-section-value-with-icon {
+  display: flex;
+  align-items: center;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.order-icon {
+  margin-right: 12px;
+  color: var(--medium-gray);
+}
+
+.card-decoration {
+  position: absolute;
+  bottom: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: var(--light-purple);
+  opacity: 0.3;
+}
+
+/* Reviews Section - UPDATED to match Figma exactly */
+.reviewsSection {
+  background-color: #f4edfb;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.reviewsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.startext {
+  color: #6c2bd9;
+  margin-left: 1px;
+}
+.startext {
+  color: #6c2bd9;
+  margin-left: 1px;
+}
+/* Monthly Sales Section - UPDATED to match Figma exactly */
+.salesSection {
+  margin-bottom: 32px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%; /* Full width of the container */
+  box-sizing: border-box;
+}
+
+/* Full-width monthly charts inside sales section */
+.salesCharts {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+  width: 100%;
+  justify-content: space-between; /* Ensures equal spacing between charts */
+}
+
+/* Chart item width adjustment (Decrease each chart width to half its current size) */
+.salesChartItem {
+  flex: 1;
+  min-width: 20%; /* Reduce width of each chart to around 20% of the total container */
+  max-width: 25%; /* Ensures charts are not wider than 25% */
+}

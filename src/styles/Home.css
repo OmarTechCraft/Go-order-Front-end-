@@ -1,0 +1,702 @@
+@import url("https://fonts.googleapis.com/css2?family=Lobster+Two:wght@700&display=swap");
+@import "@fontsource/lobster-two/700-italic.css";
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@700;900&display=swap");
+
+/* ======= GLOBAL ======= */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* ========== FIRST PHASE ========== */
+.offer-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 40px;
+  margin: 0;
+}
+
+.background-image {
+  width: 100vw;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  margin-top: 60px;
+}
+
+.offer-text {
+  position: absolute;
+  color: black;
+  width: 60%;
+  margin-top: 140px;
+  margin-left: 150px;
+  font-size: 67px;
+}
+
+.offer-title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.offer-heading {
+  font-size: 50px;
+  font-weight: bold;
+  color: black;
+  margin-top: 55px;
+}
+
+.on-order-container {
+  display: flex;
+  align-items: center;
+}
+
+.on-text {
+  font-size: 50px;
+  font-weight: bold;
+  color: black;
+}
+
+.highlight,
+.special-o {
+  font-family: "Lobster Two", cursive;
+  font-size: 80px;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 85px;
+  color: #7d2ae8;
+  display: flex;
+  align-items: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tagline {
+  font-family: "Rubik", sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 85px;
+  color: #333333;
+  margin: 40px 0 50px 0;
+  text-align: left;
+}
+
+.cta-reviews {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.get-started {
+  background-color: #7d2ae8;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.get-started:hover {
+  background-color: #6a1bbf;
+}
+
+.collab-images {
+  display: flex;
+  align-items: center;
+}
+
+.collab-images img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid white;
+  object-fit: cover;
+  margin-left: -10px;
+}
+
+.collab-images img:first-child {
+  margin-left: 0;
+}
+
+.customer-reviews {
+  font-size: 16px;
+  color: black;
+  font-weight: bold;
+  text-align: left;
+}
+
+.stars {
+  color: #f4b400;
+  font-weight: bold;
+}
+
+/* ========== SECOND PHASE ========== */
+.what-we-serve-container {
+  text-align: center;
+  padding: 50px 0;
+  margin: 0;
+  background-color: white;
+  width: 100vw;
+}
+
+.what-we-serve-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #7d2ae8;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.delivery-partner-heading {
+  font-size: 32px;
+  font-weight: bold;
+  color: black;
+}
+
+.services-container {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.service {
+  width: 280px;
+  text-align: center;
+}
+
+.service img {
+  width: 160px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.service-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 8px;
+}
+
+.service-description {
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 30px;
+  color: #333;
+  margin-top: 10px;
+}
+
+/* ========== THIRD PHASE ========== */
+.image-split-container {
+  display: flex;
+  width: 100%;
+  height: 90vh; /* slightly reduced height */
+  margin: 0;
+  padding: 0;
+  gap: 0; /* no spacing between images */
+  background-color: #fff;
+}
+
+.left-image,
+.right-image {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* ensures full content is visible */
+  padding: 5px; /* adjust this to control how much smaller the image looks */
+  display: block;
+}
+
+/* ========== FOURTH PHASE ========== */
+.phase4-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fafafa;
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0; /* No extra padding to ensure no gap */
+  margin: 0;
+}
+
+.phase4-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+.phase4-text {
+  flex: 1;
+  max-width: 50%;
+  margin-left: 100px;
+  box-sizing: border-box;
+}
+
+.about-us {
+  font-size: 18px;
+  font-weight: bold;
+  color: #7a25f6;
+  margin-bottom: 10px;
+}
+
+.who-we-are {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #000;
+}
+
+.description {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+  max-width: 90%;
+  margin-bottom: 60px;
+}
+
+.description1 {
+  font-size: 16px;
+  color: black;
+  line-height: 1.6;
+  max-width: 100%;
+}
+
+.cta-container {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  gap: 40px;
+}
+
+.join-us {
+  font-size: 32px;
+  font-weight: 700;
+  color: #000;
+  white-space: nowrap;
+}
+
+/* Right Side Image for Phase 4 */
+.phase4-image-container {
+  position: relative;
+  flex: 1;
+  max-width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 80px;
+  box-sizing: border-box;
+}
+
+.purple-background {
+  position: absolute;
+  width: 320px;
+  height: 300px;
+  background-color: #8a5bc6;
+  border-top-left-radius: 80px;
+  border-top-right-radius: 230.5px;
+  border-bottom-left-radius: 80px;
+  border-bottom-right-radius: 0px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+
+.ccare-image {
+  width: auto;
+  max-width: 350px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ========== FIFTH PHASE ========== */
+.phase5-container {
+  display: flex;
+  flex-direction: row; /* Ensures image appears first */
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 50px;
+  background-color: white;
+  position: relative;
+  margin-top: 0px;
+}
+
+.phase5-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.phase5-image img {
+  width: 760px; /* Match Figma width */
+  height: 589px; /* Match Figma height */
+  object-fit: contain;
+  position: relative;
+  z-index: 2;
+}
+
+/* Semi-transparent background behind truck */
+.truck-background {
+  width: 488px;
+  height: 461px;
+  background-color: rgba(217, 209, 227, 0.5);
+  position: absolute;
+  border-radius: 52px 59px 50px 53px;
+  z-index: 1;
+  margin-right: 400px;
+  margin-top: 30px;
+}
+
+/* Flying Dots */
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.yellow {
+  background-color: #f4c430;
+  margin-left: 500px;
+}
+
+.purple {
+  background-color: #8a2be2;
+  margin-left: 650px;
+  margin-top: 90px;
+}
+
+.phase5-content {
+  flex-wrap: nowrap;
+  flex: 1;
+  text-align: left;
+  margin-left: 15px;
+}
+
+.phase5-title {
+  font-size: 40px;
+  font-weight: 700;
+  color: #000;
+  font-family: "Poppins", sans-serif;
+  line-height: 30px;
+}
+
+.phase5-text {
+  font-size: 20px;
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+  line-height: 30px;
+  margin: 10px 0 20px;
+  color: #000;
+  width: 441px;
+  height: 120px;
+}
+
+.phase5-cta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 160px;
+  margin-right: 500px;
+}
+
+.join-text {
+  font-size: 45px;
+  font-weight: 700;
+  font-family: "Rubik", sans-serif;
+  line-height: 60px;
+  color: #000;
+  text-wrap: nowrap;
+}
+
+/* Global Get Started Button - included here for completeness */
+.get-started {
+  background-color: #7a25f6;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 15px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ========== SIXTH PHASE ========== */
+.phase6-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 650px;
+  background-color: #ffffff;
+  padding: 0;
+  margin: 0;
+}
+
+.content-wrapper {
+  width: 1250px;
+  height: 614px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f4edfb;
+  border-radius: 30px;
+  padding: 50px;
+  position: relative;
+}
+
+/* DOWNLOAD APP */
+.download-app {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 22.4px;
+  color: #8817ea;
+  width: 178px;
+  height: 20px;
+  position: absolute;
+  top: 71px;
+  left: 85px;
+}
+
+/* MAIN TITLE */
+.phase6-title {
+  font-family: "Rubik", sans-serif;
+  font-weight: 700;
+  font-size: 46px;
+  line-height: 50px;
+  color: #010f1c;
+  width: 404px;
+  height: 125px;
+  position: absolute;
+  top: 169px;
+  left: 85px;
+}
+
+/* TEXT PARAGRAPH */
+.phase6-text {
+  font-family: "Poppins", sans-serif;
+  font-size: 20px;
+  color: #000000;
+  position: absolute;
+  top: 300px;
+  left: 85px;
+}
+
+/* DOWNLOAD BUTTONS */
+.download-links {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  position: absolute;
+  top: 450px; /* Moved up by 15px */
+  left: 70px;
+}
+
+.download-btn {
+  display: flex;
+  align-items: center;
+  background: white;
+  color: black;
+  border-radius: 15px;
+  padding: 10px 20px;
+  text-decoration: none;
+  font-family: "Poppins", sans-serif;
+  width: 301.15px;
+  height: 87px;
+  transition: 0.3s ease;
+  border: 1px solid #ccc;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.download-btn:hover {
+  opacity: 0.8;
+}
+
+.download-btn .icon {
+  font-size: 30px;
+  margin-right: 10px;
+}
+
+.download-btn span {
+  display: flex;
+  flex-direction: column;
+}
+
+.download-btn small {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.download-btn strong {
+  font-size: 16px;
+}
+
+/* GOOGLE PLAY BUTTON */
+.google-play {
+  background: white;
+}
+
+/* APP STORE BUTTON */
+.app-store {
+  background: white;
+  margin-left: 350px; /* Shifted right */
+  margin-top: -60px;
+}
+
+/* ========== SEVENTH PHASE (FOOTER) ========== */
+.footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  background-color: white;
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  color: black;
+  margin-left: 60px; /* Shift the content 10px to the right */
+}
+
+/* General Styling for Each Section */
+.footer-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 30%;
+}
+
+/* GoOrder Section */
+.goorder {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  color: #8a5bc6; /* Purple */
+  margin-bottom: 10px;
+}
+
+/* Description */
+.description {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: #3a393b;
+  margin-bottom: 20px;
+}
+
+/* Social Section */
+.social-section {
+  margin-top: 10px;
+}
+
+/* Social Title */
+.social-title {
+  font-family: "Roboto", sans-serif;
+  font-weight: 900;
+  font-size: 25px;
+  color: #263238;
+  margin-bottom: 10px;
+}
+
+/* Social Icons */
+.social-icons {
+  display: flex;
+  gap: 25px;
+  font-size: 2.5rem;
+  margin-top: 5px; /* Shifted down */
+}
+
+/* Icon Colors */
+.icon {
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Multi-colored Google icon */
+.google {
+  color: #000;
+}
+
+.facebook {
+  color: #1877f2;
+}
+
+.apple {
+  color: #000;
+}
+
+.social-icons img {
+  width: 40px; /* Adjust as needed */
+  height: 40px; /* Adjust as needed */
+  object-fit: contain;
+}
+
+.icon:hover {
+  transform: scale(1.2);
+}
+
+/* Contact Info & Get Help */
+.contact,
+.get-help {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-size: 25px;
+  color: black;
+  margin-bottom: 15px;
+}
+
+/* Links */
+p a {
+  text-decoration: none;
+  color: #3a393b;
+}
+
+p a:hover {
+  color: #8a5bc6;
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-left: 0; /* Reset margin on mobile */
+  }
+
+  .footer-section {
+    width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+}

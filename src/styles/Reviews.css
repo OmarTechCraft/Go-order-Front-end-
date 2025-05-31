@@ -1,0 +1,103 @@
+.reviews-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #fff;
+  padding-top: 60px; /* Space for fixed navbar */
+}
+
+/* The main content to the right of the sidebar */
+.reviews-content {
+  flex: 1;
+  padding: 24px;
+  margin-left: 240px; /* Space for fixed Sidebar_2 */
+  box-sizing: border-box;
+}
+
+/* Page title */
+.reviews-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 32px;
+  color: #333;
+  text-align: left;
+}
+
+/* Container holding all review boxes */
+.reviews-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* Each individual review card */
+.review-card {
+  background-color: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  padding: 16px;
+  flex: 1 1 calc(33.33% - 20px); /* 3 per row with gap */
+  box-sizing: border-box;
+  min-width: 280px;
+}
+
+/* Review card header: avatar + name/date on left, stars on right */
+.review-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* Left side of header: avatar + name/date */
+.review-card-left {
+  display: flex;
+  align-items: center;
+}
+
+/* Circular avatar image */
+.reviewer-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+}
+
+/* Reviewer name */
+.reviewer-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Review date */
+.review-date {
+  font-size: 14px;
+  color: #999;
+  margin: 4px 0 0;
+}
+
+/* Review star icons */
+.review-stars .star-icon {
+  color: #f5c518;
+  margin-left: 4px;
+}
+
+/* Main body text of the review */
+.review-text {
+  font-size: 14px;
+  color: #333;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Bottom right image if used */
+.bottom-right-image {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 25%;
+  height: 25%;
+  object-fit: contain;
+  z-index: 1;
+}

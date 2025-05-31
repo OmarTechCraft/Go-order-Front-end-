@@ -1,0 +1,51 @@
+/* General Page Styling */
+.terms-container {
+  font-family: Arial, sans-serif;
+  line-height: 2;
+  color: #333;
+  margin-left: 20px;
+}
+
+
+.terms-container h1 {
+    font-weight: bold;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-top: -95px;
+    line-height: 5;
+    margin-left: 50px;
+}
+.terms-container p {
+    font-size: 16px;
+    line-height: 2;
+    color: #444;
+}
+
+
+
+.terms-container strong {
+    font-weight: bold;
+}
+
+.terms-container ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.terms-container li {
+    margin-bottom: 8px;
+}
+.back-button {
+    border: none;
+    background: none;
+    font-size: 20px;
+    margin-bottom: 17px;
+    cursor: pointer;
+    color: #333;
+  }
+  .terms-header {
+    margin-top: -50px;
+  }
+
+  

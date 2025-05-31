@@ -1,0 +1,72 @@
+.privacy-policy-container {
+    font-family: Arial, sans-serif;
+    line-height: 2;
+    color: #333;
+    margin-left: 20px;
+    margin-top: 80px;
+  }
+  
+  /* Ensure headers are bolded */
+  .privacy-policy-container h1, 
+  .privacy-policy-container h2, 
+  .privacy-policy-container h3, 
+  .privacy-policy-container h4, 
+  .privacy-policy-container h5, 
+  .privacy-policy-container h6 {
+    font-weight: bold;
+    color: #333;
+    text-transform: uppercase; /* Optional: makes headers look stronger */
+  }
+  
+  .privacy-policy-container h1 {
+    margin-top: 25px;
+    font-size: 24px;
+  }
+  
+  .privacy-policy-container h2 {
+    margin-top: 20px;
+  }
+  
+  .privacy-policy-container p {
+    margin-bottom: 15px;
+  }
+  
+  .privacy-policy-container ul {
+    padding-left: 20px;
+  }
+  
+  .privacy-policy-container li {
+    margin-bottom: 10px;
+  }
+  
+  .back-button {
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+    margin-top: 40px;
+  }
+  
+  .privacy-policy-header {
+    display: flex;
+    gap: 10px;
+  }
+  /* Make sure to apply this to the body and html elements */
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: auto; /* Allow only the default scrollbar */
+  }
+  
+  /* Remove any extra scrollbars from any container */
+  * {
+    box-sizing: border-box; /* Ensures padding/margin don't mess with element size */
+  }
+  
+  .privacy-policy-container {
+    max-height: 100vh; /* Ensures the content doesn't overflow the viewport */
+  }
+  
+  body {
+    overflow-x: hidden; /* Prevent horizontal scroll */
+  }
+  

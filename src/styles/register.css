@@ -1,0 +1,956 @@
+:root {
+  --primary-purple: #8a5bc6;
+  --primary-purple-light: #a77bdd;
+  --primary-purple-dark: #6a45a0;
+  --accent-purple-light: #c4a8e9;
+  --accent-purple-ultralight: #f2edfa;
+  --right-width: 35%;
+  --transition-speed: 0.3s;
+  --border-radius: 10px;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --text-color: #2c3e50;
+  --text-color-light: #7f8c8d;
+  --border-color: #bdc3c7;
+  --background-white: #ffffff;
+  --background-light: #f8f8f8;
+  --spacing-xs: 6px;
+  --spacing-sm: 10px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+}
+
+/* Reset and global styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text-color);
+  background-color: var(--background-white);
+  line-height: 1.6;
+}
+
+/* Main container */
+.auth-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Left side (form) */
+.auth-left {
+  width: calc(100% - var(--right-width));
+  background-color: var(--background-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-lg);
+  position: relative;
+  z-index: 4; /* Ensure it's below the animation but above background layers */
+}
+
+/* Right side (purple background with illustration) */
+.auth-right {
+  width: var(--right-width);
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple),
+    var(--primary-purple-dark)
+  );
+  position: relative;
+  overflow: visible; /* Changed from overflow: hidden */
+}
+
+/* Animation container */
+.animation-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: visible; /* Changed from overflow: hidden to allow elements to extend beyond */
+  z-index: 5; /* Higher z-index to appear above both sides */
+  left: 0;
+  top: 0;
+}
+
+/* Animated floating shapes */
+.floating-shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.6;
+  z-index: 6; /* Above the container but below the illustration */
+}
+
+.shape-1 {
+  width: 100px;
+  height: 100px;
+  top: 15%;
+  left: -5%; /* Moved further left to extend into white area */
+  background: var(--primary-purple-light);
+  animation: float 15s ease-in-out infinite;
+}
+
+.shape-2 {
+  width: 60px;
+  height: 60px;
+  top: 60%;
+  left: -10%; /* Moved further left to extend into white area */
+  background: var(--accent-purple-light);
+  animation: float 18s ease-in-out infinite 2s;
+}
+.shape-3 {
+  width: 120px;
+  height: 120px;
+  top: 25%;
+  right: 5%;
+  background: var(--primary-purple-dark);
+  animation: float 20s ease-in-out infinite 1s;
+}
+
+.shape-4 {
+  width: 80px;
+  height: 80px;
+  bottom: 15%;
+  right: 25%;
+  background: var(--primary-purple);
+  animation: float 12s ease-in-out infinite 3s;
+}
+
+.shape-5 {
+  width: 40px;
+  height: 40px;
+  top: 40%;
+  left: 50%;
+  background: var(--accent-purple-light);
+  animation: float 10s ease-in-out infinite 1.5s;
+}
+
+/* Illustration image with enhanced animation */
+.auth-illustration {
+  position: absolute;
+  top: 10%;
+  left: -30%; /* Adjusted left position to extend more into the white area */
+  width: 160%;
+  max-width: none;
+  animation: floatImage 8s ease-in-out infinite;
+  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
+  z-index: 10; /* Higher z-index to appear above both sides */
+}
+
+@keyframes floatImage {
+  0%,
+  100% {
+    transform: translate(-30%, -5%) rotate(-2deg);
+  }
+  50% {
+    transform: translate(-28%, -3%) rotate(1deg);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(15px, -15px) scale(1.05);
+  }
+  50% {
+    transform: translate(0, 15px) scale(0.95);
+  }
+  75% {
+    transform: translate(-15px, -5px) scale(1.02);
+  }
+}
+
+/* Brand logo animation */
+.brand-logo {
+  color: var(--primary-purple);
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: var(--spacing-lg);
+  align-self: center; /* Center the logo */
+}
+
+.animate-logo {
+  animation: fadeInDown 0.8s ease-out, gradientText 8s ease infinite;
+  background: linear-gradient(
+    90deg,
+    var(--primary-purple),
+    var(--primary-purple-dark),
+    var(--primary-purple-light),
+    var(--primary-purple)
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@keyframes gradientText {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Content container */
+.auth-content {
+  max-width: 900px;
+  width: 180%;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+  animation: fadeIn 0.8s ease-out;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 15; /* Higher z-index than the animation so it's still accessible */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Heading styles with animation */
+.auth-heading {
+  color: var(--text-color);
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+}
+
+.animate-heading {
+  animation: slideInUp 1s ease-out;
+  position: relative;
+}
+
+.animate-heading::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--primary-purple-light),
+    var(--primary-purple-dark)
+  );
+  transform: translateX(-50%);
+  border-radius: 3px;
+  animation: expandLine 1.5s ease-out forwards;
+}
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes expandLine {
+  from {
+    width: 0;
+  }
+  to {
+    width: 60px;
+  }
+}
+
+/* Error message animation */
+.error-message {
+  background-color: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  border-left: 4px solid #e74c3c;
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  animation: fadeIn 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.error-message::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(231, 76, 60, 0.1),
+    transparent
+  );
+  animation: errorSweep 2s ease infinite;
+}
+
+@keyframes errorSweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  50%,
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shake-animation {
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translateX(-2px);
+  }
+  20%,
+  80% {
+    transform: translateX(3px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-4px);
+  }
+  40%,
+  60% {
+    transform: translateX(4px);
+  }
+}
+
+/* Form container with enhanced appearance */
+.auth-form {
+  background-color: var(--background-white);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+  transition: all 0.5s ease;
+  position: relative;
+  width: 100%; /* Take up full width of parent */
+}
+
+.form-submitting {
+  transform: scale(0.98);
+  opacity: 0.9;
+  box-shadow: 0 5px 15px rgba(138, 91, 198, 0.15);
+}
+
+/* Form row with staggered animation */
+.form-row {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  position: relative;
+  transition: all 0.5s ease;
+}
+
+.animate-form-element {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Form group */
+.form-group {
+  flex: 1;
+  position: relative;
+}
+
+/* Form labels with animation */
+.custom-label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: var(--spacing-xs);
+  font-size: 14px;
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.label-focus {
+  color: var(--primary-purple);
+  transform: translateY(-2px);
+}
+
+/* Category select styles with animation */
+.custom-select {
+  width: 100%;
+  padding: 12px var(--spacing-sm);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  color: var(--text-color);
+  background-color: var(--background-white);
+  transition: all var(--transition-speed) ease;
+  height: 42px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3e%3cpath fill='none' d='M0 0h24v24H0z'/%3e%3cpath fill='%238a5bc6' d='M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+.custom-select:focus {
+  outline: none;
+  border-color: var(--primary-purple);
+  box-shadow: 0 0 0 3px rgba(138, 91, 198, 0.2);
+  transform: translateY(-2px);
+}
+
+.select-animate {
+  transition: all 0.3s ease;
+}
+
+.select-changed {
+  animation: selectPulse 0.5s ease;
+}
+
+@keyframes selectPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(138, 91, 198, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(138, 91, 198, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(138, 91, 198, 0);
+  }
+}
+
+/* Show restaurant specific category with animation */
+.category-appear {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* File upload section with improved visuals */
+.upload-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  position: relative;
+}
+
+.file-input {
+  display: none;
+}
+
+/* Thumbnail preview with animation */
+.thumbnail-preview {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.thumbnail-animate {
+  animation: thumbnailAppear 0.5s ease forwards;
+}
+
+@keyframes thumbnailAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Input animation */
+.input-animate {
+  transition: all 0.3s ease;
+}
+
+.input-focused {
+  transform: translateY(-2px);
+  border-color: var(--primary-purple) !important;
+  box-shadow: 0 0 0 3px rgba(138, 91, 198, 0.2) !important;
+}
+
+/* Input ripple effect */
+.input-ripple {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary-purple-light);
+  border-radius: 50%;
+  opacity: 0.5;
+  transform: translateY(-50%);
+  animation: rippleEffect 0.5s ease-out forwards;
+}
+
+@keyframes rippleEffect {
+  0% {
+    opacity: 0.5;
+    transform: translateY(-50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50%) scale(2);
+  }
+}
+
+/* Register button */
+.register-button {
+  width: 100%;
+  margin-top: var(--spacing-md);
+  height: 48px;
+  border-radius: 24px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease !important;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    45deg,
+    var(--primary-purple),
+    var(--primary-purple-dark)
+  ) !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(138, 91, 198, 0.4) !important;
+}
+
+.register-button:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 25px rgba(138, 91, 198, 0.5) !important;
+}
+
+.register-button:active {
+  transform: translateY(-1px) !important;
+}
+
+/* Button ripple effect */
+.register-button::after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.3) 10%,
+    transparent 10.01%
+  );
+  background-repeat: no-repeat;
+  background-position: 50%;
+  transform: scale(10, 10);
+  opacity: 0;
+  transition: transform 0.5s, opacity 0.8s;
+}
+
+.register-button:active::after {
+  transform: scale(0, 0);
+  opacity: 0.3;
+  transition: 0s;
+}
+
+/* Social section */
+.social-section {
+  margin: var(--spacing-lg) 0;
+  text-align: center;
+}
+
+.social-text {
+  color: var(--text-color-light);
+  font-size: 14px;
+  margin-bottom: var(--spacing-sm);
+  position: relative;
+}
+
+.social-text::before,
+.social-text::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  height: 1px;
+  width: 30%;
+  background: linear-gradient(90deg, transparent, var(--border-color));
+}
+
+.social-text::before {
+  left: 0;
+}
+
+.social-text::after {
+  right: 0;
+  background: linear-gradient(90deg, var(--border-color), transparent);
+}
+
+.social-buttons {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.social-btn {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--border-color);
+  border-radius: 50%;
+  background: var(--background-white);
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-btn-animate {
+  animation: socialBtnPulse 2s infinite;
+}
+
+@keyframes socialBtnPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(138, 91, 198, 0.1);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(138, 91, 198, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(138, 91, 198, 0);
+  }
+}
+
+.social-btn:hover {
+  background: var(--accent-purple-ultralight);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(138, 91, 198, 0.2);
+  border-color: var(--primary-purple-light);
+}
+
+.social-icon {
+  font-size: 18px;
+  color: var(--primary-purple);
+  transition: all 0.3s ease;
+}
+
+.social-btn:hover .social-icon {
+  transform: scale(1.2);
+}
+
+/* Sign in text */
+.register-text {
+  color: var(--text-color-light);
+  font-size: 14px;
+  text-align: center;
+  margin-top: var(--spacing-md);
+}
+
+.register-link {
+  color: var(--primary-purple);
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-speed) ease;
+  position: relative;
+}
+
+.register-link::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--primary-purple);
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease;
+}
+
+.register-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.register-link:hover {
+  color: var(--primary-purple-dark);
+}
+
+/* Enhanced spinner overlay */
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease;
+}
+
+/* Fancy loader animation */
+.loader {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+}
+
+.circular {
+  animation: rotate 2s linear infinite;
+  height: 100%;
+  transform-origin: center center;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.path {
+  stroke-dasharray: 89, 200;
+  stroke-dashoffset: 0;
+  stroke: var(--primary-purple-light);
+  animation: dash 1.5s ease-in-out infinite;
+  stroke-linecap: round;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124;
+  }
+}
+
+/* Success animation */
+.success-animation {
+  animation: successFade 0.5s ease forwards;
+}
+
+@keyframes successFade {
+  to {
+    filter: blur(3px);
+    opacity: 0.7;
+  }
+}
+
+.success-checkmark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  z-index: 10;
+}
+
+.checkmark {
+  width: 80px;
+  height: 80px;
+}
+
+.checkmark-circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: var(--primary-purple);
+  fill: none;
+  animation: checkmarkStroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark-check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  stroke-width: 3;
+  stroke: var(--primary-purple);
+  animation: checkmarkCheck 0.3s 0.4s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+@keyframes checkmarkStroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes checkmarkCheck {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Custom input styles with animation */
+.custom-input-field {
+  width: 100%;
+  padding: 12px var(--spacing-sm);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  transition: all var(--transition-speed) ease;
+  position: relative;
+  background-color: var(--background-white);
+}
+
+.custom-input-field:focus {
+  outline: none;
+  border-color: var(--primary-purple);
+  box-shadow: 0 0 0 3px rgba(138, 91, 198, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Custom button overrides with animation */
+.custom-upload-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease !important;
+  background-color: var(--background-white) !important;
+  color: var(--primary-purple) !important;
+  border: 1.5px solid var(--primary-purple) !important;
+  border-radius: var(--border-radius) !important;
+  padding: 8px 16px !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+}
+
+.custom-upload-button:hover {
+  background-color: var(--accent-purple-ultralight) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(138, 91, 198, 0.2) !important;
+}
+
+/* Button pulse animation */
+.button-pulse {
+  animation: buttonPulse 0.6s ease;
+}
+
+@keyframes buttonPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  :root {
+    --right-width: 30%;
+  }
+
+  .floating-shape {
+    opacity: 0.4;
+  }
+}
+
+@media (max-width: 768px) {
+  .auth-container {
+    flex-direction: column;
+  }
+
+  .auth-left {
+    width: 100%;
+    order: 2;
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+
+  .auth-right {
+    width: 100%;
+    height: 200px;
+    order: 1;
+  }
+
+  .auth-illustration {
+    width: 120%;
+    transform: translate(-10%, -30%);
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .auth-content {
+    padding: var(--spacing-sm);
+  }
+
+  .floating-shape {
+    display: none;
+  }
+
+  /* Adjust animations for mobile */
+  .social-btn-animate {
+    animation: none;
+  }
+}

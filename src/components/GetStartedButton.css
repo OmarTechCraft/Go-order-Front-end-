@@ -1,0 +1,23 @@
+.get-started-button {
+    width: 186px;  /* Fixed width */
+    height: 68px;  /* Fixed height */
+    border-radius: 50px;  /* Rounded corners */
+    padding: 11px 20px;  /* Top: 11px, Right: 20px, Bottom: 11px, Left: 20px */
+    gap: 5px;  /* Gap between elements inside the button */
+    font-size: 18px;  /* Adjusted for balance */
+    font-weight: 600;
+    background-color: #6C5CE7;  /* Assuming the previous color remains */
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .get-started-button:hover {
+    background-color: #5B4CD7; /* Slightly darker shade on hover */
+  }
+  

@@ -1,0 +1,300 @@
+/* Overall page layout: Sidebar on the left, content on the right */
+.manage-delivery-man-page {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #fff;
+  margin-top: 50px;
+}
+
+/* Main content area to the right of the sidebar */
+.manage-delivery-man-content {
+  margin-left: 240px; /* Matches your Sidebar width */
+  flex: 1;
+  padding: 24px;
+}
+
+/* Header with page title and the purple button */
+.manage-delivery-man-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.manage-delivery-man-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* Container for delivery man cards */
+.delivery-man-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Card containing a single delivery man's information */
+.delivery-man-card {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 16px;
+  background-color: #fff;
+  max-width: 435px;
+  flex: 1 1 435px;
+}
+
+/* Each info line inside the card */
+.delivery-man-info-line {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: #000;
+}
+
+/* Container for the Edit/Delete buttons */
+.delivery-man-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+/* Gray button style (for Edit/Delete) */
+.gray-button {
+  background-color: #e0e0e0 !important;
+  color: #000 !important;
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
+  padding: 6px 12px !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  font-weight: 400 !important;
+}
+
+/* Purple button style with a plus icon */
+.purple-add-button {
+  background-color: #8a5bc6 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 8px 16px !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  min-width: 180px;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+}
+
+.purple-add-button:hover {
+  background-color: #7b4bb0 !important;
+}
+
+.purple-add-button::before {
+  content: "+";
+  font-size: 27px;
+  margin-right: 8px;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* ==================== */
+/* RESPONSIVE ADJUSTMENTS */
+/* ==================== */
+
+@media (max-width: 768px) {
+  .manage-delivery-man-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .delivery-man-card {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .manage-delivery-man-header h2 {
+    font-size: 20px;
+  }
+}
+
+/* ======================== */
+/* MODAL STYLES BELOW       */
+/* ======================== */
+
+/* Delete Modal Overlay */
+.delete-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* Delete Modal Content */
+.delete-modal-content {
+  position: relative;
+  background-color: #fff;
+  padding: 32px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 450px;
+  text-align: center;
+}
+
+.delete-modal-content h3 {
+  font-size: 20px;
+  margin: 0 0 16px 0;
+}
+
+.delete-modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.cancel-button {
+  background-color: #fff;
+  color: #000;
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.delete-button {
+  background-color: #eb5757;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* Modal image at top-right in delete modal */
+.modal-top-right-image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 27%;
+  height: auto;
+}
+
+/* Delivery Man Add/Edit Modal Overlay */
+.delivery-man-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  overflow-y: auto;
+}
+
+/* Delivery Man Add/Edit Modal Content */
+.delivery-man-modal-content {
+  background-color: #fff;
+  padding: 32px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  text-align: left;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  margin: 20px auto;
+}
+
+/* Form styles within the modal */
+.delivery-man-form .form-group {
+  margin-bottom: 16px;
+}
+
+.delivery-man-form .form-group label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.delivery-man-form .form-group input,
+.delivery-man-form .form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Modal actions for form buttons */
+.delivery-man-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+/* Save button styling */
+.save-button {
+  background-color: #8a5bc6;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.save-button:hover {
+  background-color: #7b4bb0;
+}
+
+/* Error message in modal */
+.modal-error-message {
+  color: #eb5757;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+/* ======================== */
+/* BACKGROUND & IMAGE STYLES */
+/* ======================== */
+
+/* Ensure the background container stays fixed at the bottom-right */
+.manage-delivery-man-background {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 0;
+}
+
+/* Style the image to touch the bottom-right edges */
+.bottom-right-image {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  max-width: 40%;
+  height: auto;
+  display: block;
+}
+
+.circle.circle1,
+.circle.circle2 {
+  display: none;
+}

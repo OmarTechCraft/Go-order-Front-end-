@@ -1,0 +1,656 @@
+/* Enhanced manage-business.css with improved styling and animations */
+
+/* Overall page layout: Sidebar on the left, content on the right */
+.manage-business-page {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #fff;
+  margin-top: 50px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Main content area to the right of the sidebar */
+.manage-business-content {
+  margin-left: 240px; /* Matches your Sidebar width */
+  flex: 1;
+  padding: 24px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+/* Header with page title and the purple button */
+.manage-business-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.manage-business-header h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  position: relative;
+}
+
+.manage-business-header h2::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: #8a5bc6;
+  border-radius: 2px;
+}
+
+/* Container for business cards */
+.business-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Card containing a single business's information */
+.business-card {
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  padding: 24px;
+  background-color: #fff;
+  max-width: 435px;
+  flex: 1 1 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.business-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.business-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #8a5bc6;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+/* Each info line inside the card */
+.business-info-line {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: #333;
+  line-height: 1.5;
+}
+
+.business-info-line:first-child {
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 16px;
+}
+
+/* Container for the Edit/Delete buttons */
+.business-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+/* Gray button style (for Edit/Delete) */
+.gray-button {
+  background-color: #f5f5f5 !important;
+  color: #333 !important;
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 8px !important;
+  padding: 8px 16px !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+.gray-button:hover {
+  background-color: #e8e8e8 !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Purple button style with a plus icon */
+.purple-add-button {
+  background-color: #8a5bc6 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 10px 20px !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  min-width: 180px;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+  box-shadow: 0 4px 12px rgba(138, 91, 198, 0.3) !important;
+  transition: all 0.2s ease !important;
+}
+
+.purple-add-button:hover {
+  background-color: #7b4bb0 !important;
+  box-shadow: 0 6px 16px rgba(138, 91, 198, 0.4) !important;
+  transform: translateY(-2px) !important;
+}
+
+.purple-add-button:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 8px rgba(138, 91, 198, 0.3) !important;
+}
+
+.purple-add-button::before {
+  content: "+";
+  font-size: 24px;
+  margin-right: 8px;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* No businesses message */
+.no-businesses-message {
+  width: 100%;
+  padding: 40px;
+  text-align: center;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  color: #666;
+  font-size: 18px;
+  border: 1px dashed #ddd;
+}
+
+/* Loading indicator */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  backdrop-filter: blur(4px);
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #8a5bc6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Success message */
+.success-message {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  background-color: #4caf50;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  animation: slideIn 0.3s forwards, fadeOut 0.3s 3s forwards;
+}
+
+.success-message::before {
+  content: "✓";
+  font-size: 20px;
+  margin-right: 12px;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* ==================== */
+/* RESPONSIVE ADJUSTMENTS */
+/* ==================== */
+
+@media (max-width: 1024px) {
+  .manage-business-content {
+    margin-left: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .manage-business-content {
+    margin-left: 0;
+    padding: 16px;
+  }
+
+  .manage-business-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .business-card {
+    max-width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .business-modal-content {
+    padding: 24px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .manage-business-header h2 {
+    font-size: 22px;
+  }
+
+  .business-card {
+    padding: 16px;
+  }
+
+  .business-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .gray-button {
+    width: 100%;
+  }
+
+  .delete-modal-content,
+  .business-modal-content {
+    padding: 16px;
+    width: 95%;
+  }
+}
+
+/* ======================== */
+/* MODAL STYLES BELOW       */
+/* ======================== */
+
+/* Error message container - MODIFIED */
+.error-message-container {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 10001;
+  animation: slideIn 0.3s forwards;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 300px;
+  max-width: 450px;
+  border-left: 4px solid #f44336;
+}
+
+.close-error-btn {
+  background: none;
+  border: none;
+  color: #721c24;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0 0 0 16px;
+  margin-left: 8px;
+}
+
+/* Delete Modal Overlay */
+.delete-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Delete Modal Content */
+.delete-modal-content {
+  position: relative;
+  background-color: #fff;
+  padding: 32px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 450px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  animation: scaleIn 0.3s forwards;
+  transform-origin: center;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.delete-modal-content h3 {
+  font-size: 20px;
+  margin: 0 0 24px 0;
+  color: #333;
+  font-weight: 600;
+}
+
+.delete-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.cancel-button {
+  background-color: #fff;
+  color: #333;
+  padding: 12px 24px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.cancel-button:hover {
+  background-color: #f5f5f5;
+  border-color: #ccc;
+}
+
+.delete-button {
+  background-color: #f44336;
+  color: #fff;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.2);
+  min-width: 120px;
+}
+
+.delete-button:hover {
+  background-color: #e53935;
+  box-shadow: 0 6px 16px rgba(244, 67, 54, 0.3);
+}
+
+/* Modal image at top-right in delete modal - MODIFIED */
+.modal-top-right-image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 27%;
+  height: auto;
+  z-index: 1;
+  transform: rotate(8deg);
+}
+
+/* Business Add/Edit Modal Overlay */
+.business-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s forwards;
+}
+
+/* Business Add/Edit Modal Content */
+.business-modal-content {
+  background-color: #fff;
+  padding: 32px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  text-align: left;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.3s forwards;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.business-modal-content h3 {
+  font-size: 22px;
+  margin: 0 0 24px 0;
+  color: #333;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.business-modal-content h3::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: #8a5bc6;
+  border-radius: 2px;
+}
+
+/* Form styles within the modal */
+.business-form .form-group {
+  margin-bottom: 20px;
+}
+
+.business-form .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #555;
+}
+
+.business-form .form-group input,
+.business-form .form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  background-color: #fafafa;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.business-form .form-group input:focus,
+.business-form .form-group select:focus {
+  outline: none;
+  border-color: #8a5bc6;
+  box-shadow: 0 0 0 3px rgba(138, 91, 198, 0.15);
+}
+
+.business-form .form-group input[type="file"] {
+  padding: 10px;
+  background-color: #f5f5f5;
+  border: 1px dashed #ccc;
+  cursor: pointer;
+}
+
+/* Modal actions for form buttons */
+.business-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+/* Save button styling */
+.save-button {
+  background-color: #8a5bc6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(138, 91, 198, 0.2);
+  min-width: 120px;
+}
+
+.save-button:hover {
+  background-color: #7b4bb0;
+  box-shadow: 0 6px 16px rgba(138, 91, 198, 0.3);
+}
+
+/* ======================== */
+/* BACKGROUND & IMAGE STYLES */
+/* ======================== */
+
+/* Ensure the background container stays fixed at the bottom-right */
+.manage-business-background {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Style the image to touch the bottom-right edges */
+.bottom-right-image {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  max-width: 35%;
+  height: auto;
+  display: block;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.circle.circle1,
+.circle.circle2 {
+  display: none;
+}
+
+/* ADDED: Loading screen styles */
+.page-loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.page-loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #8a5bc6;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+}
+
+.page-loading-text {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #333;
+  font-weight: 500;
+}

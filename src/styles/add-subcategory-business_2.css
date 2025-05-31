@@ -1,0 +1,246 @@
+/* --------- Overall Layout --------- */
+.add-subcategory-business-page {
+  position: relative;
+  display: flex;
+  min-height: 100vh;
+  background-color: #fff;
+  margin-left: 240px; /* Width of Sidebar_2 */
+  padding-top: 60px;   /* Height of fixed Navbar */
+}
+
+/* This wrapper will be blurred when the pop-up is active */
+.page-content {
+  display: flex;
+  width: 100%;
+  transition: filter 0.3s ease;
+}
+
+.page-content.blurred {
+  filter: blur(5px);
+}
+
+.add-subcategory-business-content {
+  flex: 1;
+  padding: 24px;
+}
+
+.add-subcategory-business-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.add-subcategory-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #9b51e0;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-colا رفعت بس لسه بربط or 0.3s ease;
+}
+
+.add-subcategory-button:hover {
+  background-color: #823ecc;
+}
+
+.plus-icon {
+  font-size: 16px;
+}
+
+.subcategories-heading {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 24px 0 16px;
+}
+
+.subcategories-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.subcategory-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background-color: #fff;
+  border: 1px solid #e2e2e2;
+  padding: 16px;
+  text-align: center;
+  transition: box-shadow 0.2s ease;
+}
+
+.subcategory-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+.subcategory-image {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 8px;
+}
+
+.subcategory-label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin: 0;
+}
+
+/* --------- Popup / Modal Styles --------- */
+
+/* Keyframe animations for smooth appearance */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Overlay to darken and capture clicks outside the popup */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+}
+
+/* The white content box with a smooth scale-in animation */
+.popup-content {
+  background-color: #fff;
+  border: 4px solid #9b51e0;
+  border-radius: 16px;
+  width: 480px;
+  padding: 24px;
+  position: relative;
+  animation: scaleIn 0.3s ease;
+}
+
+.popup-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+/* Form fields */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.input-label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.text-input {
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+}
+
+/* Upload section: placeholder on left, upload button on right */
+.upload-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.upload-photo-placeholder {
+  width: 90px;
+  height: 90px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ensures the uploaded image fits within the placeholder */
+.uploaded-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.upload-add-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+  border: 1px dashed #9b51e0;
+  border-radius: 8px;
+  color: #9b51e0;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.upload-add-icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+/* Center the Save Changes button */
+.popup-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.save-button {
+  background-color: #9b51e0;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+  background-color: #823ecc;
+}

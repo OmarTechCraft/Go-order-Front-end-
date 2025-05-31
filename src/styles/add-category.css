@@ -1,0 +1,1005 @@
+/* Enhanced Add Category Page CSS - Modern and Interactive */
+
+/* Overall page layout: Sidebar on the left, content on the right */
+.add-category-page {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #fcfcff;
+  margin-top: 50px;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
+}
+
+/* Main content area to the right of the sidebar */
+.add-category-content {
+  margin-left: 240px; /* Matches your Sidebar width */
+  flex: 1;
+  padding: 32px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Fixed background image at bottom-right with animation */
+.add-category-background {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 0;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.fixed-background-image {
+  width: auto;
+  height: 300px; /* Adjust as needed */
+  object-fit: contain;
+  filter: drop-shadow(0 5px 15px rgba(138, 91, 198, 0.15));
+}
+
+/* Main heading near top-left with improved styling */
+.page-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 24px;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 8px;
+}
+
+.page-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #8a5bc6, #b07eff);
+  border-radius: 3px;
+}
+
+/* Repositioned "Edd" category above "Categories" as requested */
+
+/* Arrow-shaped badge for "Categories" */
+
+.categories-title-badge:hover {
+  transform: translateX(5px);
+  box-shadow: 0 5px 12px rgba(138, 91, 198, 0.3);
+}
+
+.categories-title-badge::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-right: 16px solid #8a5bc6;
+  transition: all 0.3s ease;
+}
+
+/* Grid layout for category cards (3 per row), left aligned */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+  max-width: 90%;
+  perspective: 1000px;
+}
+
+/* Card containing a single category's image and label - with hover effects */
+.category-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 20px;
+  background-color: #fff;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+
+.category-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.category-label {
+  font-size: 16px;
+  color: #333;
+  margin: 0;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-5px) rotateX(5deg);
+  box-shadow: 0 8px 20px rgba(138, 91, 198, 0.2);
+  border-color: rgba(138, 91, 198, 0.3);
+}
+
+.category-card:hover .category-image {
+  transform: scale(1.05);
+}
+
+.category-card:hover .category-label {
+  color: #8a5bc6;
+}
+
+/* Three-dot button on each category card */
+.menu-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.2s ease;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.menu-button:hover {
+  background-color: rgba(138, 91, 198, 0.1);
+  color: #8a5bc6;
+}
+
+/* Slide-out menu for category actions */
+.menu-slide {
+  position: absolute;
+  top: 48px;
+  right: 8px;
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideIn 0.2s ease-out forwards;
+  transform-origin: top right;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.menu-option {
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.menu-option:not(:last-child) {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.menu-option:hover {
+  background-color: #f6f2ff;
+  color: #8a5bc6;
+}
+
+/* Remove edit button as requested */
+.menu-option.edit-option {
+  display: none;
+}
+
+/* "Add category" button container at 50% from left */
+.add-category-button-container {
+  position: fixed;
+  bottom: 2%;
+  left: 55%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+/* Purple add button style (with a plus sign) */
+.purple-add-button {
+  background: linear-gradient(45deg, #8a5bc6, #a673e7) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 14px 28px !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+  box-shadow: 0 4px 15px rgba(138, 91, 198, 0.4);
+  transition: all 0.3s ease !important;
+  letter-spacing: 0.5px;
+}
+
+.purple-add-button:hover {
+  background: linear-gradient(45deg, #7b4bb0, #9563e0) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 18px rgba(138, 91, 198, 0.5) !important;
+}
+
+.purple-add-button:active {
+  transform: translateY(1px) !important;
+  box-shadow: 0 2px 8px rgba(138, 91, 198, 0.4) !important;
+}
+
+.purple-add-button::before {
+  content: "+";
+  font-size: 27px;
+  margin-right: 8px;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* Delete Confirmation Modal - Improved */
+.delete-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.delete-modal-content {
+  background-color: #fff;
+  padding: 32px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 450px;
+  text-align: center;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  animation: modalSlideIn 0.3s ease;
+  transform: translateY(0);
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.delete-modal-content h3 {
+  margin-top: 0;
+  color: #333;
+  font-size: 20px;
+}
+
+.delete-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.cancel-button {
+  background-color: #f8f8f8;
+  color: #333;
+  padding: 12px 24px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.cancel-button:hover {
+  background-color: #f0f0f0;
+  border-color: #ccc;
+}
+
+.delete-button {
+  background-color: #eb5757;
+  color: #fff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 8px rgba(235, 87, 87, 0.2);
+}
+
+.delete-button:hover {
+  background-color: #e23e3e;
+  box-shadow: 0 5px 12px rgba(235, 87, 87, 0.3);
+}
+
+/* Edit Popup Modal - Redesigned */
+.edit-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+.edit-modal-content {
+  background-color: #fff;
+  padding: 32px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  text-align: left;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  animation: modalSlideIn 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.edit-modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 24px;
+  text-align: center;
+  color: #333;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.edit-modal-content h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #8a5bc6, #b07eff);
+  border-radius: 3px;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.edit-form label {
+  font-size: 15px;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: -12px;
+}
+
+/* Improved two-column layout for image placeholders */
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Left large box for existing or preview image */
+.photo-box {
+  width: 180px;
+  height: 180px;
+  background-color: #f6f2ff;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #d4c4e7;
+  transition: all 0.3s ease;
+  margin: 0 auto;
+}
+
+.photo-box:hover {
+  border-color: #8a5bc6;
+  background-color: #f0e7ff;
+}
+
+/* If there's a preview, it replaces the gray box content */
+.photo-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8a5bc6;
+  font-size: 14px;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.photo-placeholder::after {
+  content: "Preview";
+  opacity: 0.7;
+}
+
+/* Hidden file input used by the "Choose File" box */
+.upload-input {
+  display: none;
+}
+
+/* Enhanced file upload button - Redesigned */
+.file-upload-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  width: 70%;
+  max-width: 280px;
+  margin: 0 auto;
+  gap: 10px;
+  border-radius: 12px;
+  border: 2px dashed #8a5bc6;
+  background-color: #f9f5ff;
+  color: #8a5bc6;
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(138, 91, 198, 0.1);
+  text-align: center;
+}
+
+.file-upload-button:hover {
+  background-color: #f0e7ff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(138, 91, 198, 0.2);
+  border-color: #9d6fe0;
+}
+
+.file-upload-button:active {
+  transform: translateY(0);
+}
+
+.file-upload-button span {
+  margin: 5px 0;
+  font-weight: 600;
+}
+
+.file-upload-button small {
+  color: #8a5bc6;
+  opacity: 0.8;
+  font-size: 12px;
+  max-width: 90%;
+  text-align: center;
+}
+
+/* Save Changes button container */
+.save-changes-container {
+  display: flex;
+  justify-content: center !important;
+  margin-top: 24px;
+}
+
+/* Enhanced save button */
+.purple-save-button {
+  background: linear-gradient(45deg, #8a5bc6, #a673e7) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 14px 32px !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+  font-weight: 500 !important;
+  white-space: nowrap;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 12px rgba(138, 91, 198, 0.3) !important;
+  letter-spacing: 0.5px;
+}
+
+.purple-save-button:hover {
+  background: linear-gradient(45deg, #7b4bb0, #9563e0) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(138, 91, 198, 0.4) !important;
+}
+
+.purple-save-button:active {
+  transform: translateY(1px) !important;
+  box-shadow: 0 2px 8px rgba(138, 91, 198, 0.3) !important;
+}
+
+.purple-save-button.nowrap {
+  white-space: nowrap;
+}
+
+/* Input styling for custom text fields */
+.custom-input-container {
+  position: relative;
+}
+
+.custom-input-field {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+  background-color: #f9f9f9;
+}
+
+.custom-input-field:focus {
+  border-color: #8a5bc6;
+  box-shadow: 0 0 0 3px rgba(138, 91, 198, 0.1);
+  background-color: #fff;
+}
+
+.custom-input-field::placeholder {
+  color: #aaa;
+}
+
+.custom-eye-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.custom-eye-icon:hover {
+  color: #8a5bc6;
+}
+
+/* Loading state */
+.loading-indicator {
+  width: 100%;
+  padding: 30px;
+  text-align: center;
+  border-radius: 12px;
+  background-color: #f9f5ff;
+  margin-bottom: 24px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.loading-indicator p {
+  color: #8a5bc6;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Error state */
+.error-message {
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+  font-size: 16px;
+  color: #eb5757;
+  background-color: rgba(235, 87, 87, 0.1);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(235, 87, 87, 0.2);
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-10px);
+  }
+  40% {
+    transform: translateX(10px);
+  }
+  60% {
+    transform: translateX(-5px);
+  }
+  80% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.error-message button {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background-color: #fff;
+  color: #eb5757;
+  border: 1px solid #eb5757;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.error-message button:hover {
+  background-color: #eb5757;
+  color: #fff;
+}
+
+/* Disabled button states */
+button:disabled,
+.purple-save-button:disabled,
+.delete-button:disabled,
+.cancel-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* Empty state for no categories */
+.categories-grid:empty::after {
+  content: "No categories found. Add your first category!";
+  display: block;
+  width: 100%;
+  padding: 60px 20px;
+  text-align: center;
+  color: #8a5bc6;
+  font-size: 18px;
+  grid-column: 1 / -1;
+  border: 2px dashed #d4c4e7;
+  border-radius: 12px;
+  background-color: #f9f5ff;
+  animation: breathe 3s infinite ease-in-out;
+}
+
+@keyframes breathe {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Improvements for SPA behavior - prevent page refresh on category click */
+.categories-grid a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Smooth animations for all transitions */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ENHANCED RESPONSIVE STYLES */
+
+/* Large screens (desktops) */
+@media (min-width: 1201px) {
+  .edit-modal-content {
+    max-width: 550px;
+  }
+}
+
+/* Medium-sized screens (laptops) */
+@media (max-width: 1200px) {
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 95%;
+  }
+
+  .add-category-content {
+    padding: 28px;
+  }
+
+  .fixed-background-image {
+    height: 250px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 992px) {
+  .add-category-content {
+    margin-left: 220px;
+    padding: 24px;
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .fixed-background-image {
+    height: 200px;
+    opacity: 0.7;
+  }
+
+  .add-category-button-container {
+    left: 60%;
+  }
+}
+
+/* Small tablets */
+@media (max-width: 768px) {
+  .add-category-content {
+    margin-left: 0;
+    padding: 20px;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 100%;
+    gap: 16px;
+  }
+
+  .category-card {
+    padding: 16px;
+  }
+
+  .category-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .edit-modal-content,
+  .delete-modal-content {
+    width: 95%;
+    padding: 24px;
+    max-width: 450px;
+  }
+
+  .photo-box {
+    width: 150px;
+    height: 150px;
+  }
+
+  .file-upload-button {
+    width: 90%;
+    padding: 14px 20px;
+  }
+
+  .add-category-button-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    width: 90%;
+    max-width: 350px;
+    transform: translateX(-50%);
+  }
+
+  .purple-add-button {
+    width: 100%;
+    padding: 12px 24px !important;
+  }
+
+  /* Make modal actions more touch-friendly */
+  .delete-modal-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .delete-modal-actions button {
+    width: 100%;
+    padding: 14px !important;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 576px) {
+  .categories-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .category-card {
+    max-width: 100%;
+  }
+
+  .page-title {
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+
+  .edit-modal-content,
+  .delete-modal-content {
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  .edit-modal-content h2 {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .photo-box {
+    width: 120px;
+    height: 120px;
+  }
+
+  .purple-save-button,
+  .purple-add-button {
+    padding: 12px 20px !important;
+    font-size: 14px !important;
+  }
+
+  .delete-modal-content h3 {
+    font-size: 18px;
+  }
+
+  /* Smaller text for mobile */
+  .edit-form label {
+    font-size: 14px;
+  }
+
+  .custom-input-field {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  /* Make sure the menu doesn't overflow on small screens */
+  .menu-slide {
+    right: 0;
+    width: auto;
+    min-width: 120px;
+  }
+}
+
+/* Very small mobile devices */
+@media (max-width: 375px) {
+  .add-category-content {
+    padding: 16px 12px;
+  }
+
+  .category-image {
+    width: 90px;
+    height: 90px;
+  }
+
+  .edit-modal-content,
+  .delete-modal-content {
+    padding: 16px;
+  }
+
+  .photo-box {
+    width: 100px;
+    height: 100px;
+  }
+
+  .file-upload-button {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .file-upload-button span {
+    font-size: 14px;
+  }
+
+  .file-upload-button small {
+    font-size: 10px;
+  }
+
+  /* Smaller fixed background image */
+  .fixed-background-image {
+    height: 150px;
+    opacity: 0.5;
+  }
+}
+
+/* Fix for modals on landscape mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .edit-modal-content {
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 16px;
+  }
+
+  .photo-box {
+    width: 100px;
+    height: 100px;
+  }
+
+  .edit-form {
+    gap: 12px;
+  }
+
+  .save-changes-container {
+    margin-top: 16px;
+  }
+}
+
+/* Additional accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,251 @@
+/* ==== GENERAL SIDEBAR ==== */
+.sidebar {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 240px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid #ddd;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100%;
+}
+
+/* ==== RESPONSIVE SIDEBAR POSITIONS ==== */
+/* Mobile (Portrait phones) */
+@media (max-width: 576px) {
+  .sidebar {
+    top: 56px;
+    width: 240px;
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+/* Small tablets */
+@media (min-width: 577px) and (max-width: 767px) {
+  .sidebar {
+    top: 56px;
+    width: 240px;
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+/* Tablets */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .sidebar {
+    top: 60px;
+    width: 240px;
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+/* Laptops and Desktops */
+@media (min-width: 1024px) {
+  .sidebar {
+    top: 60px;
+    width: 240px;
+    transform: translateX(0) !important;
+  }
+}
+
+/* ==== NAV LIST ==== */
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.nav-item a {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  color: #444;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.nav-item a:hover {
+  background-color: #f2f2f2;
+}
+
+.nav-item a.active {
+  color: #8a5bc6;
+  background-color: rgba(138, 91, 198, 0.08);
+  position: relative;
+}
+
+.nav-item a.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: #8a5bc6;
+}
+
+.nav-icon {
+  margin-right: 10px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+}
+
+.nav-label {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.nav-right-icon {
+  margin-left: auto;
+  font-size: 12px;
+  color: #999;
+}
+
+/* ==== USER INFO SECTION ==== */
+.user-info {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-top: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.user-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  margin-right: 12px;
+  object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-details h4 {
+  margin: 0;
+  font-size: 14px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.user-details p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #7f8c8d;
+}
+
+.loading-state,
+.error-state {
+  font-size: 14px;
+  color: #7f8c8d;
+  text-align: center;
+  width: 100%;
+}
+
+/* ==== SIDEBAR OVERLAY ==== */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 999;
+}
+
+@media (min-width: 1024px) {
+  .sidebar-overlay {
+    display: none;
+  }
+}
+
+/* ==== LOGOUT MODAL ==== */
+.logout-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-modal {
+  background: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.logout-modal h3 {
+  margin-top: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.logout-modal-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.cancel-btn,
+.confirm-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn {
+  background: #ddd;
+  color: #333;
+}
+
+.cancel-btn:hover {
+  background: #ccc;
+}
+
+.confirm-btn {
+  background: #8a5bc6;
+  color: #fff;
+}
+
+.confirm-btn:hover {
+  background: #7a4bb6;
+}

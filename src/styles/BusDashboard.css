@@ -1,0 +1,236 @@
+/* File: src/styles/BusDashboard.css */
+
+.dashboardContainer {
+  display: flex;
+  margin-left: 240px;
+  padding-top: 60px;
+  width: calc(100% - 240px);
+  background-color: #f8f8fc;
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 24px 32px;
+  background-color: #f8f8fc;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.metrics {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  flex: 1;
+  min-width: 250px;
+}
+
+.card.orderProducts,
+.card.totalOrders {
+  width: 280px;
+  height: 140px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.card p {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+.success {
+  color: #22c55e;
+  font-size: 14px;
+  margin-top: 6px;
+  display: block;
+}
+
+/* Revenue section */
+.revenueSection {
+  margin-bottom: 32px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  overflow-x: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Sales section */
+.salesSection {
+  margin-bottom: 32px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.salesSection h4 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+/* Chart Header */
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.chartHeader h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.tabs button {
+  margin-left: 10px;
+  background: none;
+  border: none;
+  font-weight: 600;
+  color: #888;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: color 0.3s ease;
+}
+
+.tabs .active {
+  color: #6c2bd9;
+  background-color: #f4edfb;
+}
+
+/* Growth and decline boxes */
+.growthBox {
+  background-color: #e7fbe9;
+  color: #22c55e;
+  padding: 4px 10px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.declineBox {
+  background-color: #ffecec;
+  color: #f87171;
+  padding: 4px 10px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Loading and Error states */
+.loadingContainer,
+.errorContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  background-color: #fff;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.loadingContainer p,
+.errorContainer p {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+.errorContainer p {
+  color: #f87171;
+}
+
+/* No data message */
+.noDataMessage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px dashed #ddd;
+}
+
+.noDataMessage p {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .dashboardContainer {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .metrics {
+    flex-direction: column;
+  }
+
+  .chartHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 5px;
+  }
+
+  .tabs button {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    padding: 16px;
+  }
+
+  .card {
+    min-width: 100%;
+  }
+
+  .revenueSection,
+  .salesSection {
+    padding: 16px;
+  }
+}

@@ -1,0 +1,115 @@
+.profile_b-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #fff;
+  margin-left: 240px; /* Width of Sidebar_2 */
+  padding-top: 60px;   /* Height of fixed Navbar */
+}
+
+/* Removed margin-left to eliminate the unwanted space between Sidebar and content */
+.profile_b-content {
+  flex: 1;
+  position: relative;
+}
+
+/* Top bar with light purple background */
+.profile_b-topbar {
+  background-color: #e8dced;
+  height: 160px;
+  position: relative;
+}
+
+/* Avatar overlapping the top bar */
+.profile_b-avatar {
+  position: absolute;
+  bottom: -40px;
+  left: 40px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff;
+}
+
+/* Main section (below the purple bar) */
+.profile_b-main {
+  margin-top: 60px;
+  padding: 0 40px 24px;
+}
+
+/* Title "Profile Date" */
+.profile_b-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+/* Form with two columns */
+.profile_b-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 40px;
+  max-width: 900px;
+}
+
+/* Each field with label and input */
+.profile_b-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile_b-field label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.profile_b-field input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+.profile_b-field input:focus {
+  border-color: #8a5bc6;
+}
+
+/* Upload button style */
+.profile_b-upload-btn {
+  background-color: #f5f5f5;
+  color: #666;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.profile_b-upload-btn:hover {
+  background-color: #eaeaea;
+}
+
+/* Save Changes button at bottom-right */
+.profile_b-actions {
+  margin-top: 24px;
+  text-align: right;
+}
+
+.profile_b-save-btn {
+  background-color: #8a5bc6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.profile_b-save-btn:hover {
+  background-color: #7b4bb0;
+}
