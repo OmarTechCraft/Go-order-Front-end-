@@ -1,4 +1,6 @@
 import "./App.css";
+import PrivacyNotice from "./Pages/public/PrivacyNotice";
+import MainTerms from "./Pages/public/MainTerms";
 import Dashboard from "./Pages/Dashboard";
 import Settings from "./Pages/Settings";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
@@ -38,7 +40,6 @@ import DoneOrders from "./Pages/Business/Orders/done-orders";
 import { OrdersProvider } from "./Pages/Business/Orders/context/OrdersContext";
 import MarketingAILayout from "./Pages/Business/MarketingAI/layout";
 import MarketingRouter from "./Pages/Business/MarketingAI/marketing-router";
-import PrivacyNotice from "./Pages/PrivacyNotice";
 
 const MyApp: React.FC = () => {
   return (
@@ -91,6 +92,10 @@ const MyApp: React.FC = () => {
           />
 
           <Route path="/orders/all" element={<AllOrders />} />
+
+          <Route path="/privacy-notice" element={<PrivacyNotice />} />
+          <Route path="/term-condition" element={<MainTerms />} />
+
           <Route path="/orders/waiting" element={<WaitingOrders />} />
           <Route path="/orders/in-progress" element={<InProgressOrders />} />
           <Route path="/orders/done" element={<DoneOrders />} />

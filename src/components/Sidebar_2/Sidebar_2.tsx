@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaHome,
   FaUser,
@@ -43,13 +43,19 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
   isMobileMenuOpen = false,
   toggleMobileMenu,
 }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   // State to handle toggling of the "Orders" submenu
-  const isActive = (path: string) => location.pathname === path;
   const [ordersOpen, setOrdersOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const isActive = (path: string) => location.pathname === path;
 
   const handleOrdersToggle = () => {
     setOrdersOpen((prev) => !prev);
   };
+
   // State to manage internal mobile menu state if toggleMobileMenu prop isn't provided
   const [mobileOpen, setMobileOpen] = useState(isMobileMenuOpen);
   // State to manage overlay visibility
@@ -95,6 +101,28 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
     }
   };
 
+  // Handle logout with confirmation modal
+  const handleLogoutClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowLogoutModal(true);
+  };
+
+  const confirmLogout = () => {
+    // Clear all proxy storage data
+    localStorage.clear();
+    sessionStorage.clear();
+
+    // Close modal
+    setShowLogoutModal(false);
+
+    // Navigate to login or home page
+    navigate("/login");
+  };
+
+  const cancelLogout = () => {
+    setShowLogoutModal(false);
+  };
+
   // Determine if using internal or external mobile menu state
   const isMenuOpen = toggleMobileMenu ? isMobileMenuOpen : mobileOpen;
 
@@ -117,12 +145,35 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
         />
       )}
 
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
+        <div className="logout-modal-overlay">
+          <div className="logout-modal">
+            <div className="logout-modal-content">
+              <h3>Confirm Logout</h3>
+              <p>
+                Are you sure you want to logout? All your session data will be
+                cleared.
+              </p>
+              <div className="logout-modal-buttons">
+                <button className="logout-cancel-btn" onClick={cancelLogout}>
+                  Cancel
+                </button>
+                <button className="logout-confirm-btn" onClick={confirmLogout}>
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className={`sidebar_2 ${isMenuOpen ? "mobile-open" : ""}`}>
         {/* Top Section: Menu Items */}
         <div className="sidebar_2-top">
           <ul className="sidebar_2-menu">
             {/* Dashboard */}
-            <li>
+            <li className={isActive("/BusDashboard") ? "active" : ""}>
               <Link
                 to="/BusDashboard"
                 onClick={() =>
@@ -135,7 +186,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             </li>
 
             {/* Profile */}
-            <li>
+            <li className={isActive("/profile_b") ? "active" : ""}>
               <Link
                 to="/profile_b"
                 onClick={() =>
@@ -148,9 +199,9 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             </li>
 
             {/* Settings */}
-            <li>
+            <li className={isActive("/Bus-settings") ? "active" : ""}>
               <Link
-                to="/settings"
+                to="/Bus-settings"
                 onClick={() =>
                   window.innerWidth <= 768 && handleToggleMobileMenu(false)
                 }
@@ -161,7 +212,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             </li>
 
             {/* User review */}
-            <li>
+            <li className={isActive("/reviews") ? "active" : ""}>
               <Link
                 to="/reviews"
                 onClick={() =>
@@ -174,7 +225,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             </li>
 
             {/* Messages */}
-            <li>
+            <li className={isActive("/messages") ? "active" : ""}>
               <Link
                 to="/messages"
                 onClick={() =>
@@ -187,7 +238,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             </li>
 
             {/* Notifications */}
-            <li>
+            <li className={isActive("/notifications") ? "active" : ""}>
               <Link
                 to="/notifications"
                 onClick={() =>
@@ -200,7 +251,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             </li>
 
             {/* Add Category */}
-            <li>
+            <li className={isActive("/add-category-business") ? "active" : ""}>
               <Link
                 to="/add-category-business"
                 onClick={() =>
@@ -213,7 +264,9 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             </li>
 
             {/* Add Subcategory */}
-            <li>
+            <li
+              className={isActive("/add-subcategory-business") ? "active" : ""}
+            >
               <Link
                 to="/add-subcategory-business"
                 onClick={() =>
@@ -226,7 +279,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             </li>
 
             {/* Add Product */}
-            <li>
+            <li className={isActive("/add-product-business_1") ? "active" : ""}>
               <Link
                 to="/add-product-business_1"
                 onClick={() =>
@@ -239,7 +292,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             </li>
 
             {/* Image Generator */}
-            <li>
+            <li className={isActive("/image-generator") ? "active" : ""}>
               <Link
                 to="/image-generator"
                 onClick={() =>
@@ -252,7 +305,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             </li>
 
             {/* Marketing AI */}
-            <li>
+            <li className={isActive("/marketing-ai") ? "active" : ""}>
               <Link
                 to="/marketing-ai"
                 onClick={() =>
@@ -296,15 +349,10 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
 
             {/* Logout */}
             <li>
-              <Link
-                to="/logout"
-                onClick={() =>
-                  window.innerWidth <= 768 && handleToggleMobileMenu(false)
-                }
-              >
+              <a href="#" onClick={handleLogoutClick}>
                 <FaSignOutAlt className="sidebar_2-icon" />
                 <span>Logout</span>
-              </Link>
+              </a>
             </li>
           </ul>
         </div>

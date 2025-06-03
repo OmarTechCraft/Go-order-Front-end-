@@ -37,7 +37,9 @@ const Home: React.FC = () => {
           </div>
           <p className="tagline">“Dare to Be Different, Shop With Us”</p>
           <div className="cta-reviews">
-            <GetStartedButton />
+            <Link to="/register">
+              <GetStartedButton />
+            </Link>
             <div className="collab-images">
               <img src="/images/girl1.jpg" alt="Customer 1" />
               <img src="/images/girl2.jpg" alt="Customer 2" />
@@ -113,7 +115,9 @@ const Home: React.FC = () => {
           </p>
           <div className="cta-container">
             <p className="join-us">Join As Partner</p>
-            <GetStartedButton />
+            <Link to="/register">
+              <GetStartedButton />
+            </Link>
           </div>
         </div>
         <div className="phase4-image-container">
@@ -152,7 +156,9 @@ const Home: React.FC = () => {
           </p>
           <div className="phase5-cta">
             <p className="join-text">Join as Deliver</p>
-            <GetStartedButton />
+            <Link to="/deliver-with-us">
+              <GetStartedButton />
+            </Link>
           </div>
         </div>
       </div>
@@ -252,7 +258,7 @@ const Home: React.FC = () => {
             <Link to="/privacy-notice">Privacy Notice</Link>
           </p>
           <p>
-            <Link to="/privacy-notice">Terms & Conditions</Link>
+            <Link to="/term-condition">Terms & Conditions</Link>
           </p>
         </div>
       </div>

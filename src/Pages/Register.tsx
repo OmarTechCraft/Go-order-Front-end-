@@ -695,10 +695,7 @@ const Register: React.FC = () => {
               </div>
 
               {/* Sign In link */}
-              <p
-                className="register-text animate-form-element"
-                style={{ opacity: 0, transform: "translateY(20px)" }}
-              >
+              <p className="register-text">
                 Already have an account?{" "}
                 <Link to="/login" className="register-link">
                   Sign In

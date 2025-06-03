@@ -52,7 +52,8 @@ body {
   align-items: center;
   padding: var(--spacing-lg);
   position: relative;
-  z-index: 4; /* Ensure it's below the animation but above background layers */
+  z-index: 4;
+  min-height: 100vh; /* Ensure full viewport height */
 }
 
 /* Right side (purple background with illustration) */
@@ -175,6 +176,7 @@ body {
   font-weight: 700;
   margin-bottom: var(--spacing-lg);
   align-self: center; /* Center the logo */
+  position: relative;
 }
 
 .animate-logo {
@@ -216,7 +218,7 @@ body {
 /* Content container */
 .auth-content {
   max-width: 900px;
-  width: 180%;
+  width: 100%;
   margin: 0 auto;
   padding: var(--spacing-md);
   animation: fadeIn 0.8s ease-out;
@@ -224,7 +226,10 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 15; /* Higher z-index than the animation so it's still accessible */
+  justify-content: center;
+  z-index: 15;
+  /* Center vertically and horizontally in available space */
+  flex: 1;
 }
 
 @keyframes fadeIn {
@@ -542,7 +547,7 @@ body {
 /* Register button */
 .register-button {
   width: 100%;
-  margin-top: var(--spacing-md);
+  margin: var(--spacing-md) auto; /* Center the button horizontally */
   height: 48px;
   border-radius: 24px !important;
   font-size: 16px !important;
@@ -559,6 +564,7 @@ body {
   ) !important;
   border: none !important;
   box-shadow: 0 4px 15px rgba(138, 91, 198, 0.4) !important;
+  display: block; /* Ensure it's a block element for centering */
 }
 
 .register-button:hover {

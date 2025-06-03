@@ -1,702 +1,990 @@
-@import url("https://fonts.googleapis.com/css2?family=Lobster+Two:wght@700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Lobster+Two:wght@700&display=swap');
 @import "@fontsource/lobster-two/700-italic.css";
-@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@700;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700;900&display=swap');
 
 /* ======= GLOBAL ======= */
-body,
 html {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  overflow-x: hidden;
-  box-sizing: border-box;
+    font-size: 16px; /* Base font size for rem units */
 }
 
-/* ========== FIRST PHASE ========== */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden; /* Prevents horizontal scroll */
+    box-sizing: border-box;
+}
+
+/* Ensure images don't overflow their containers */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ========== FIRST SECTION - OfferSection ========== */
 .offer-container {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding-top: 40px;
-  margin: 0;
+    position: relative;
+    width: 100vw;
+    min-height: 100vh; /* Ensures it takes at least the full viewport height */
+    display: flex;
+    align-items: flex-start; /* Aligns text to top of container initially */
+    justify-content: flex-start; /* Aligns text to left of container initially */
+    padding-top: 2.5rem;
+    margin: 0;
+    overflow: hidden; /* Important for absolute positioning and background image */
 }
 
 .background-image {
-  width: 100vw;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  margin-top: 60px;
+    width: 100%; /* Take full width of its parent */
+    height: 100%; /* Take full height of its parent */
+    object-fit: cover; /* Ensures the image covers the entire area, cropping if necessary */
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    margin-top: 3.75rem; /* Pushes the image down slightly, considering fixed Navbar */
 }
 
 .offer-text {
-  position: absolute;
-  color: black;
-  width: 60%;
-  margin-top: 140px;
-  margin-left: 150px;
-  font-size: 67px;
+    position: absolute; /* Keep absolute positioning for fixed placement on desktop */
+    color: black;
+    width: 60vw; /* Original width */
+    max-width: 900px; /* Limit max width for large screens */
+    left: 25%; /* Original fixed left position */
+    top: 180px; /* Current desktop top position, shifted down as requested */
+    text-align: left; /* Align text to the left */
+    padding: 1rem; /* Add some padding for smaller screens */
+    box-sizing: border-box; /* Include padding in width calculation */
 }
 
 .offer-title {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+     margin-top: 6.5vh;
 }
 
 .offer-heading {
-  font-size: 50px;
-  font-weight: bold;
-  color: black;
-  margin-top: 55px;
+    font-size: clamp(2rem, 5vw, 3.125rem); /* Responsive font size */
+    font-weight: bold;
+    color: black;
+    margin-top: 3.4375rem; /* Original margin-top */
 }
 
 .on-order-container {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .on-text {
-  font-size: 50px;
-  font-weight: bold;
-  color: black;
+    font-size: clamp(2rem, 5vw, 3.125rem); /* Responsive font size */
+    font-weight: bold;
+    color: black;
+    margin-right: 0.5rem;
 }
 
-.highlight,
-.special-o {
-  font-family: "Lobster Two", cursive;
-  font-size: 80px;
-  font-weight: 700;
-  font-style: italic;
-  line-height: 85px;
-  color: #7d2ae8;
-  display: flex;
-  align-items: center;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+.highlight, .special-o {
+    font-family: "Lobster Two", cursive;
+    font-size: clamp(3rem, 7vw, 5rem); /* Responsive font size */
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.2;
+    color: #7d2ae8;
+    display: flex;
+    align-items: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .tagline {
-  font-family: "Rubik", sans-serif;
-  font-size: 36px;
-  font-weight: 700;
-  line-height: 85px;
-  color: #333333;
-  margin: 40px 0 50px 0;
-  text-align: left;
+    font-family: "Rubik", sans-serif;
+    font-size: clamp(1.2rem, 3vw, 2.25rem); /* Responsive font size */
+    font-weight: 700;
+    line-height: 1.5;
+    color: #333333;
+     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 2.5rem 0 3.125rem 0; /* Original margins */
+    text-align: left;
 }
 
 .cta-reviews {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1.25rem;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 
 .get-started {
-  background-color: #7d2ae8;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 30px;
-  cursor: pointer;
-  font-size: 18px;
-  font-weight: bold;
-  transition: 0.3s;
+    background-color: #7d2ae8;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 1.875rem;
+    cursor: pointer;
+    font-size: 1.125rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .get-started:hover {
-  background-color: #6a1bbf;
+    background-color: #6a1bbf;
+    transform: translateY(-2px);
 }
 
 .collab-images {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .collab-images img {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  border: 2px solid white;
-  object-fit: cover;
-  margin-left: -10px;
+    width: 2.8125rem;
+    height: 2.8125rem;
+    border-radius: 50%;
+    border: 0.125rem solid white;
+    object-fit: cover;
+    margin-left: -0.625rem;
 }
 
 .collab-images img:first-child {
-  margin-left: 0;
+    margin-left: 0;
 }
 
 .customer-reviews {
-  font-size: 16px;
-  color: black;
-  font-weight: bold;
-  text-align: left;
+    font-size: 1rem;
+    color: black;
+    font-weight: bold;
+    text-align: left;
+    margin-left: 0.625rem;
 }
 
 .stars {
-  color: #f4b400;
-  font-weight: bold;
+    color: #f4b400;
+    font-weight: bold;
 }
 
-/* ========== SECOND PHASE ========== */
+/* ========== SECOND SECTION - What We Serve ========== */
 .what-we-serve-container {
-  text-align: center;
-  padding: 50px 0;
-  margin: 0;
-  background-color: white;
-  width: 100vw;
+    text-align: center;
+    padding: 3.125rem 1rem; /* Added horizontal padding */
+    margin: 0;
+    background-color: white;
+    width: 100vw;
+    box-sizing: border-box;
 }
 
 .what-we-serve-title {
-  font-size: 16px;
-  font-weight: bold;
-  color: #7d2ae8;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #7d2ae8;
+    letter-spacing: 0.0625rem;
+    text-transform: uppercase;
 }
 
 .delivery-partner-heading {
-  font-size: 32px;
-  font-weight: bold;
-  color: black;
+    font-size: clamp(1.5rem, 4vw, 2rem); /* Responsive font size */
+    font-weight: bold;
+    color: black;
+    margin-bottom: 2rem;
 }
 
 .services-container {
-  display: flex;
-  justify-content: center;
-  gap: 60px;
-  align-items: center;
-  flex-wrap: wrap;
-  max-width: 100%;
-  margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 2rem; /* Adjusted gap for better responsiveness */
+    align-items: flex-start;
+    flex-wrap: wrap;
+    max-width: 1200px; /* Limit max width */
+    margin: 0 auto;
+    padding: 0 1rem;
 }
 
 .service {
-  width: 280px;
-  text-align: center;
+    flex: 1 1 280px; /* Allows flexibility while maintaining a base width */
+    max-width: 300px; /* Max width for individual service cards */
+    text-align: center;
+    padding: 1.25rem;
+    box-sizing: border-box;
+    display: flex; /* Added flex for centering image */
+    flex-direction: column; /* Stack image and text */
+    align-items: center; /* Center horizontally */
 }
 
 .service img {
-  width: 160px;
-  height: auto;
-  margin-bottom: 20px;
+    width: 10rem;
+    height: auto;
+    margin-bottom: 1.25rem;
+    /* Removed margin-left to ensure centering */
 }
 
 .service-title {
-  font-size: 22px;
-  font-weight: bold;
-  color: black;
-  margin-bottom: 8px;
+    font-size: 1.375rem;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 0.5rem;
 }
 
 .service-description {
-  font-family: "Poppins", sans-serif;
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 30px;
-  color: #333;
-  margin-top: 10px;
+    font-family: "Poppins", sans-serif;
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.875rem;
+    color: #333;
+    margin-top: 0.625rem;
 }
 
-/* ========== THIRD PHASE ========== */
+/* ========== THIRD SECTION - Two Images Side by Side ========== */
 .image-split-container {
-  display: flex;
-  width: 100%;
-  height: 90vh; /* slightly reduced height */
-  margin: 0;
-  padding: 0;
-  gap: 0; /* no spacing between images */
-  background-color: #fff;
+    display: flex;
+    width: 100%;
+    height: auto; /* Revert to auto height, let content define */
+    margin: 0;
+    padding: 0; /* Revert padding */
+    gap: 0; /* Revert gap */
+    background-color: #fff;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
 .left-image,
 .right-image {
-  flex: 1;
-  width: 100%;
-  height: 100%;
-  object-fit: contain; /* ensures full content is visible */
-  padding: 5px; /* adjust this to control how much smaller the image looks */
-  display: block;
+    flex: 1; /* Allows images to grow and shrink */
+    width: 100%; /* Take full width within its flex item */
+    height: auto; /* Auto height to maintain aspect ratio */
+    object-fit: contain; /* Ensures the entire image is visible */
+    padding: 0.3125rem; /* Original padding */
+    display: block;
+    max-width: 40%; /* Original max width to maintain side-by-side */
+    box-sizing: border-box;
 }
 
-/* ========== FOURTH PHASE ========== */
-.phase4-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fafafa;
-  width: 100%;
-  min-height: 100vh;
-  box-sizing: border-box;
-  padding: 0; /* No extra padding to ensure no gap */
-  margin: 0;
-}
 
+/* ========== FOURTH SECTION - Who We Are Section ========== */
 .phase4-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  background-color: white;
-  box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background-color: white;
+    box-sizing: border-box;
+    padding: 3.125rem 2rem; /* Adjusted horizontal padding */
+    flex-wrap: wrap;
 }
 
 .phase4-text {
-  flex: 1;
-  max-width: 50%;
-  margin-left: 100px;
-  box-sizing: border-box;
+    flex: 1 1 45%; /* Allows flexibility */
+    max-width: 50%; /* Adjusted max-width */
+    margin-left: 0; /* Remove fixed margin-left */
+    padding-right: 1rem;
+    box-sizing: border-box;
+    text-align: left;
+    min-width: 300px;
 }
 
 .about-us {
-  font-size: 18px;
-  font-weight: bold;
-  color: #7a25f6;
-  margin-bottom: 10px;
+    font-size: 1.125rem;
+    font-weight: bold;
+    color: #7a25f6;
+    margin-bottom: 0.625rem;
 }
 
 .who-we-are {
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 12px;
-  color: #000;
-}
-
-.description {
-  font-size: 16px;
-  color: #555;
-  line-height: 1.6;
-  max-width: 90%;
-  margin-bottom: 60px;
+    font-size: clamp(1.8rem, 4vw, 2rem); /* Responsive font size */
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: #000;
 }
 
 .description1 {
-  font-size: 16px;
-  color: black;
-  line-height: 1.6;
-  max-width: 100%;
+    font-size: 1rem;
+    color: black;
+    line-height: 1.6;
+    max-width: 100%;
+    margin-bottom: 1.875rem;
 }
 
 .cta-container {
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-  gap: 40px;
+    display: flex;
+    align-items: center;
+    margin-top: 1.25rem;
+    gap: 1.5rem; /* Adjusted gap */
+    flex-wrap: wrap;
 }
 
 .join-us {
-  font-size: 32px;
-  font-weight: 700;
-  color: #000;
-  white-space: nowrap;
+    font-size: clamp(1.5rem, 3vw, 2rem); /* Responsive font size */
+    font-weight: 700;
+    color: #000;
+    white-space: nowrap;
 }
 
 /* Right Side Image for Phase 4 */
 .phase4-image-container {
-  position: relative;
-  flex: 1;
-  max-width: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 80px;
-  box-sizing: border-box;
+    position: relative;
+    flex: 1 1 45%; /* Allows flexibility */
+    max-width: 50%; /* Adjusted max-width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 0; /* Remove fixed margin-right */
+    box-sizing: border-box;
+    min-width: 300px;
 }
 
 .purple-background {
-  position: absolute;
-  width: 320px;
-  height: 300px;
-  background-color: #8a5bc6;
-  border-top-left-radius: 80px;
-  border-top-right-radius: 230.5px;
-  border-bottom-left-radius: 80px;
-  border-bottom-right-radius: 0px;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 0;
+    position: absolute;
+    width: clamp(200px, 20vw, 320px); /* Responsive width */
+    height: clamp(200px, 20vw, 300px); /* Responsive height */
+    background-color: #8A5BC6;
+    border-top-left-radius: 5rem;
+    border-top-right-radius: 14.40625rem;
+    border-bottom-left-radius: 5rem;
+    border-bottom-right-radius: 0;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
 }
 
 .ccare-image {
-  width: auto;
-  max-width: 350px;
-  position: relative;
-  z-index: 1;
+    width: auto;
+    max-width: clamp(200px, 25vw, 350px); /* Responsive max-width */
+    height: auto;
+    position: relative;
+    z-index: 1;
 }
 
-/* ========== FIFTH PHASE ========== */
+/* ========== FIFTH SECTION - We Deliver Section ========== */
 .phase5-container {
-  display: flex;
-  flex-direction: row; /* Ensures image appears first */
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 50px;
-  background-color: white;
-  position: relative;
-  margin-top: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 3.125rem 2rem; /* Adjusted horizontal padding */
+    background-color: white;
+    position: relative;
+    margin-top: 0;
+    box-sizing: border-box;
+    flex-wrap: wrap-reverse; /* Image above text on smaller screens */
 }
 
 .phase5-image {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  position: relative;
+    flex: 1 1 45%; /* Allows flexibility */
+    display: flex;
+    justify-content: center;
+    position: relative;
+    min-width: 300px;
+    padding: 1rem;
+    box-sizing: border-box;
 }
 
 .phase5-image img {
-  width: 760px; /* Match Figma width */
-  height: 589px; /* Match Figma height */
-  object-fit: contain;
-  position: relative;
-  z-index: 2;
+    width: 100%;
+    max-width: 760px;
+    height: auto;
+    object-fit: contain;
+    position: relative;
+    z-index: 2;
 }
 
-/* Semi-transparent background behind truck */
 .truck-background {
-  width: 488px;
-  height: 461px;
-  background-color: rgba(217, 209, 227, 0.5);
-  position: absolute;
-  border-radius: 52px 59px 50px 53px;
-  z-index: 1;
-  margin-right: 400px;
-  margin-top: 30px;
+    width: clamp(250px, 30vw, 488px); /* Responsive width */
+    height: clamp(250px, 30vw, 461px); /* Responsive height */
+    background-color: rgba(217, 209, 227, 0.5);
+    position: absolute;
+    border-radius: 3.25rem 3.6875rem 3.125rem 3.3125rem;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
-/* Flying Dots */
+/* Flying Dots - positioned relative to .phase5-image */
 .dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  position: absolute;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 50%;
+    position: absolute;
 }
 
-.yellow {
-  background-color: #f4c430;
-  margin-left: 500px;
-}
+.dot.yellow { background-color: #f4b400; }
+.dot.purple { background-color: #7d2ae8; }
 
-.purple {
-  background-color: #8a2be2;
-  margin-left: 650px;
-  margin-top: 90px;
-}
+
+/* The actual dot positions need to be fine-tuned based on parent container */
+/* Example: if they are absolutely positioned within .phase5-image */
+.phase5-image .dot:nth-child(2) { top: 10%; left: 5%; } /* yellow */
+.phase5-image .dot:nth-child(3) { top: 13%; left: 70%; } /* purple */
+.phase5-image .dot:nth-child(4) { top: 30%; left: 70%; } /* purple */
+.phase5-image .dot:nth-child(5) { top: 85%; left: 10%; } /* yellow */
+.phase5-image .dot:nth-child(6) { top: 10%; left: 70%; } /* yellow */
+.phase5-image .dot:nth-child(7) { top: -10%; left: 0%; } /* purple */
+
 
 .phase5-content {
-  flex-wrap: nowrap;
-  flex: 1;
-  text-align: left;
-  margin-left: 15px;
+    flex: 1 1 45%; /* Allows flexibility */
+    text-align: left;
+    margin-left: 0; /* Remove fixed margin-left */
+    min-width: 300px;
+    padding-right: 1rem;
+    box-sizing: border-box;
 }
 
 .phase5-title {
-  font-size: 40px;
-  font-weight: 700;
-  color: #000;
-  font-family: "Poppins", sans-serif;
-  line-height: 30px;
+    font-size: clamp(2rem, 4vw, 2.5rem); /* Responsive font size */
+    font-weight: 700;
+    color: #000;
+    font-family: "Poppins", sans-serif;
+    line-height: 1.2;
+    margin-bottom: 1.25rem;
 }
 
 .phase5-text {
-  font-size: 20px;
-  font-weight: 500;
-  font-family: "Poppins", sans-serif;
-  line-height: 30px;
-  margin: 10px 0 20px;
-  color: #000;
-  width: 441px;
-  height: 120px;
+    font-size: clamp(1rem, 2vw, 1.25rem); /* Responsive font size */
+    font-weight: 500;
+    font-family: "Poppins", sans-serif;
+    line-height: 1.875rem;
+    margin: 0.625rem 0 1.25rem;
+    color: #000;
+    width: auto;
+    height: auto;
+    max-width: 441px;
 }
 
 .phase5-cta {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-top: 160px;
-  margin-right: 500px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem; /* Adjusted margin */
+    flex-wrap: wrap;
 }
 
 .join-text {
-  font-size: 45px;
-  font-weight: 700;
-  font-family: "Rubik", sans-serif;
-  line-height: 60px;
-  color: #000;
-  text-wrap: nowrap;
+    font-size: clamp(1.8rem, 4vw, 2.8125rem); /* Responsive font size */
+    font-weight: 700;
+    font-family: "Rubik", sans-serif;
+    line-height: 1.2;
+    color: #000;
+    white-space: nowrap;
 }
 
 /* Global Get Started Button - included here for completeness */
 .get-started {
-  background-color: #7a25f6;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 15px;
-  cursor: pointer;
-  white-space: nowrap;
+    background-color: #7a25f6;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 0.9375rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-/* ========== SIXTH PHASE ========== */
+.get-started:hover {
+    background-color: #6a1bbf;
+    transform: translateY(-2px);
+}
+
+/* ========== SIXTH SECTION - Download Our Application ========== */
 .phase6-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 650px;
-  background-color: #ffffff;
-  padding: 0;
-  margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    min-height: 650px;
+    background-color: #ffffff;
+    padding: 3.125rem 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 .content-wrapper {
-  width: 1250px;
-  height: 614px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #f4edfb;
-  border-radius: 30px;
-  padding: 50px;
-  position: relative;
+    width: 90vw;
+    max-width: 1250px;
+    min-height: 38.375rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f4edfb;
+    border-radius: 1.875rem;
+    padding: 3.125rem;
+    position: relative;
+    box-sizing: border-box;
+    flex-wrap: wrap;
 }
 
 /* DOWNLOAD APP */
 .download-app {
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 22.4px;
-  color: #8817ea;
-  width: 178px;
-  height: 20px;
-  position: absolute;
-  top: 71px;
-  left: 85px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 1.125rem;
+    line-height: 1.4rem;
+    color: #8817EA;
+    position: absolute;
+    top: 4.4375rem;
+    left: 5.3125rem;
+    width: auto;
+    white-space: nowrap;
 }
 
 /* MAIN TITLE */
 .phase6-title {
-  font-family: "Rubik", sans-serif;
-  font-weight: 700;
-  font-size: 46px;
-  line-height: 50px;
-  color: #010f1c;
-  width: 404px;
-  height: 125px;
-  position: absolute;
-  top: 169px;
-  left: 85px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 4vw, 2.875rem); /* Responsive font size */
+    line-height: 1.2;
+    color: #010F1C;
+    width: 25.25rem; /* Original fixed width */
+    height: auto;
+    position: absolute;
+    top: 10.5625rem;
+    left: 5.3125rem;
 }
 
 /* TEXT PARAGRAPH */
 .phase6-text {
-  font-family: "Poppins", sans-serif;
-  font-size: 20px;
-  color: #000000;
-  position: absolute;
-  top: 300px;
-  left: 85px;
+    font-family: "Poppins", sans-serif;
+    font-size: clamp(1rem, 2vw, 1.25rem); /* Responsive font size */
+    color: #000000;
+    position: absolute;
+    top: 18.75rem;
+    left: 5.3125rem;
+    width: 90%;
+    max-width: 500px;
+    line-height: 1.6;
 }
 
 /* DOWNLOAD BUTTONS */
 .download-links {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  position: absolute;
-  top: 450px; /* Moved up by 15px */
-  left: 70px;
+    display: flex;
+    flex-direction: row;
+    gap: 1.25rem;
+    position: absolute;
+    top: 28.125rem;
+    left: 4.375rem;
+    flex-wrap: wrap;
+    width: calc(100% - 8.75rem);
 }
 
 .download-btn {
-  display: flex;
-  align-items: center;
-  background: white;
-  color: black;
-  border-radius: 15px;
-  padding: 10px 20px;
-  text-decoration: none;
-  font-family: "Poppins", sans-serif;
-  width: 301.15px;
-  height: 87px;
-  transition: 0.3s ease;
-  border: 1px solid #ccc;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    background: white;
+    color: black;
+    border-radius: 0.9375rem;
+    padding: 0.625rem 1.25rem;
+    text-decoration: none;
+    font-family: "Poppins", sans-serif;
+    width: auto;
+    min-width: 150px;
+    height: auto;
+    transition: 0.3s ease;
+    border: 0.0625rem solid #ccc;
+    box-shadow: 0px 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
+    flex: 1;
+    max-width: 301.15px;
 }
 
 .download-btn:hover {
-  opacity: 0.8;
+    opacity: 0.9;
+    transform: translateY(-2px);
 }
 
 .download-btn .icon {
-  font-size: 30px;
-  margin-right: 10px;
+    font-size: 1.875rem;
+    margin-right: 0.625rem;
 }
 
 .download-btn span {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .download-btn small {
-  font-size: 12px;
-  opacity: 0.8;
+    font-size: 0.75rem;
+    opacity: 0.8;
 }
 
 .download-btn strong {
-  font-size: 16px;
+    font-size: 1rem;
 }
 
-/* GOOGLE PLAY BUTTON */
-.google-play {
-  background: white;
+/* Updated positioning for phase6-image for normal web view */
+.phase6-image {
+    flex: 1; /* Allows flexibility */
+    display: flex;
+    justify-content: flex-end; /* Align to the right side of the flex container */
+    align-items: flex-end; /* Align to the bottom of the flex container */
+    min-width: 300px;
+    padding-left: 1rem;
+    box-sizing: border-box;
+    /* Reverted to position: static or relative in the flex context */
+    position: static; /* Let flexbox handle positioning */
+    margin-left: 0; /* Reset this */
+    /* Remove explicit width/height for normal flow, let img define */
+    width: auto;
+    height: auto;
 }
 
-/* APP STORE BUTTON */
-.app-store {
-  background: white;
-  margin-left: 350px; /* Shifted right */
-  margin-top: -60px;
+.phase6-image img {
+    /* Use absolute positioning *within* phase6-image for precise placement */
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain; /* Ensures the entire image is visible */
+    width: clamp(250px, 30vw, 450px); /* Keep responsive width */
 }
 
-/* ========== SEVENTH PHASE (FOOTER) ========== */
+
+/* ========== SEVENTH SECTION (FOOTER) ========== */
 .footer {
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
-  background-color: white;
-  padding: 20px;
-  width: 100%;
-  box-sizing: border-box;
-  color: black;
-  margin-left: 60px; /* Shift the content 10px to the right */
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    background-color: white;
+    padding: 1.25rem 0;
+    width: 100%;
+    box-sizing: border-box;
+    color: black;
+    margin-left: 0;
+    flex-wrap: wrap;
 }
 
 /* General Styling for Each Section */
 .footer-section {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 30%;
+    min-width: 250px;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
 }
 
 /* GoOrder Section */
 .goorder {
-  font-family: "Roboto", sans-serif;
-  font-weight: 700;
-  font-size: 40px;
-  color: #8a5bc6; /* Purple */
-  margin-bottom: 10px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 4vw, 2.5rem); /* Responsive font size */
+    color: #8A5BC6;
+    margin-bottom: 0.625rem;
 }
 
 /* Description */
 .description {
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
-  font-size: 18px;
-  color: #3a393b;
-  margin-bottom: 20px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 1.125rem;
+    color: #3A393B;
+    margin-bottom: 1.25rem;
+    line-height: 1.6;
 }
 
 /* Social Section */
 .social-section {
-  margin-top: 10px;
+    margin-top: 0.625rem;
 }
 
 /* Social Title */
 .social-title {
-  font-family: "Roboto", sans-serif;
-  font-weight: 900;
-  font-size: 25px;
-  color: #263238;
-  margin-bottom: 10px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 900;
+    font-size: 1.5625rem;
+    color: #263238;
+    margin-bottom: 0.625rem;
 }
 
 /* Social Icons */
 .social-icons {
-  display: flex;
-  gap: 25px;
-  font-size: 2.5rem;
-  margin-top: 5px; /* Shifted down */
-}
-
-/* Icon Colors */
-.icon {
-  transition: transform 0.2s ease-in-out;
-}
-
-/* Multi-colored Google icon */
-.google {
-  color: #000;
-}
-
-.facebook {
-  color: #1877f2;
-}
-
-.apple {
-  color: #000;
+    display: flex;
+    gap: 1.5625rem;
+    font-size: 2.5rem;
+    margin-top: 0.3125rem;
 }
 
 .social-icons img {
-  width: 40px; /* Adjust as needed */
-  height: 40px; /* Adjust as needed */
-  object-fit: contain;
+    width: 2.5rem;
+    height: 2.5rem;
+    object-fit: contain;
+    transition: transform 0.2s ease-in-out;
 }
 
-.icon:hover {
-  transform: scale(1.2);
+.social-icons img:hover {
+    transform: scale(1.1);
 }
 
 /* Contact Info & Get Help */
-.contact,
-.get-help {
-  font-family: "Roboto", sans-serif;
-  font-weight: 700;
-  font-size: 25px;
-  color: black;
-  margin-bottom: 15px;
+.contact, .get-help {
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    font-size: 1.5625rem;
+    color: black;
+    margin-bottom: 0.9375rem;
 }
 
 /* Links */
+.footer-section p {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
 p a {
-  text-decoration: none;
-  color: #3a393b;
+    text-decoration: none;
+    color: #3A393B;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
 }
 
 p a:hover {
-  color: #8a5bc6;
-  text-decoration: underline;
+    color: #8A5BC6;
+    text-decoration: underline;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .footer {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    margin-left: 0; /* Reset margin on mobile */
-  }
+/* --- RESPONSIVE DESIGN --- */
 
-  .footer-section {
-    width: 100%;
-    margin-bottom: 30px;
-  }
+/* For screens smaller than 1200px (Large Desktops/Laptops) */
+@media (max-width: 1200px) {
+    .phase4-content, .phase5-container, .content-wrapper {
+        padding: 3.125rem 1.5rem; /* Reduced padding */
+    }
 
-  .social-icons {
-    justify-content: center;
-  }
+    .phase4-text, .phase4-image-container, .phase5-image, .phase5-content {
+        max-width: 48%; /* Adjust for slightly less margin */
+    }
+}
+
+/* For screens smaller than 992px (Tablets) */
+@media (max-width: 992px) {
+    .offer-container {
+        padding-top: 5rem;
+    }
+
+    /* Text position over background image: Centralize for smaller screens */
+    .offer-text {
+        width: 90vw;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%); /* Center it on smaller screens */
+        text-align: center; /* Center text content */
+        padding: 0 1rem;
+        margin-top: 0; /* Reset margin-top for centering */
+    }
+
+    .offer-title {
+        align-items: center; /* Center items in the title */
+    }
+
+    .cta-reviews {
+        flex-direction: column; /* Stack elements */
+        align-items: center; /* Center items */
+        gap: 1rem;
+    }
+
+    .customer-reviews {
+        margin-left: 0;
+    }
+
+    .services-container {
+        gap: 1.5rem;
+        padding: 0 0.5rem;
+    }
+
+    .service {
+        flex: 1 1 45%; /* Two columns per row */
+        max-width: 48%;
+    }
+
+    /* Image split container: stack images vertically on smaller screens */
+    .image-split-container {
+        flex-direction: column;
+        min-height: auto;
+        padding: 1rem 0.5rem;
+        gap: 1rem; /* Add gap when stacked */
+    }
+
+    .left-image, .right-image {
+        flex: 1 1 90%; /* Almost full width for stacked images */
+        max-width: 90%;
+        margin-bottom: 1rem;
+    }
+
+    .phase4-content, .phase5-container {
+        flex-direction: column; /* Stack text and image */
+        padding: 2.5rem 1rem;
+        align-items: center;
+        text-align: center;
+    }
+
+    .phase4-text, .phase4-image-container, .phase5-image, .phase5-content {
+        flex: 1 1 90%; /* Wider on smaller screens */
+        max-width: 90%;
+        margin: 0 auto;
+        padding: 0;
+        min-width: unset;
+    }
+
+    .phase4-text {
+        order: 2; /* Text below image on smaller screens */
+    }
+    .phase4-image-container {
+        order: 1; /* Image above text on smaller screens */
+        margin-bottom: 2rem;
+    }
+
+    .purple-background, .truck-background {
+        width: clamp(200px, 40vw, 300px); /* Adjust size */
+        height: clamp(200px, 40vw, 280px); /* Adjust size */
+    }
+
+    .ccare-image, .phase5-image img {
+        max-width: 80%; /* Ensure images fit */
+        object-fit: contain;
+    }
+
+    .cta-container, .phase5-cta {
+        justify-content: center; /* Center buttons */
+    }
+
+    .phase5-image {
+        order: 1; /* Image above text */
+        margin-bottom: 2rem;
+    }
+    .phase5-content {
+        order: 2; /* Text below image */
+    }
+
+    .content-wrapper {
+        flex-direction: column; /* Stack content and image */
+        padding: 2rem;
+        min-height: auto;
+        height: auto;
+    }
+
+    /* Download app section elements: static positioning for mobile */
+    .download-app, .phase6-title, .phase6-text, .download-links {
+        position: static; /* Switch to static for normal flow */
+        width: auto;
+        left: auto;
+        top: auto;
+        text-align: center;
+        margin: 0 auto 1rem auto;
+    }
+
+    .download-links {
+        flex-direction: column; /* Stack download buttons */
+        align-items: center;
+    }
+
+    .download-btn {
+        width: 80%;
+        max-width: 300px;
+        margin-bottom: 1rem;
+    }
+
+    /* Reset phase6-image on mobile for natural flow */
+    .phase6-image {
+        padding-left: 0;
+        margin-top: 2rem;
+        order: 1; /* Image on top */
+        position: static; /* Revert to static for natural flow */
+        justify-content: center; /* Center image */
+        width: 100%; /* Take full width on mobile */
+        height: auto;
+    }
+
+    .phase6-image img {
+        position: static; /* Revert image to static within its container for normal flow */
+        width: clamp(200px, 50vw, 350px); /* Adjust size for mobile */
+        object-fit: contain;
+    }
+
+    .footer {
+        flex-direction: column; /* Stack footer sections */
+        align-items: center;
+        text-align: center;
+        padding: 2rem 1rem;
+    }
+
+    .footer-section {
+        width: 90%;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding: 0;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+}
+
+/* For screens smaller than 576px (Small Mobile) */
+@media (max-width: 576px) {
+    html {
+        font-size: 14px;
+    }
+
+    .offer-text {
+        padding: 0 0.5rem; /* Tighter padding */
+    }
+
+    .get-started {
+        padding: 0.6rem 1.2rem;
+        font-size: 1rem;
+    }
+    .collab-images img {
+        width: 2rem;
+        height: 2rem;
+        margin-left: -0.4rem;
+    }
+    .customer-reviews {
+        font-size: 0.8rem;
+    }
+
+    .service {
+        flex: 1 1 90%; /* Single column */
+        max-width: 95%;
+        margin-bottom: 1.5rem;
+    }
+
+    .phase4-content, .phase5-container, .content-wrapper {
+        padding: 1.5rem 0.5rem; /* Even less padding */
+    }
+
+    .phase4-text, .phase4-image-container, .phase5-image, .phase5-content, .phase6-content, .phase6-image {
+        max-width: 100%;
+        padding: 0 0.5rem;
+    }
+
+    .download-btn {
+        width: 95%;
+    }
+    .download-btn small {
+        font-size: 0.6rem;
+    }
+    .download-btn strong {
+        font-size: 0.9rem;
+    }
+
+    .footer-section {
+        width: 95%;
+    }
+    .social-icons img {
+        width: 2rem;
+        height: 2rem;
+    }
+    .footer-section p {
+        font-size: 0.9rem;
+    }
 }

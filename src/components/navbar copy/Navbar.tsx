@@ -311,7 +311,7 @@ const Navbar: React.FC<NavbarProps> = ({ sidebarToggle, isSidebarOpen }) => {
           <NotificationBell count={notifications.length} />
         </div>
 
-        <Link to="/profile" className="profile-link">
+        <Link to="/profile_b" className="profile-link">
           <UserAvatar imageUrl={profileData?.image || "/photos/boy1.png"} />
         </Link>
       </div>
