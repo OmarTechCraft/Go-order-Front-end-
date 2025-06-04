@@ -8,7 +8,7 @@ import TermsAndConditions from "./Pages/TermsAndConditions";
 import "./i18n"; // should be before app rendering
 import ImageGenerator from "./Pages/Business/image-generator/ImageGenerator";
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Pages/public/Home";
 import MyLogin from "./Pages/Login";
 import Register from "./Pages/Register";
@@ -114,7 +114,7 @@ const NotFound: React.FC = () => {
 const MyApp: React.FC = () => {
   return (
     <OrdersProvider>
-      <Router>
+      <BrowserRouter>
         <Routes>
           {/* Main Routes */}
           <Route path="/" element={<Home />} />
@@ -190,7 +190,7 @@ const MyApp: React.FC = () => {
           {/* 404 Catch-all Route - MUST be last */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </Router>
+      </BrowserRouter>
     </OrdersProvider>
   );
 };
