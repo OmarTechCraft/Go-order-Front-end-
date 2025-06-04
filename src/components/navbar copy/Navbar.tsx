@@ -10,6 +10,10 @@ import {
 } from "react-icons/fa";
 import "./Navbar.css";
 import { getUserProfile, ProfileData } from "../../service/Profile_service";
+import {
+  getBusinessProfile,
+  BusinessProfile,
+} from "../../service/Profile_B_service";
 
 const fetchNotifications = async () => {
   try {
@@ -245,7 +249,7 @@ const SearchBar = () => {
 const UserAvatar = ({ imageUrl }: { imageUrl: string }) => {
   return (
     <div className="user-avatar">
-      <img src={imageUrl || "/photos/boy1.png"} alt="User profile" />
+      <img src={imageUrl} alt="User profile" />
     </div>
   );
 };
@@ -259,6 +263,8 @@ const Navbar: React.FC<NavbarProps> = ({ sidebarToggle, isSidebarOpen }) => {
   const [notifications, setNotifications] = useState<any[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
+  const [businessProfile, setBusinessProfile] =
+    useState<BusinessProfile | null>(null);
 
   useEffect(() => {
     const loadNotifications = async () => {
@@ -275,8 +281,18 @@ const Navbar: React.FC<NavbarProps> = ({ sidebarToggle, isSidebarOpen }) => {
       }
     };
 
+    const loadBusinessProfile = async () => {
+      try {
+        const businessData = await getBusinessProfile();
+        setBusinessProfile(businessData);
+      } catch (error) {
+        console.error("Error loading business profile:", error);
+      }
+    };
+
     loadNotifications();
     loadUserProfile();
+    loadBusinessProfile();
   }, []);
 
   const toggleDropdown = () => {
@@ -288,6 +304,10 @@ const Navbar: React.FC<NavbarProps> = ({ sidebarToggle, isSidebarOpen }) => {
       sidebarToggle();
     }
   };
+
+  // Use business profile image first, then fall back to user profile image
+  const profileImageUrl =
+    businessProfile?.image || profileData?.image || "/photos/boy1.png";
 
   return (
     <header className="header">
@@ -312,7 +332,7 @@ const Navbar: React.FC<NavbarProps> = ({ sidebarToggle, isSidebarOpen }) => {
         </div>
 
         <Link to="/profile_b" className="profile-link">
-          <UserAvatar imageUrl={profileData?.image || "/photos/boy1.png"} />
+          <UserAvatar imageUrl={profileImageUrl} />
         </Link>
       </div>
 

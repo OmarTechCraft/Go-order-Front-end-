@@ -185,7 +185,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
 
   // Determine which data to display (props take priority over fetched data)
   const displayName = propName || userProfile?.businessName || "Loading...";
-  const displayEmail = propEmail || "business@example.com"; // Fallback since API doesn't provide email
+  const displayEmail = propEmail || userProfile?.phoneNumber || "Loading..."; // Fallback since API doesn't provide email
   const displayAvatar = propAvatarUrl || userProfile?.image;
 
   return (
