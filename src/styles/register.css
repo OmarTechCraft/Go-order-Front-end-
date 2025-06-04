@@ -42,7 +42,7 @@ body {
   overflow: hidden;
 }
 
-/* Left side (form) */
+/* Left side (form) - MODIFIED FOR CENTERING */
 .auth-left {
   width: calc(100% - var(--right-width));
   background-color: var(--background-white);
@@ -53,7 +53,8 @@ body {
   padding: var(--spacing-lg);
   position: relative;
   z-index: 4;
-  min-height: 100vh; /* Ensure full viewport height */
+  min-height: 100vh;
+  padding-top: 110px;
 }
 
 /* Right side (purple background with illustration) */
@@ -171,12 +172,14 @@ body {
 
 /* Brand logo animation */
 .brand-logo {
+  position: fixed;
+  top: 10px;
+  left: 20px;
+  z-index: 1000;
   color: var(--primary-purple);
   font-size: 28px;
   font-weight: 700;
-  margin-bottom: var(--spacing-lg);
-  align-self: center; /* Center the logo */
-  position: relative;
+  margin-bottom: 0; /* Remove bottom margin since it's now fixed */
 }
 
 .animate-logo {
@@ -215,11 +218,11 @@ body {
   }
 }
 
-/* Content container */
+/* Content container - MODIFIED FOR PERFECT CENTERING */
 .auth-content {
-  max-width: 900px;
+  max-width: 500px;
   width: 100%;
-  margin: 0 auto;
+  margin: 0;
   padding: var(--spacing-md);
   animation: fadeIn 0.8s ease-out;
   position: relative;
@@ -228,8 +231,6 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 15;
-  /* Center vertically and horizontally in available space */
-  flex: 1;
 }
 
 @keyframes fadeIn {
@@ -924,31 +925,48 @@ body {
   .auth-container {
     flex-direction: column;
   }
-
+  .brand-logo {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    font-size: 24px;
+    z-index: 1001; /* Higher z-index for mobile */
+  }
   .auth-left {
     width: 100%;
     order: 2;
     padding: var(--spacing-md) var(--spacing-sm);
+    padding-top: 60px; /* Adjust for smaller logo on mobile */
   }
 
   .auth-right {
     width: 100%;
-    height: 200px;
+    height: 250px; /* Increased height to show image completely */
     order: 1;
+    overflow: hidden; /* Ensure image stays within purple area */
   }
 
   .auth-illustration {
-    width: 120%;
-    transform: translate(-10%, -30%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the image */
+    width: 90%; /* Reduce width to fit completely */
+    max-width: 300px; /* Set maximum width */
+    height: auto;
+    animation: floatImage 8s ease-in-out infinite;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
+    z-index: 10;
+  }
+
+  .auth-content {
+    justify-content: flex-start;
+    padding-top: var(--spacing-lg);
   }
 
   .form-row {
     flex-direction: column;
     gap: var(--spacing-sm);
-  }
-
-  .auth-content {
-    padding: var(--spacing-sm);
   }
 
   .floating-shape {
@@ -958,5 +976,29 @@ body {
   /* Adjust animations for mobile */
   .social-btn-animate {
     animation: none;
+  }
+}
+@media (max-width: 480px) {
+  .brand-logo {
+    font-size: 20px;
+    top: 10px;
+    left: 10px;
+  }
+
+  .auth-right {
+    height: 220px;
+  }
+
+  .auth-illustration {
+    width: 85%;
+    max-width: 250px;
+  }
+
+  .auth-left {
+    padding-top: 50px;
+  }
+
+  .auth-content {
+    justify-content: flex-start;
   }
 }
