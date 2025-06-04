@@ -69,11 +69,7 @@ const BusSettings = () => {
       <Navbar />
 
       <div className={`settings-container ${showPopup ? "blurred" : ""}`}>
-        <Sidebar_2
-          name="Yaqeen"
-          email="yaq24@gmail.com"
-          avatarUrl="/images/avatar.png"
-        />
+        <Sidebar_2 />
         <h1 className="settings-title">{t("Settings")}</h1>
 
         <div className="settings-menu">

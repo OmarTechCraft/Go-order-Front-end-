@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaHome,
@@ -21,6 +21,12 @@ import {
 // NEW ICON IMPORTS
 import { HiSparkles, HiSquares2X2 } from "react-icons/hi2";
 
+// Import the business profile service
+import {
+  getBusinessProfile,
+  BusinessProfile,
+} from "../../service/Profile_B_service";
+
 import "./Sidebar_2.css";
 
 export interface Sidebar_2Props {
@@ -37,9 +43,9 @@ export interface Sidebar_2Props {
 }
 
 const Sidebar_2: React.FC<Sidebar_2Props> = ({
-  name = "User Name",
-  email = "user@example.com",
-  avatarUrl,
+  name: propName,
+  email: propEmail,
+  avatarUrl: propAvatarUrl,
   isMobileMenuOpen = false,
   toggleMobileMenu,
 }) => {
@@ -50,16 +56,66 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
   const [ordersOpen, setOrdersOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
+  // State for user profile data
+  const [userProfile, setUserProfile] = useState<BusinessProfile | null>(null);
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [profileError, setProfileError] = useState<string | null>(null);
+
+  // State to manage internal mobile menu state if toggleMobileMenu prop isn't provided
+  const [mobileOpen, setMobileOpen] = useState(isMobileMenuOpen);
+  // State to manage overlay visibility
+  const [overlayVisible, setOverlayVisible] = useState(isMobileMenuOpen);
+
   const isActive = (path: string) => location.pathname === path;
 
   const handleOrdersToggle = () => {
     setOrdersOpen((prev) => !prev);
   };
 
-  // State to manage internal mobile menu state if toggleMobileMenu prop isn't provided
-  const [mobileOpen, setMobileOpen] = useState(isMobileMenuOpen);
-  // State to manage overlay visibility
-  const [overlayVisible, setOverlayVisible] = useState(isMobileMenuOpen);
+  // Use useCallback to memoize the function and fix the ESLint warning
+  const handleToggleMobileMenu = useCallback(
+    (forceState?: boolean) => {
+      const newState =
+        typeof forceState !== "undefined" ? forceState : !mobileOpen;
+
+      if (toggleMobileMenu) {
+        toggleMobileMenu();
+      } else {
+        setMobileOpen(newState);
+      }
+
+      setOverlayVisible(newState);
+
+      // Prevent body scrolling when menu is open
+      if (newState) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "";
+      }
+    },
+    [mobileOpen, toggleMobileMenu]
+  );
+
+  // Fetch user profile data
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        setProfileLoading(true);
+        setProfileError(null);
+        const profile = await getBusinessProfile();
+        setUserProfile(profile);
+      } catch (error) {
+        console.error("Failed to fetch user profile:", error);
+        setProfileError(
+          error instanceof Error ? error.message : "Failed to load profile"
+        );
+      } finally {
+        setProfileLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   useEffect(() => {
     // Update internal state when prop changes
@@ -79,27 +135,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [mobileOpen]);
-
-  const handleToggleMobileMenu = (forceState?: boolean) => {
-    const newState =
-      typeof forceState !== "undefined" ? forceState : !mobileOpen;
-
-    if (toggleMobileMenu) {
-      toggleMobileMenu();
-    } else {
-      setMobileOpen(newState);
-    }
-
-    setOverlayVisible(newState);
-
-    // Prevent body scrolling when menu is open
-    if (newState) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-  };
+  }, [mobileOpen, handleToggleMobileMenu]); // Fixed: Added handleToggleMobileMenu to dependencies
 
   // Handle logout with confirmation modal
   const handleLogoutClick = (e: React.MouseEvent) => {
@@ -108,23 +144,49 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
   };
 
   const confirmLogout = () => {
-    // Clear all proxy storage data
-    localStorage.clear();
-    sessionStorage.clear();
+    try {
+      // Clear all storage data safely
+      if (typeof Storage !== "undefined") {
+        localStorage.clear();
+        sessionStorage.clear();
+      }
+    } catch (error) {
+      console.warn("Could not clear storage:", error);
+    }
 
     // Close modal
     setShowLogoutModal(false);
 
-    // Navigate to login or home page
-    navigate("/login");
+    // Navigate to login or home page with replace to prevent back navigation
+    navigate("/login", { replace: true });
   };
 
   const cancelLogout = () => {
     setShowLogoutModal(false);
   };
 
+  // Handle navigation with error handling
+  const handleNavigate = (path: string) => {
+    try {
+      // Navigate to the specified path
+      navigate(path);
+
+      // Close mobile menu if on mobile screen
+      if (window.innerWidth <= 768) {
+        handleToggleMobileMenu(false);
+      }
+    } catch (error) {
+      console.warn("Navigation error:", error);
+    }
+  };
+
   // Determine if using internal or external mobile menu state
   const isMenuOpen = toggleMobileMenu ? isMobileMenuOpen : mobileOpen;
+
+  // Determine which data to display (props take priority over fetched data)
+  const displayName = propName || userProfile?.businessName || "Loading...";
+  const displayEmail = propEmail || "business@example.com"; // Fallback since API doesn't provide email
+  const displayAvatar = propAvatarUrl || userProfile?.image;
 
   return (
     <>
@@ -176,9 +238,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             <li className={isActive("/BusDashboard") ? "active" : ""}>
               <Link
                 to="/BusDashboard"
-                onClick={() =>
-                  window.innerWidth <= 768 && handleToggleMobileMenu(false)
-                }
+                onClick={() => handleNavigate("/BusDashboard")}
               >
                 <FaHome className="sidebar_2-icon" />
                 <span>Dashboard</span>
@@ -189,9 +249,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             <li className={isActive("/profile_b") ? "active" : ""}>
               <Link
                 to="/profile_b"
-                onClick={() =>
-                  window.innerWidth <= 768 && handleToggleMobileMenu(false)
-                }
+                onClick={() => handleNavigate("/profile_b")}
               >
                 <FaUser className="sidebar_2-icon" />
                 <span>Profile</span>
@@ -202,9 +260,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             <li className={isActive("/Bus-settings") ? "active" : ""}>
               <Link
                 to="/Bus-settings"
-                onClick={() =>
-                  window.innerWidth <= 768 && handleToggleMobileMenu(false)
-                }
+                onClick={() => handleNavigate("/Bus-settings")}
               >
                 <FaCog className="sidebar_2-icon" />
                 <span>Settings</span>
@@ -213,12 +269,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
 
             {/* User review */}
             <li className={isActive("/reviews") ? "active" : ""}>
-              <Link
-                to="/reviews"
-                onClick={() =>
-                  window.innerWidth <= 768 && handleToggleMobileMenu(false)
-                }
-              >
+              <Link to="/reviews" onClick={() => handleNavigate("/reviews")}>
                 <FaEye className="sidebar_2-icon" />
                 <span>User review</span>
               </Link>
@@ -226,12 +277,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
 
             {/* Messages */}
             <li className={isActive("/messages") ? "active" : ""}>
-              <Link
-                to="/messages"
-                onClick={() =>
-                  window.innerWidth <= 768 && handleToggleMobileMenu(false)
-                }
-              >
+              <Link to="/messages" onClick={() => handleNavigate("/messages")}>
                 <FaEnvelope className="sidebar_2-icon" />
                 <span>Messages</span>
               </Link>
@@ -241,9 +287,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             <li className={isActive("/notifications") ? "active" : ""}>
               <Link
                 to="/notifications"
-                onClick={() =>
-                  window.innerWidth <= 768 && handleToggleMobileMenu(false)
-                }
+                onClick={() => handleNavigate("/notifications")}
               >
                 <FaBell className="sidebar_2-icon" />
                 <span>Notifications</span>
@@ -254,9 +298,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             <li className={isActive("/add-category-business") ? "active" : ""}>
               <Link
                 to="/add-category-business"
-                onClick={() =>
-                  window.innerWidth <= 768 && handleToggleMobileMenu(false)
-                }
+                onClick={() => handleNavigate("/add-category-business")}
               >
                 <HiSparkles className="sidebar_2-icon" />
                 <span>Add Category</span>
@@ -269,9 +311,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             >
               <Link
                 to="/add-subcategory-business"
-                onClick={() =>
-                  window.innerWidth <= 768 && handleToggleMobileMenu(false)
-                }
+                onClick={() => handleNavigate("/add-subcategory-business")}
               >
                 <HiSquares2X2 className="sidebar_2-icon" />
                 <span>Add Subcategory</span>
@@ -282,9 +322,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             <li className={isActive("/add-product-business_1") ? "active" : ""}>
               <Link
                 to="/add-product-business_1"
-                onClick={() =>
-                  window.innerWidth <= 768 && handleToggleMobileMenu(false)
-                }
+                onClick={() => handleNavigate("/add-product-business_1")}
               >
                 <FaBoxOpen className="sidebar_2-icon" />
                 <span>Add Product</span>
@@ -295,9 +333,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             <li className={isActive("/image-generator") ? "active" : ""}>
               <Link
                 to="/image-generator"
-                onClick={() =>
-                  window.innerWidth <= 768 && handleToggleMobileMenu(false)
-                }
+                onClick={() => handleNavigate("/image-generator")}
               >
                 <FaImages className="sidebar_2-icon" />
                 <span>Image Generator</span>
@@ -308,9 +344,7 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
             <li className={isActive("/marketing-ai") ? "active" : ""}>
               <Link
                 to="/marketing-ai"
-                onClick={() =>
-                  window.innerWidth <= 768 && handleToggleMobileMenu(false)
-                }
+                onClick={() => handleNavigate("/marketing-ai")}
               >
                 <FaBullhorn className="sidebar_2-icon" />
                 <span>Marketing AI</span>
@@ -330,18 +364,38 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
               {ordersOpen && (
                 <ul className="sidebar_2-orders-submenu">
                   <li className={isActive("/orders/all") ? "active" : ""}>
-                    <Link to="/orders/all">All Orders</Link>
+                    <Link
+                      to="/orders/all"
+                      onClick={() => handleNavigate("/orders/all")}
+                    >
+                      All Orders
+                    </Link>
                   </li>
                   <li className={isActive("/orders/waiting") ? "active" : ""}>
-                    <Link to="/orders/waiting">Waiting</Link>
+                    <Link
+                      to="/orders/waiting"
+                      onClick={() => handleNavigate("/orders/waiting")}
+                    >
+                      Waiting
+                    </Link>
                   </li>
                   <li
                     className={isActive("/orders/in-progress") ? "active" : ""}
                   >
-                    <Link to="/orders/in-progress">In Progress</Link>
+                    <Link
+                      to="/orders/in-progress"
+                      onClick={() => handleNavigate("/orders/in-progress")}
+                    >
+                      In Progress
+                    </Link>
                   </li>
                   <li className={isActive("/orders/done") ? "active" : ""}>
-                    <Link to="/orders/done">Done</Link>
+                    <Link
+                      to="/orders/done"
+                      onClick={() => handleNavigate("/orders/done")}
+                    >
+                      Done
+                    </Link>
                   </li>
                 </ul>
               )}
@@ -359,16 +413,24 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
 
         {/* Bottom Section: User Info */}
         <div className="sidebar_2-bottom">
-          {avatarUrl && (
+          {displayAvatar && (
             <img
-              src={avatarUrl}
+              src={displayAvatar}
               alt="User Avatar"
               className="sidebar_2-avatar"
+              onError={(e) => {
+                // Hide image if it fails to load
+                e.currentTarget.style.display = "none";
+              }}
             />
           )}
           <div className="sidebar_2-user-info">
-            <span className="sidebar_2-user-name">{name}</span>
-            <span className="sidebar_2-user-email">{email}</span>
+            <span className="sidebar_2-user-name">
+              {profileLoading ? "Loading..." : displayName}
+            </span>
+            <span className="sidebar_2-user-email">
+              {profileError ? "Error loading profile" : displayEmail}
+            </span>
           </div>
         </div>
       </div>

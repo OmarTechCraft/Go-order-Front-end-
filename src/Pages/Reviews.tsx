@@ -32,11 +32,7 @@ const Reviews: React.FC = () => {
 
   return (
     <div className="reviews-page">
-      <Sidebar_2
-        name="Yaqeen"
-        email="yaq24@gmail.com"
-        avatarUrl="/avatar.jpg"
-      />
+      <Sidebar_2 />
 
       <div className="reviews-content">
         <Navbar />

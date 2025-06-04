@@ -7,21 +7,11 @@ import Sidebar_2 from "../../components/Sidebar_2/Sidebar_2";
 const TermsConditions: React.FC = () => {
   const navigate = useNavigate();
 
-  const User = {
-    name: "John Doe",
-    email: "john@example.com",
-    avatarUrl: "/images/avatar.png",
-  };
-
   return (
     <>
       <Navbar />
       <div className="main-content">
-        <Sidebar_2
-          name={User.name}
-          email={User.email}
-          avatarUrl={User.avatarUrl}
-        />
+        <Sidebar_2 />
         <div className="terms-container">
           <div className="terms-header">
             <button

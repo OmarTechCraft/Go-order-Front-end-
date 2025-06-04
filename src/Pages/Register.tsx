@@ -483,7 +483,7 @@ const Register: React.FC = () => {
                       focusedField === "BankAccountNumber" ? "label-focus" : ""
                     }`}
                   >
-                    Bank Account Number
+                    Bank Account
                   </label>
                   <CustomInputField
                     type="text"

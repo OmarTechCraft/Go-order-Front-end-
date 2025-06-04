@@ -20,11 +20,7 @@ const notifications = [
 const Notifications: React.FC = () => {
   return (
     <div className="notifications-container">
-      <Sidebar_2
-        name="Yaqeen"
-        email="yaq24@gmail.com"
-        avatarUrl="/images/avatar.png"
-      />
+      <Sidebar_2 />
       <div className="main-content">
         <Navbar />
         <div className="notifications-wrapper">

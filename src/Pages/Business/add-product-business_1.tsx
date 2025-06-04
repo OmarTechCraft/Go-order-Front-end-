@@ -643,11 +643,7 @@ const AddProductBusiness_1: React.FC = () => {
       {/* Main content container */}
       <div className="page-content">
         {/* Sidebar */}
-        <Sidebar_2
-          name="Admin User"
-          email="admin@example.com"
-          avatarUrl="/avatar.jpg"
-        />
+        <Sidebar_2 />
 
         {/* Main content area */}
         <div className="add-category-business-content">

@@ -139,11 +139,7 @@ const BusDashboard = () => {
 
   return (
     <div className="dashboardContainer">
-      <Sidebar_2
-        name={dummyUser.name}
-        email={dummyUser.email}
-        avatarUrl="/images/avatar.png"
-      />
+      <Sidebar_2 />
       <div className="mainContent">
         <Navbar />
 

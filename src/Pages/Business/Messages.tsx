@@ -295,11 +295,7 @@ const Messages: React.FC = () => {
   if (isLoading) {
     return (
       <div className="messages-page">
-        <Sidebar_2
-          name="Yaqeen"
-          email="yaq24@gmail.com"
-          avatarUrl="/images/avatar.png"
-        />
+        <Sidebar_2 />
         <div className="messages-content">
           <Navbar />
           <div className="loading-container">
@@ -315,11 +311,7 @@ const Messages: React.FC = () => {
   if (errorMessage && !showChatModal) {
     return (
       <div className="messages-page">
-        <Sidebar_2
-          name="Yaqeen"
-          email="yaq24@gmail.com"
-          avatarUrl="/images/avatar.png"
-        />
+        <Sidebar_2 />
         <div className="messages-content">
           <Navbar />
           <div className="error-container">
@@ -336,11 +328,7 @@ const Messages: React.FC = () => {
 
   return (
     <div className="messages-page">
-      <Sidebar_2
-        name="Yaqeen"
-        email="yaq24@gmail.com"
-        avatarUrl="/images/avatar.png"
-      />
+      <Sidebar_2 />
 
       <div className="messages-content">
         <Navbar />

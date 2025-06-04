@@ -200,11 +200,7 @@ const AddCategoryBusiness: React.FC = () => {
         }`}
       >
         {/* Sidebar */}
-        <Sidebar_2
-          name="Yaqeen"
-          email="yaq24@gmail.com"
-          avatarUrl="/avatar.jpg"
-        />
+        <Sidebar_2 />
 
         {/* Main content area */}
         <div className="add-category-business-content">
@@ -382,7 +378,7 @@ const AddCategoryBusiness: React.FC = () => {
                 onClick={handleDeleteCategory}
                 disabled={isLoading}
               >
-                {isLoading ? "Deleting..." : "Delete"}
+                Delete
               </button>
             </div>
           </div>

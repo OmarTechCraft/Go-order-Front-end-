@@ -124,11 +124,7 @@ const Profile_B: React.FC = () => {
   if (loadingData) {
     return (
       <div className="profile_b-page">
-        <Sidebar_2
-          name="Yaqeen"
-          email="yaq24@gmail.com"
-          avatarUrl="/images/avatar.png"
-        />
+        <Sidebar_2 />
         <div className="profile_b-content">
           <Navbar />
           <div
@@ -149,11 +145,7 @@ const Profile_B: React.FC = () => {
 
   return (
     <div className="profile_b-page">
-      <Sidebar_2
-        name="Yaqeen"
-        email="yaq24@gmail.com"
-        avatarUrl="/images/avatar.png"
-      />
+      <Sidebar_2 />
 
       <div className="profile_b-content">
         <Navbar />
