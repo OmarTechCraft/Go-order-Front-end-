@@ -87,12 +87,12 @@ const Home: React.FC = () => {
       {/* Third Section - Two Images Side by Side */}
       <div className="image-split-container">
         <img
-          src="/public/images/chch.png"
+          src="/public/images/chch.jpg"
           alt="Chef Serving Food"
           className="left-image"
         />
         <img
-          src="/public/images/chch2.png"
+          src="/public/images/chch2.jpg"
           alt="Customer Review Section"
           className="right-image"
         />
@@ -123,7 +123,7 @@ const Home: React.FC = () => {
         <div className="phase4-image-container">
           <div className="purple-background"></div>
           <img
-            src="/public/images/ccare.png"
+            src="/public/images/ccare.jpg"
             alt="Customer Care"
             className="ccare-image"
           />
