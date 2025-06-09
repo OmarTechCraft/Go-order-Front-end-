@@ -6,7 +6,6 @@ import {
   FaCog,
   FaEye,
   FaEnvelope,
-  FaBell,
   FaBoxOpen,
   FaImages,
   FaBullhorn,
@@ -280,17 +279,6 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
               <Link to="/messages" onClick={() => handleNavigate("/messages")}>
                 <FaEnvelope className="sidebar_2-icon" />
                 <span>Messages</span>
-              </Link>
-            </li>
-
-            {/* Notifications */}
-            <li className={isActive("/notifications") ? "active" : ""}>
-              <Link
-                to="/notifications"
-                onClick={() => handleNavigate("/notifications")}
-              >
-                <FaBell className="sidebar_2-icon" />
-                <span>Notifications</span>
               </Link>
             </li>
 

@@ -4,13 +4,13 @@
 .sidebar_2 {
   width: 240px;
   height: 100vh;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border-right: 1px solid #dee2e6;
+  background: #eff0f4; /* Match navbar background */
+  border-right: 1px solid #e2e2e2; /* Match navbar border */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  font-family: "Arial", sans-serif; /* Match navbar font */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Match navbar shadow */
   position: fixed;
   left: 0;
   top: 0;
@@ -18,7 +18,6 @@
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow-y: auto;
   padding-top: 60px;
-  backdrop-filter: blur(10px);
 }
 
 /* Main content adjustment to account for fixed sidebar */
@@ -419,27 +418,44 @@
   box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
 }
 
-/* Mobile menu toggle button */
+/* Mobile menu toggle button - Enhanced styling to match navbar */
 .sidebar_2-toggle {
   display: none;
   position: fixed;
   top: 15px;
   left: 20px;
   z-index: 1001;
-  background: linear-gradient(135deg, #8a5bc6, #b794d4);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 12px;
+  background: #f8f9fa; /* Match navbar button background */
+  color: #495057; /* Match navbar button color */
+  border: 1px solid #dee2e6; /* Match navbar button border */
+  border-radius: 8px; /* Match navbar button border radius */
+  padding: 10px 12px; /* Match navbar button padding */
   cursor: pointer;
   font-size: 18px;
-  box-shadow: 0 4px 12px rgba(138, 91, 198, 0.3);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Match navbar button shadow */
+  transition: all 0.2s ease; /* Match navbar button transition */
+  min-width: 44px; /* Match navbar button min-width */
+  min-height: 44px; /* Match navbar button min-height */
+  align-items: center;
+  justify-content: center;
 }
 
 .sidebar_2-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(138, 91, 198, 0.4);
+  background: #e9ecef; /* Match navbar button hover background */
+  border-color: #ced4da; /* Match navbar button hover border */
+  transform: translateY(-1px); /* Match navbar button hover transform */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Match navbar button hover shadow */
+}
+
+.sidebar_2-toggle:active {
+  transform: translateY(0); /* Match navbar button active transform */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Match navbar button active shadow */
+}
+
+.sidebar_2-toggle:focus {
+  outline: none;
+  border-color: #8a5bc6;
+  box-shadow: 0 0 0 3px rgba(138, 91, 198, 0.1);
 }
 
 /* Mobile responsiveness */
@@ -466,12 +482,14 @@
   .sidebar_2 {
     width: 280px;
     transform: translateX(-100%);
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    background: #eff0f4; /* Match navbar background on mobile */
+    border-right: 1px solid #e2e2e2; /* Match navbar border on mobile */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Match navbar shadow on mobile */
   }
 
   .sidebar_2.mobile-open {
     transform: translateX(0);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Enhanced shadow when open */
   }
 
   .main-content {
@@ -479,7 +497,7 @@
   }
 
   .sidebar_2-toggle {
-    display: block;
+    display: flex;
   }
 
   /* Add overlay when menu is open */
@@ -505,6 +523,7 @@
   .sidebar_2 {
     width: 85%;
     max-width: 300px;
+    background: #eff0f4; /* Match navbar background */
   }
 
   .sidebar_2-bottom {
