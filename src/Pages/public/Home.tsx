@@ -87,12 +87,12 @@ const Home: React.FC = () => {
       {/* Third Section - Two Images Side by Side */}
       <div className="image-split-container">
         <img
-          src="/public/images/chch.jpg"
+          src="/images/chch.jpg"
           alt="Chef Serving Food"
           className="left-image"
         />
         <img
-          src="/public/images/chch2.jpg"
+          src="/images/chch2.jpg"
           alt="Customer Review Section"
           className="right-image"
         />
@@ -123,7 +123,7 @@ const Home: React.FC = () => {
         <div className="phase4-image-container">
           <div className="purple-background"></div>
           <img
-            src="/public/images/ccare.jpg"
+            src="/images/ccare.jpg"
             alt="Customer Care"
             className="ccare-image"
           />
@@ -201,7 +201,7 @@ const Home: React.FC = () => {
             </div>
           </div>
           <div className="phase6-image">
-            <img src="/public/images/apps.png" alt="App Preview" />
+            <img src="/images/apps.jpg" alt="App Preview" />
           </div>
         </div>
       </div>
@@ -224,21 +224,21 @@ const Home: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src="/public/images/gog.png" />
+                <img src="/images/gog.jpg" />
               </a>
               <a
                 href="https://www.facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src="/public/images/fac.png" />
+                <img src="/images/fac.jpg" />
               </a>
               <a
                 href="https://www.apple.com"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src="/public/images/appl.png" />
+                <img src="/images/appl.jpg" />
               </a>
             </div>
           </div>
