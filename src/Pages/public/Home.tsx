@@ -31,7 +31,7 @@ const Home: React.FC = () => {
             <div className="on-order-container">
               <span className="on-text">on</span>
               <span className="highlight">
-                <span className="special-o">O</span>rder
+                <span className="special-o">Go O</span>rder
               </span>
             </div>
           </div>
