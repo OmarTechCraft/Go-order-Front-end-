@@ -1,3 +1,4 @@
+/* Base styles */
 .add-category-business-page {
   position: relative;
   display: flex;
@@ -152,6 +153,40 @@
   margin: 0;
 }
 
+/* Success and error messages */
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  border: 1px solid #c3e6cb;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  border: 1px solid #f5c6cb;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-size: 16px;
+}
+
+.no-categories {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-size: 16px;
+}
+
 /* --------- Popup / Modal Styles --------- */
 
 /* Keyframe animations for smooth appearance */
@@ -200,6 +235,9 @@
   position: relative;
   animation: scaleIn 0.3s ease;
   color: #000; /* Make sure text is black */
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .popup-title {
@@ -236,6 +274,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
 }
 
 .upload-photo-placeholder {
@@ -246,6 +285,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 /* Added rule for the uploaded image to ensure it fits within the placeholder */
@@ -268,6 +308,7 @@
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
+  flex-shrink: 0;
 }
 
 .upload-add-icon {
@@ -350,4 +391,186 @@
 .popup-error {
   color: #e53935;
   margin-bottom: 16px;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Mobile phones (up to 576px) */
+@media (max-width: 576px) {
+  .add-category-business-page {
+    margin-left: 0;
+    padding-top: 56px;
+  }
+
+  .add-category-business-content {
+    padding: 16px;
+  }
+
+  .add-category-business-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .page-title {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .add-subcategory-button {
+    width: 100%;
+    justify-content: center;
+    padding: 12px;
+  }
+
+  .categories-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .category-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .popup-content {
+    width: 95%;
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .popup-title {
+    font-size: 18px;
+  }
+
+  .upload-section {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .upload-photo-placeholder,
+  .upload-add-box {
+    width: 80px;
+    height: 80px;
+  }
+
+  .confirm-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .cancel-button,
+  .delete-button {
+    width: 100%;
+  }
+}
+
+/* Small tablets (577px to 767px) */
+@media (min-width: 577px) and (max-width: 767px) {
+  .add-category-business-page {
+    margin-left: 0;
+    padding-top: 56px;
+  }
+
+  .add-category-business-content {
+    padding: 20px;
+  }
+
+  .add-category-business-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .page-title {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .add-subcategory-button {
+    align-self: center;
+    min-width: 200px;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .category-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .popup-content {
+    width: 90%;
+    max-width: 500px;
+  }
+}
+
+/* Tablets (768px to 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .add-category-business-page {
+    margin-left: 0;
+    padding-top: 60px;
+  }
+
+  .add-category-business-content {
+    padding: 24px;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .category-image {
+    width: 110px;
+    height: 110px;
+  }
+
+  .popup-content {
+    width: 85%;
+    max-width: 550px;
+  }
+}
+
+/* Laptops and larger screens (1024px and above) */
+@media (min-width: 1024px) {
+  .add-category-business-page {
+    margin-left: 240px;
+    padding-top: 60px;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .category-image {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* Extra large screens (1200px and above) */
+@media (min-width: 1200px) {
+  .add-category-business-content {
+    padding: 32px;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+
+  .popup-content {
+    width: 600px;
+  }
+}
+
+/* Ultra wide screens (1400px and above) */
+@media (min-width: 1400px) {
+  .categories-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
 }

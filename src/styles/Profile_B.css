@@ -1,12 +1,12 @@
+/* Base styles for desktop */
 .profile_b-page {
   display: flex;
   min-height: 100vh;
   background-color: #fff;
   margin-left: 240px; /* Width of Sidebar_2 */
-  padding-top: 60px;   /* Height of fixed Navbar */
+  padding-top: 60px; /* Height of fixed Navbar */
 }
 
-/* Removed margin-left to eliminate the unwanted space between Sidebar and content */
 .profile_b-content {
   flex: 1;
   position: relative;
@@ -20,15 +20,30 @@
 }
 
 /* Avatar overlapping the top bar */
-.profile_b-avatar {
+.profile_b-avatar-container {
   position: absolute;
   bottom: -40px;
   left: 40px;
+}
+
+.profile_b-avatar {
   width: 80px;
   height: 80px;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid #fff;
+}
+
+.profile_b-avatar-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  border: 3px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
 }
 
 /* Main section (below the purple bar) */
@@ -112,4 +127,217 @@
 
 .profile_b-save-btn:hover {
   background-color: #7b4bb0;
+}
+
+/* Error and success message styles */
+.error-message {
+  color: red;
+  margin-bottom: 16px;
+  padding: 10px;
+  background-color: #ffe6e6;
+  border: 1px solid #ff4444;
+  border-radius: 4px;
+}
+
+.success-message {
+  color: green;
+  margin-bottom: 16px;
+  padding: 10px;
+  background-color: #e6ffe6;
+  border: 1px solid #44ff44;
+  border-radius: 4px;
+}
+
+/* RESPONSIVE DESIGN */
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .profile_b-page {
+    margin-left: 0;
+    padding-top: 60px;
+  }
+
+  .profile_b-main {
+    padding: 0 24px 24px;
+  }
+
+  .profile_b-form {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 600px;
+  }
+
+  .profile_b-avatar-container {
+    left: 24px;
+  }
+
+  .profile_b-title {
+    font-size: 22px;
+  }
+}
+
+/* Small tablets and large phones (577px - 767px) */
+@media (min-width: 577px) and (max-width: 767px) {
+  .profile_b-page {
+    margin-left: 0;
+    padding-top: 56px;
+  }
+
+  .profile_b-topbar {
+    height: 120px;
+  }
+
+  .profile_b-avatar-container {
+    left: 20px;
+    bottom: -30px;
+  }
+
+  .profile_b-avatar,
+  .profile_b-avatar-placeholder {
+    width: 60px;
+    height: 60px;
+  }
+
+  .profile_b-avatar-placeholder {
+    font-size: 20px;
+  }
+
+  .profile_b-main {
+    margin-top: 50px;
+    padding: 0 20px 24px;
+  }
+
+  .profile_b-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .profile_b-form {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    max-width: 100%;
+  }
+
+  .profile_b-field input {
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  .profile_b-upload-btn {
+    padding: 10px 12px;
+    font-size: 16px;
+  }
+
+  .profile_b-save-btn {
+    padding: 14px 24px;
+    font-size: 16px;
+    width: 100%;
+  }
+
+  .profile_b-actions {
+    text-align: center;
+  }
+}
+
+/* Mobile phones (up to 576px) */
+@media (max-width: 576px) {
+  .profile_b-page {
+    margin-left: 0;
+    padding-top: 56px;
+  }
+
+  .profile_b-topbar {
+    height: 100px;
+  }
+
+  .profile_b-avatar-container {
+    left: 16px;
+    bottom: -25px;
+  }
+
+  .profile_b-avatar,
+  .profile_b-avatar-placeholder {
+    width: 50px;
+    height: 50px;
+  }
+
+  .profile_b-avatar-placeholder {
+    font-size: 18px;
+  }
+
+  .profile_b-main {
+    margin-top: 40px;
+    padding: 0 16px 24px;
+  }
+
+  .profile_b-title {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .profile_b-form {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    max-width: 100%;
+  }
+
+  .profile_b-field label {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .profile_b-field input {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+
+  .profile_b-upload-btn {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+
+  .profile_b-save-btn {
+    padding: 16px 24px;
+    font-size: 16px;
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  .profile_b-actions {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .error-message,
+  .success-message {
+    margin-bottom: 12px;
+    padding: 8px;
+    font-size: 14px;
+  }
+}
+
+/* Extra small devices (up to 480px) */
+@media (max-width: 480px) {
+  .profile_b-main {
+    padding: 0 12px 24px;
+  }
+
+  .profile_b-avatar-container {
+    left: 12px;
+  }
+
+  .profile_b-title {
+    font-size: 16px;
+  }
+
+  .profile_b-field input,
+  .profile_b-upload-btn {
+    padding: 14px;
+  }
+
+  .profile_b-save-btn {
+    padding: 18px 24px;
+  }
 }

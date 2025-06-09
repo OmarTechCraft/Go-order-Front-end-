@@ -107,7 +107,7 @@ const ImageGenerator: React.FC = () => {
                   />
                 ) : (
                   <img
-                    src="/public/images/nasser.png"
+                    src="/images/nasser.png"
                     alt="Placeholder"
                     className="image"
                   />

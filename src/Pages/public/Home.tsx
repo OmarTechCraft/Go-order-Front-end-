@@ -31,7 +31,7 @@ const Home: React.FC = () => {
             <div className="on-order-container">
               <span className="on-text">on</span>
               <span className="highlight">
-                <span className="special-o">Go O</span>rder
+                <span className="special-o">O</span>rder
               </span>
             </div>
           </div>
@@ -61,21 +61,21 @@ const Home: React.FC = () => {
         </h2>
         <div className="services-container">
           <div className="service">
-            <img src="/public/images/req.png" alt="Easy to Order" />
+            <img src="/images/req.jpg" alt="Easy to Order" />
             <h3 className="service-title">Easy To Order</h3>
             <p className="service-description">
               You only need a few steps in ordering
             </p>
           </div>
           <div className="service">
-            <img src="/public/images/take.png" alt="Fastest Delivery" />
+            <img src="/images/take.jpg" alt="Fastest Delivery" />
             <h3 className="service-title">Fastest Delivery</h3>
             <p className="service-description">
               Delivery that is always on time, even faster
             </p>
           </div>
           <div className="service">
-            <img src="/public/images/serve.png" alt="Best Quality" />
+            <img src="/images/serve.jpg" alt="Best Quality" />
             <h3 className="service-title">Best Quality</h3>
             <p className="service-description">
               Not only fast, our quality is also number one
@@ -134,7 +134,7 @@ const Home: React.FC = () => {
       <div className="phase5-container">
         <div className="phase5-image">
           <div className="truck-background"></div>
-          <img src="/public/images/truck.png" alt="Delivery Truck" />
+          <img src="/images/truck.jpg" alt="Delivery Truck" />
           <div className="dot yellow" style={{ top: "10%", left: "5%" }}></div>
           <div
             className="dot purple"

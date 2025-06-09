@@ -105,11 +105,15 @@ const Navbar = () => {
 
   // Function to confirm logout
   const confirmLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    // Clear any other user-related data you might have
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("userPreferences");
+    try {
+      // Clear all storage data safely
+      if (typeof Storage !== "undefined") {
+        localStorage.clear();
+        sessionStorage.clear();
+      }
+    } catch (error) {
+      console.warn("Could not clear storage:", error);
+    }
 
     setIsLoggedIn(false); // Update local state
     setUserRole(null); // Update local state
@@ -162,14 +166,29 @@ const Navbar = () => {
       {showLogoutModal && (
         <div className="logout-modal-overlay">
           <div className="logout-modal">
-            <h3>Are you sure you want to logout?</h3>
-            <div className="logout-modal-actions">
-              <button className="cancel-btn" onClick={cancelLogout}>
-                Cancel
-              </button>
-              <button className="confirm-btn" onClick={confirmLogout}>
-                Yes
-              </button>
+            <div className="logout-modal-content">
+              {" "}
+              {/* Added this div */}
+              <h3>Confirm Logout</h3> {/* Updated title */}
+              <p>
+                Are you sure you want to logout? All your session data will be
+                cleared.
+              </p>{" "}
+              {/* Updated message */}
+              <div className="logout-modal-buttons">
+                {" "}
+                {/* Renamed this div */}
+                <button className="logout-cancel-btn" onClick={cancelLogout}>
+                  {" "}
+                  {/* Renamed class */}
+                  Cancel
+                </button>
+                <button className="logout-confirm-btn" onClick={confirmLogout}>
+                  {" "}
+                  {/* Renamed class */}
+                  Logout
+                </button>
+              </div>
             </div>
           </div>
         </div>
