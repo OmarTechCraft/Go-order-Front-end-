@@ -1,26 +1,33 @@
 /* Base styles */
 .add-category-business-page {
   position: relative;
-  display: flex;
+  display: flex; /* Use flexbox to arrange sidebar and content wrapper */
   min-height: 100vh;
   background-color: #fff;
-  margin-left: 240px; /* Width of Sidebar_2 */
+  /* Removed margin-left: 240px; from here */
   padding-top: 60px; /* Height of fixed Navbar */
 }
 
-/* This wrapper will be blurred when the pop-up is active */
-.page-content {
-  display: flex;
-  width: 100%;
+/* This new wrapper will contain all the page content *except* the sidebar
+   and will be blurred when the pop-up is active. */
+.page-content-wrapper {
+  flex: 1; /* Allows it to take up remaining space next to sidebar */
+  margin-left: 240px; /* This creates space for the fixed sidebar */
   transition: filter 0.3s ease;
+  min-height: calc(100vh - 60px); /* Ensure it takes full height below navbar */
+  position: relative; /* Needed for stacking context if you add children with absolute positioning */
+  z-index: 1; /* Keep it above the general page background but below modals */
 }
 
-.page-content.blurred {
+.page-content-wrapper.blurred {
   filter: blur(5px);
+  /* Prevent interaction with blurred content */
+  pointer-events: none;
+  user-select: none;
 }
 
 .add-category-business-content {
-  flex: 1;
+  /* No margin or padding changes needed here, as it's inside page-content-wrapper */
   padding: 24px;
 }
 
@@ -189,27 +196,6 @@
 
 /* --------- Popup / Modal Styles --------- */
 
-/* Keyframe animations for smooth appearance */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 /* Overlay to darken and capture clicks outside the popup */
 .popup-overlay {
   position: fixed;
@@ -222,10 +208,9 @@
   align-items: center;
   justify-content: center;
   z-index: 999;
-  animation: fadeIn 0.3s ease;
 }
 
-/* The white content box with a smooth scale-in animation */
+/* The white content box */
 .popup-content {
   background-color: #fff;
   border: 4px solid #9b51e0;
@@ -233,8 +218,7 @@
   width: 480px;
   padding: 24px;
   position: relative;
-  animation: scaleIn 0.3s ease;
-  color: #000; /* Make sure text is black */
+  color: #000;
   max-width: 90vw;
   max-height: 90vh;
   overflow-y: auto;
@@ -244,7 +228,7 @@
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 24px;
-  color: #000; /* Make sure title is black */
+  color: #000;
 }
 
 /* Form fields */
@@ -258,7 +242,7 @@
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 6px;
-  color: #000; /* Make sure labels are black */
+  color: #000;
 }
 
 .text-input {
@@ -266,7 +250,7 @@
   border-radius: 8px;
   padding: 12px;
   font-size: 14px;
-  color: #000; /* Make sure input text is black */
+  color: #000;
 }
 
 /* Upload section: placeholder on left, upload button on right */
@@ -339,58 +323,102 @@
   background-color: #823ecc;
 }
 
-/* Delete confirmation dialog */
-.confirm-dialog {
-  text-align: center;
-}
-
-.confirm-dialog p {
-  margin-bottom: 24px;
-  color: #000; /* Make sure confirmation text is black */
-}
-
-.confirm-actions {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-}
-
-.cancel-button {
-  background-color: #e2e2e2;
-  color: #333;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.cancel-button:hover {
-  background-color: #d0d0d0;
-}
-
-.delete-button {
-  background-color: #e53935;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.delete-button:hover {
-  background-color: #c62828;
-}
-
 /* Ensure error messages in popup are visible but still red */
 .popup-error {
   color: #e53935;
   margin-bottom: 16px;
+}
+
+/* --- NEW Delete Confirmation Dialog Specific Styles --- */
+
+.delete-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Darker overlay for delete */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Higher z-index than other modals */
+}
+
+.delete-modal-content {
+  background-color: #fff;
+  border: 4px solid #dc3545; /* Red border to indicate warning */
+  border-radius: 12px;
+  width: 400px; /* Slightly smaller for a confirmation */
+  padding: 30px;
+  text-align: center;
+  max-width: 90vw;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25); /* More prominent shadow */
+  color: #333;
+}
+
+.delete-modal-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #dc3545; /* Red title for clear warning */
+}
+
+.delete-modal-message {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 30px;
+  color: #555;
+}
+
+.delete-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.delete-modal-cancel-button {
+  background-color: #f0f0f0;
+  color: #555;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  min-width: 100px;
+}
+
+.delete-modal-cancel-button:hover {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.delete-modal-cancel-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.delete-modal-confirm-button {
+  background-color: #dc3545; /* Red for deletion */
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  min-width: 100px;
+}
+
+.delete-modal-confirm-button:hover {
+  background-color: #c82333; /* Darker red on hover */
+}
+
+.delete-modal-confirm-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
@@ -398,8 +426,12 @@
 /* Mobile phones (up to 576px) */
 @media (max-width: 576px) {
   .add-category-business-page {
-    margin-left: 0;
+    /* No margin-left here now, as it's handled by flex and sidebar's fixed position */
     padding-top: 56px;
+  }
+
+  .page-content-wrapper {
+    margin-left: 0; /* No margin on small screens as sidebar is mobile-specific */
   }
 
   .add-category-business-content {
@@ -454,13 +486,23 @@
     height: 80px;
   }
 
-  .confirm-actions {
+  .delete-modal-content {
+    width: 95%;
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .delete-modal-title {
+    font-size: 20px;
+  }
+
+  .delete-modal-actions {
     flex-direction: column;
     gap: 12px;
   }
 
-  .cancel-button,
-  .delete-button {
+  .delete-modal-cancel-button,
+  .delete-modal-confirm-button {
     width: 100%;
   }
 }
@@ -468,8 +510,11 @@
 /* Small tablets (577px to 767px) */
 @media (min-width: 577px) and (max-width: 767px) {
   .add-category-business-page {
-    margin-left: 0;
     padding-top: 56px;
+  }
+
+  .page-content-wrapper {
+    margin-left: 0; /* No margin on small screens when sidebar is mobile-specific */
   }
 
   .add-category-business-content {
@@ -506,13 +551,22 @@
     width: 90%;
     max-width: 500px;
   }
+
+  .delete-modal-content {
+    width: 80%;
+    max-width: 450px;
+  }
 }
 
 /* Tablets (768px to 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
   .add-category-business-page {
-    margin-left: 0;
+    /* No margin-left here */
     padding-top: 60px;
+  }
+
+  .page-content-wrapper {
+    margin-left: 240px; /* Re-apply margin-left for sidebar space */
   }
 
   .add-category-business-content {
@@ -533,13 +587,17 @@
     width: 85%;
     max-width: 550px;
   }
+
+  .delete-modal-content {
+    width: 70%;
+    max-width: 400px;
+  }
 }
 
 /* Laptops and larger screens (1024px and above) */
 @media (min-width: 1024px) {
-  .add-category-business-page {
-    margin-left: 240px;
-    padding-top: 60px;
+  .page-content-wrapper {
+    margin-left: 240px; /* Ensure margin for fixed sidebar */
   }
 
   .categories-grid {

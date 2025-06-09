@@ -57,6 +57,19 @@ const AddCategoryBusiness: React.FC = () => {
     };
   }, [openMenuId]);
 
+  // Handle body scroll locking when a modal is open
+  useEffect(() => {
+    if (showPopup || showDeleteConfirm) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    // Cleanup function
+    return () => {
+      document.body.style.overflow = ""; // Ensure overflow is reset on unmount
+    };
+  }, [showPopup, showDeleteConfirm]);
+
   // Fetch categories from API
   const fetchCategories = async () => {
     setIsLoading(true);
@@ -192,17 +205,15 @@ const AddCategoryBusiness: React.FC = () => {
   return (
     <div className="add-category-business-page">
       <Navbar />
+      {/* Sidebar is now a direct child of the main page container */}
+      <Sidebar_2 />
 
-      {/* Wrap main content with a container that will be blurred if the popup is active */}
+      {/* Main content wrapped in a div that can be blurred */}
       <div
-        className={`page-content${
+        className={`page-content-wrapper${
           showPopup || showDeleteConfirm ? " blurred" : ""
         }`}
       >
-        {/* Sidebar */}
-        <Sidebar_2 />
-
-        {/* Main content area */}
         <div className="add-category-business-content">
           {/* Header: Page title and Add My Store button */}
           <div className="add-category-business-header">
@@ -357,28 +368,28 @@ const AddCategoryBusiness: React.FC = () => {
 
       {/* Delete Confirmation Dialog */}
       {showDeleteConfirm && (
-        <div className="popup-overlay" onClick={cancelDelete}>
-          <div
-            className="popup-content confirm-dialog"
-            onClick={stopPropagation}
-          >
-            <h2 className="popup-title">Delete Category</h2>
-            <p>Are you sure you want to delete this category?</p>
+        <div className="delete-modal-overlay" onClick={cancelDelete}>
+          <div className="delete-modal-content" onClick={stopPropagation}>
+            <h2 className="delete-modal-title">Confirm Deletion</h2>
+            <p className="delete-modal-message">
+              Are you sure you want to delete this category? This action cannot
+              be undone.
+            </p>
 
-            <div className="confirm-actions">
+            <div className="delete-modal-actions">
               <button
-                className="cancel-button"
+                className="delete-modal-cancel-button"
                 onClick={cancelDelete}
                 disabled={isLoading}
               >
                 Cancel
               </button>
               <button
-                className="delete-button"
+                className="delete-modal-confirm-button"
                 onClick={handleDeleteCategory}
                 disabled={isLoading}
               >
-                Delete
+                {isLoading ? "Deleting..." : "Delete"}
               </button>
             </div>
           </div>
