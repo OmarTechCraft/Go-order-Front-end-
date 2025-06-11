@@ -1,4 +1,5 @@
 import axiosInstance from "../api/api";
+import * as signalR from "@microsoft/signalr";
 
 // Types for the chat functionality - matching Flutter structure
 interface Chat {
@@ -170,55 +171,242 @@ export const sendMessage = async (
   }
 };
 
-// Real-time message handling using WebSocket or SignalR
-// Note: This would typically connect to a SignalR hub for real-time updates
+// Real-time message handling using SignalR
 class MessageService {
-  private connection: unknown = null;
+  private connection: signalR.HubConnection | null = null;
+  private connectionCallbacks: ((connected: boolean) => void)[] = [];
+  private messageCallbacks: ((message: Message) => void)[] = [];
+  private isConnecting = false;
 
-  // Initialize real-time connection (if using SignalR)
+  // Initialize SignalR connection
   public async startConnection(): Promise<void> {
-    try {
-      // This would be implemented with SignalR connection
-      // For now, we'll use polling or manual refresh
-      console.log("Real-time connection started");
-    } catch (error) {
-      console.error("Error starting connection:", error);
+    if (this.connection || this.isConnecting) {
+      console.log("Connection already exists or is connecting");
+      return;
     }
+
+    try {
+      this.isConnecting = true;
+
+      // Get token for authentication
+      const token = localStorage.getItem("token");
+
+      // Create SignalR connection
+      this.connection = new signalR.HubConnectionBuilder()
+        .withUrl("https://go-order.koyeb.app/baseHub", {
+          accessTokenFactory: () => token || "",
+          transport: signalR.HttpTransportType.WebSockets,
+          skipNegotiation: false,
+        })
+        .withAutomaticReconnect({
+          nextRetryDelayInMilliseconds: (retryContext) => {
+            // Exponential backoff: 0, 2, 10, 30 seconds, then 30 seconds
+            if (retryContext.previousRetryCount === 0) {
+              return 0;
+            } else if (retryContext.previousRetryCount === 1) {
+              return 2000;
+            } else if (retryContext.previousRetryCount === 2) {
+              return 10000;
+            } else {
+              return 30000;
+            }
+          },
+        })
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+
+      // Set up event handlers
+      this.setupEventHandlers();
+
+      // Start the connection
+      await this.connection.start();
+      console.log("SignalR Connected successfully");
+
+      // Notify connection status callbacks
+      this.notifyConnectionStatus(true);
+    } catch (error) {
+      console.error("SignalR Connection failed:", error);
+      this.connection = null;
+      this.notifyConnectionStatus(false);
+      throw error;
+    } finally {
+      this.isConnecting = false;
+    }
+  }
+
+  // Set up SignalR event handlers
+  private setupEventHandlers(): void {
+    if (!this.connection) return;
+
+    // Listen for incoming messages on "ReceiveMessage" channel
+    this.connection.on("ReceiveMessage", (message: any) => {
+      console.log("Received SignalR message:", message);
+
+      // Convert the received message to our Message format
+      const formattedMessage: Message = {
+        id: message.id || `received-${Date.now()}-${Math.random()}`,
+        text: message.text || message.Text || "",
+        senderId: message.senderId || message.SenderId || "",
+        isSender: message.isSender !== undefined ? message.isSender : false,
+        createdAt:
+          message.createdAt || message.CreatedAt || new Date().toISOString(),
+      };
+
+      // Notify all message callbacks
+      this.messageCallbacks.forEach((callback) => {
+        try {
+          callback(formattedMessage);
+        } catch (error) {
+          console.error("Error in message callback:", error);
+        }
+      });
+    });
+
+    // Handle connection closed
+    this.connection.onclose((error) => {
+      console.log("SignalR connection closed:", error);
+      this.notifyConnectionStatus(false);
+    });
+
+    // Handle reconnecting
+    this.connection.onreconnecting((error) => {
+      console.log("SignalR reconnecting:", error);
+      this.notifyConnectionStatus(false);
+    });
+
+    // Handle reconnected
+    this.connection.onreconnected((connectionId) => {
+      console.log("SignalR reconnected:", connectionId);
+      this.notifyConnectionStatus(true);
+    });
   }
 
   // Listen for incoming messages
   public onReceiveMessage(callback: (message: Message) => void): void {
-    // This would set up the SignalR listener for "ReceiveMessage"
-    if (
-      this.connection &&
-      typeof this.connection === "object" &&
-      this.connection !== null
-    ) {
-      // Type assertion for connection with 'on' method (SignalR-like)
-      const signalRConnection = this.connection as {
-        on: (event: string, callback: (message: Message) => void) => void;
-      };
-      signalRConnection.on("ReceiveMessage", callback);
+    this.messageCallbacks.push(callback);
+  }
+
+  // Listen for connection status changes
+  public onConnectionStatusChange(
+    callback: (connected: boolean) => void
+  ): void {
+    this.connectionCallbacks.push(callback);
+
+    // Immediately notify of current status
+    if (this.connection) {
+      callback(this.connection.state === signalR.HubConnectionState.Connected);
+    } else {
+      callback(false);
     }
+  }
+
+  // Get current connection status
+  public isConnected(): boolean {
+    return this.connection?.state === signalR.HubConnectionState.Connected;
+  }
+
+  // Send a message through SignalR (if needed)
+  public async sendMessageToHub(
+    chatId: number,
+    message: string
+  ): Promise<void> {
+    if (
+      !this.connection ||
+      this.connection.state !== signalR.HubConnectionState.Connected
+    ) {
+      throw new Error("SignalR connection not established");
+    }
+
+    try {
+      await this.connection.invoke("SendMessage", {
+        chatId: chatId,
+        text: message,
+        timestamp: new Date().toISOString(),
+      });
+      console.log("Message sent through SignalR hub");
+    } catch (error) {
+      console.error("Error sending message through SignalR:", error);
+      throw error;
+    }
+  }
+
+  // Join a specific chat room (if your hub supports it)
+  public async joinChatRoom(chatId: number): Promise<void> {
+    if (
+      !this.connection ||
+      this.connection.state !== signalR.HubConnectionState.Connected
+    ) {
+      console.warn("Cannot join chat room - SignalR not connected");
+      return;
+    }
+
+    try {
+      await this.connection.invoke("JoinChatRoom", chatId.toString());
+      console.log(`Joined chat room: ${chatId}`);
+    } catch (error) {
+      console.error("Error joining chat room:", error);
+    }
+  }
+
+  // Leave a specific chat room (if your hub supports it)
+  public async leaveChatRoom(chatId: number): Promise<void> {
+    if (
+      !this.connection ||
+      this.connection.state !== signalR.HubConnectionState.Connected
+    ) {
+      return;
+    }
+
+    try {
+      await this.connection.invoke("LeaveChatRoom", chatId.toString());
+      console.log(`Left chat room: ${chatId}`);
+    } catch (error) {
+      console.error("Error leaving chat room:", error);
+    }
+  }
+
+  // Notify connection status callbacks
+  private notifyConnectionStatus(connected: boolean): void {
+    this.connectionCallbacks.forEach((callback) => {
+      try {
+        callback(connected);
+      } catch (error) {
+        console.error("Error in connection status callback:", error);
+      }
+    });
   }
 
   // Stop the connection
   public async stopConnection(): Promise<void> {
+    if (!this.connection) {
+      return;
+    }
+
     try {
-      if (
-        this.connection &&
-        typeof this.connection === "object" &&
-        this.connection !== null
-      ) {
-        // Type assertion for connection with 'stop' method (SignalR-like)
-        const signalRConnection = this.connection as {
-          stop: () => Promise<void>;
-        };
-        await signalRConnection.stop();
-        this.connection = null;
-      }
+      await this.connection.stop();
+      console.log("SignalR connection stopped");
     } catch (error) {
-      console.error("Error stopping connection:", error);
+      console.error("Error stopping SignalR connection:", error);
+    } finally {
+      this.connection = null;
+      this.notifyConnectionStatus(false);
+    }
+  }
+
+  // Clean up callbacks (useful for component unmounting)
+  public removeMessageCallback(callback: (message: Message) => void): void {
+    const index = this.messageCallbacks.indexOf(callback);
+    if (index > -1) {
+      this.messageCallbacks.splice(index, 1);
+    }
+  }
+
+  public removeConnectionCallback(
+    callback: (connected: boolean) => void
+  ): void {
+    const index = this.connectionCallbacks.indexOf(callback);
+    if (index > -1) {
+      this.connectionCallbacks.splice(index, 1);
     }
   }
 }
@@ -253,7 +441,6 @@ export const formatMessageDate = (dateString: string): string => {
       });
     }
   } catch {
-    // Removed unused 'e' parameter
     return "";
   }
 };
@@ -347,7 +534,6 @@ export const formatTimestamp = (timestamp: string): string => {
       });
     }
   } catch {
-    // Removed unused 'e' parameter
     return "";
   }
 };

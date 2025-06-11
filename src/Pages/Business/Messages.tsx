@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Sidebar_2 from "../../components/Sidebar_2/Sidebar_2";
 import { FaPaperPlane } from "react-icons/fa";
 import "../../styles/Messages.css";
@@ -7,6 +7,7 @@ import {
   getChats,
   getChatMessages,
   sendMessage,
+  messageService,
 } from "../../service/Messages_service";
 
 interface Chat {
@@ -52,6 +53,9 @@ const Messages: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSending, setIsSending] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+  const [connectionStatus, setConnectionStatus] =
+    useState<string>("Disconnected");
 
   // Store messages for each chat to prevent disappearing
   const [chatMessagesCache, setChatMessagesCache] = useState<{
@@ -59,14 +63,150 @@ const Messages: React.FC = () => {
   }>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Refs for cleanup
+  const messageCallbackRef = useRef<((message: Message) => void) | null>(null);
+  const connectionCallbackRef = useRef<((connected: boolean) => void) | null>(
+    null
+  );
+
+  // Memoized callback for receiving messages
+  const handleReceiveMessage = useCallback(
+    (incomingMessage: Message) => {
+      console.log("Received real-time message:", incomingMessage);
+
+      // Update messages if the message belongs to the currently selected chat
+      setMessages((prevMessages) => {
+        // Check if message already exists to prevent duplicates
+        const exists = prevMessages.some(
+          (msg) => msg.id === incomingMessage.id
+        );
+        if (!exists) {
+          const updatedMessages = [...prevMessages, incomingMessage].sort(
+            (a, b) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          );
+          return updatedMessages;
+        }
+        return prevMessages;
+      });
+
+      // Update the cache for all chats
+      setChatMessagesCache((prevCache) => {
+        const updatedCache = { ...prevCache };
+
+        // Update cache for the appropriate chat
+        Object.keys(updatedCache).forEach((chatIdStr) => {
+          const chatId = parseInt(chatIdStr);
+          const chat = chats.find((c) => c.id === chatId);
+
+          if (
+            chat &&
+            (chat.customerId === incomingMessage.senderId ||
+              chat.businessId === incomingMessage.senderId)
+          ) {
+            const existingMessages = updatedCache[chatId] || [];
+            const exists = existingMessages.some(
+              (msg) => msg.id === incomingMessage.id
+            );
+
+            if (!exists) {
+              updatedCache[chatId] = [
+                ...existingMessages,
+                incomingMessage,
+              ].sort(
+                (a, b) =>
+                  new Date(a.createdAt).getTime() -
+                  new Date(b.createdAt).getTime()
+              );
+            }
+          }
+        });
+
+        return updatedCache;
+      });
+    },
+    [chats]
+  );
+
+  // Memoized callback for connection status changes
+  const handleConnectionStatusChange = useCallback((connected: boolean) => {
+    setIsConnected(connected);
+    setConnectionStatus(connected ? "Connected" : "Disconnected");
+    console.log(
+      "SignalR connection status:",
+      connected ? "Connected" : "Disconnected"
+    );
+  }, []);
+
   useEffect(() => {
     loadChats();
+    initializeSignalR();
+
+    // Cleanup on unmount
+    return () => {
+      cleanupSignalR();
+    };
   }, []);
+
+  // Update refs when callbacks change
+  useEffect(() => {
+    messageCallbackRef.current = handleReceiveMessage;
+  }, [handleReceiveMessage]);
+
+  useEffect(() => {
+    connectionCallbackRef.current = handleConnectionStatusChange;
+  }, [handleConnectionStatusChange]);
 
   // Scroll to bottom when messages change
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Join chat room when selected chat changes
+  useEffect(() => {
+    if (selectedChat && isConnected) {
+      messageService.joinChatRoom(selectedChat.id);
+    }
+
+    // Leave previous chat room when selecting a new one
+    return () => {
+      if (selectedChat && isConnected) {
+        messageService.leaveChatRoom(selectedChat.id);
+      }
+    };
+  }, [selectedChat, isConnected]);
+
+  const initializeSignalR = async () => {
+    try {
+      setConnectionStatus("Connecting...");
+
+      // Set up event listeners before starting connection
+      messageService.onReceiveMessage(handleReceiveMessage);
+      messageService.onConnectionStatusChange(handleConnectionStatusChange);
+
+      // Start the connection
+      await messageService.startConnection();
+
+      console.log("SignalR initialized successfully");
+    } catch (error) {
+      console.error("Failed to initialize SignalR:", error);
+      setIsConnected(false);
+      setConnectionStatus("Connection Failed");
+    }
+  };
+
+  const cleanupSignalR = () => {
+    // Remove callbacks
+    if (messageCallbackRef.current) {
+      messageService.removeMessageCallback(messageCallbackRef.current);
+    }
+    if (connectionCallbackRef.current) {
+      messageService.removeConnectionCallback(connectionCallbackRef.current);
+    }
+
+    // Stop connection
+    messageService.stopConnection();
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -87,6 +227,11 @@ const Messages: React.FC = () => {
   };
 
   const handleChatSelect = async (chat: Chat) => {
+    // Leave previous chat room
+    if (selectedChat && isConnected) {
+      await messageService.leaveChatRoom(selectedChat.id);
+    }
+
     setSelectedChat(chat);
     setShowChatModal(true);
     setLoadingMessages(true);
@@ -152,6 +297,11 @@ const Messages: React.FC = () => {
         ...prev,
         [chat.id]: sortedMessages,
       }));
+
+      // Join the new chat room
+      if (isConnected) {
+        await messageService.joinChatRoom(chat.id);
+      }
     } catch (error) {
       console.error("Error loading messages:", error);
       setErrorMessage("Failed to load messages");
@@ -208,6 +358,16 @@ const Messages: React.FC = () => {
         ...prev,
         [selectedChat.id]: finalMessages,
       }));
+
+      // Optionally send through SignalR hub as well (if your backend requires it)
+      try {
+        if (isConnected) {
+          await messageService.sendMessageToHub(selectedChat.id, messageText);
+        }
+      } catch (hubError) {
+        console.warn("Failed to send message through SignalR hub:", hubError);
+        // Don't fail the whole operation if hub send fails
+      }
     } catch (error) {
       console.error("Error sending message:", error);
       // Remove optimistic message on error and restore input
@@ -231,6 +391,11 @@ const Messages: React.FC = () => {
   const handleCloseModal = () => {
     setShowChatModal(false);
     setErrorMessage(null);
+
+    // Leave chat room when closing modal
+    if (selectedChat && isConnected) {
+      messageService.leaveChatRoom(selectedChat.id);
+    }
   };
 
   const formatTimestamp = (timestamp: string) => {
@@ -291,6 +456,17 @@ const Messages: React.FC = () => {
     }
   };
 
+  const retryConnection = async () => {
+    setConnectionStatus("Reconnecting...");
+    try {
+      await messageService.stopConnection();
+      await initializeSignalR();
+    } catch (error) {
+      console.error("Failed to reconnect:", error);
+      setConnectionStatus("Connection Failed");
+    }
+  };
+
   // Loading state
   if (isLoading) {
     return (
@@ -333,7 +509,28 @@ const Messages: React.FC = () => {
       <div className="messages-content">
         <Navbar />
 
-        <h2 className="messages-title">Messages</h2>
+        <div className="messages-header">
+          <h2 className="messages-title">Messages</h2>
+          <div className="connection-status">
+            <div
+              className={`status-indicator ${
+                isConnected ? "connected" : "disconnected"
+              }`}
+            >
+              <div className="status-dot"></div>
+              <span>{connectionStatus}</span>
+              {!isConnected && connectionStatus !== "Connecting..." && (
+                <button
+                  className="retry-connection-btn"
+                  onClick={retryConnection}
+                  title="Retry connection"
+                >
+                  🔄
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
 
         {chats.length === 0 ? (
           <div className="no-chats">
@@ -423,9 +620,19 @@ const Messages: React.FC = () => {
                     )}
                   </div>
                 </div>
-                <button className="chat-close-btn" onClick={handleCloseModal}>
-                  ×
-                </button>
+                <div className="chat-header-actions">
+                  <div
+                    className={`connection-status-mini ${
+                      isConnected ? "connected" : "disconnected"
+                    }`}
+                    title={`SignalR: ${connectionStatus}`}
+                  >
+                    <div className="status-dot-mini"></div>
+                  </div>
+                  <button className="chat-close-btn" onClick={handleCloseModal}>
+                    ×
+                  </button>
+                </div>
               </div>
 
               <div className="chat-messages">
@@ -486,17 +693,27 @@ const Messages: React.FC = () => {
                     type="text"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    placeholder="Type a message..."
+                    placeholder={
+                      isConnected
+                        ? "Type a message..."
+                        : "Reconnecting... Please wait"
+                    }
                     className="chat-input"
                     onKeyPress={handleKeyPress}
-                    disabled={isSending}
+                    disabled={isSending || !isConnected}
                   />
                 </div>
                 <button
                   onClick={handleSendMessage}
                   className={`send-button ${isSending ? "sending" : ""}`}
-                  disabled={isSending || !newMessage.trim()}
-                  title={isSending ? "Sending..." : "Send message"}
+                  disabled={isSending || !newMessage.trim() || !isConnected}
+                  title={
+                    !isConnected
+                      ? "Reconnecting..."
+                      : isSending
+                      ? "Sending..."
+                      : "Send message"
+                  }
                 >
                   {isSending ? (
                     <div className="sending-spinner"></div>
