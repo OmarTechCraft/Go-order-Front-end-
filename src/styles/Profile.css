@@ -14,8 +14,8 @@
   transition: all 0.3s ease;
 }
 
-/* The top bar with color #E8DCED */
-.profile-topbar {
+/* The top bar with color #E8DCED - CORRECTED CLASS NAME */
+.profile-top-bar {
   background-color: #e8dced;
   height: 180px;
   position: relative;
@@ -107,15 +107,51 @@
   transition: all 0.3s ease;
 }
 
-/* Two-column form layout with 4 rows total */
+/* Form layout to match the image - CORRECTED LAYOUT */
 .profile-form {
   display: grid;
   grid-template-columns: 1fr 1fr; /* two columns */
-  grid-template-rows: auto auto auto auto; /* four rows */
   column-gap: 32px;
   row-gap: 24px;
   max-width: 800px;
   margin-bottom: 36px;
+}
+
+/* Specific positioning for form fields to match the image */
+.profile-field:nth-child(1) {
+  /* First Name */
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.profile-field:nth-child(2) {
+  /* Address */
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.profile-field:nth-child(3) {
+  /* Last Name */
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.profile-field:nth-child(4) {
+  /* Role */
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.profile-field:nth-child(5) {
+  /* Email */
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.profile-field:nth-child(6) {
+  /* Phone Number */
+  grid-column: 1;
+  grid-row: 4;
 }
 
 .profile-field {
@@ -304,7 +340,7 @@
     margin-left: 200px; /* Smaller sidebar width */
   }
 
-  .profile-topbar {
+  .profile-top-bar {
     height: 160px;
   }
 
@@ -340,6 +376,17 @@
   .profile-form {
     grid-template-columns: 1fr; /* One column layout */
     padding: 0 20px;
+  }
+
+  /* Reset grid positioning for mobile */
+  .profile-field:nth-child(1),
+  .profile-field:nth-child(2),
+  .profile-field:nth-child(3),
+  .profile-field:nth-child(4),
+  .profile-field:nth-child(5),
+  .profile-field:nth-child(6) {
+    grid-column: 1;
+    grid-row: auto;
   }
 
   .profile-header {
@@ -384,7 +431,7 @@
 }
 
 @media (max-width: 480px) {
-  .profile-topbar {
+  .profile-top-bar {
     height: 140px;
   }
 

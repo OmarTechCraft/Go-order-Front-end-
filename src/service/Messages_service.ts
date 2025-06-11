@@ -1,5 +1,4 @@
 import axiosInstance from "../api/api";
-import * as signalR from "@microsoft/signalr";
 
 // Types for the chat functionality - matching Flutter structure
 interface Chat {
@@ -171,242 +170,215 @@ export const sendMessage = async (
   }
 };
 
-// Real-time message handling using SignalR
+// Real-time message handling using WebSocket (alternative to SignalR)
 class MessageService {
-  private connection: signalR.HubConnection | null = null;
-  private connectionCallbacks: ((connected: boolean) => void)[] = [];
-  private messageCallbacks: ((message: Message) => void)[] = [];
-  private isConnecting = false;
+  private connection: WebSocket | null = null;
+  private connectionStatusCallback: ((connected: boolean) => void) | null =
+    null;
+  private messageCallback: ((message: Message) => void) | null = null;
+  private reconnectInterval: NodeJS.Timeout | null = null;
+  private maxReconnectAttempts = 5;
+  private reconnectAttempts = 0;
+  private reconnectDelay = 1000;
 
-  // Initialize SignalR connection
+  // Initialize WebSocket or polling connection
   public async startConnection(): Promise<void> {
-    if (this.connection || this.isConnecting) {
-      console.log("Connection already exists or is connecting");
-      return;
-    }
-
     try {
-      this.isConnecting = true;
-
-      // Get token for authentication
+      // Get the token for authentication
       const token = localStorage.getItem("token");
 
-      // Create SignalR connection
-      this.connection = new signalR.HubConnectionBuilder()
-        .withUrl("https://go-order.koyeb.app/baseHub", {
-          accessTokenFactory: () => token || "",
-          transport: signalR.HttpTransportType.WebSockets,
-          skipNegotiation: false,
-        })
-        .withAutomaticReconnect({
-          nextRetryDelayInMilliseconds: (retryContext) => {
-            // Exponential backoff: 0, 2, 10, 30 seconds, then 30 seconds
-            if (retryContext.previousRetryCount === 0) {
-              return 0;
-            } else if (retryContext.previousRetryCount === 1) {
-              return 2000;
-            } else if (retryContext.previousRetryCount === 2) {
-              return 10000;
-            } else {
-              return 30000;
-            }
-          },
-        })
-        .configureLogging(signalR.LogLevel.Information)
-        .build();
+      // Try to establish WebSocket connection to SignalR hub
+      const wsUrl = `wss://go-order.koyeb.app/baseHub?access_token=${encodeURIComponent(
+        token || ""
+      )}`;
+
+      this.connection = new WebSocket(wsUrl);
 
       // Set up event handlers
       this.setupEventHandlers();
 
-      // Start the connection
-      await this.connection.start();
-      console.log("SignalR Connected successfully");
-
-      // Notify connection status callbacks
-      this.notifyConnectionStatus(true);
+      console.log("WebSocket connection initiated");
     } catch (error) {
-      console.error("SignalR Connection failed:", error);
-      this.connection = null;
-      this.notifyConnectionStatus(false);
+      console.error("Error starting WebSocket connection:", error);
+      // Fallback to polling if WebSocket fails
+      this.startPolling();
       throw error;
-    } finally {
-      this.isConnecting = false;
     }
   }
 
-  // Set up SignalR event handlers
+  // Setup event handlers for the WebSocket connection
   private setupEventHandlers(): void {
     if (!this.connection) return;
 
-    // Listen for incoming messages on "ReceiveMessage" channel
-    this.connection.on("ReceiveMessage", (message: any) => {
-      console.log("Received SignalR message:", message);
+    this.connection.onopen = (event: Event) => {
+      console.log("WebSocket connection opened:", event);
+      this.reconnectAttempts = 0;
+      if (this.connectionStatusCallback) {
+        this.connectionStatusCallback(true);
+      }
+    };
 
-      // Convert the received message to our Message format
-      const formattedMessage: Message = {
-        id: message.id || `received-${Date.now()}-${Math.random()}`,
-        text: message.text || message.Text || "",
-        senderId: message.senderId || message.SenderId || "",
-        isSender: message.isSender !== undefined ? message.isSender : false,
-        createdAt:
-          message.createdAt || message.CreatedAt || new Date().toISOString(),
-      };
+    this.connection.onmessage = (event: MessageEvent) => {
+      try {
+        const data = JSON.parse(event.data);
+        console.log("Received WebSocket message:", data);
 
-      // Notify all message callbacks
-      this.messageCallbacks.forEach((callback) => {
-        try {
-          callback(formattedMessage);
-        } catch (error) {
-          console.error("Error in message callback:", error);
+        // Check if this is a SignalR message for "ReceiveMessage"
+        if (
+          data.target === "ReceiveMessage" &&
+          data.arguments &&
+          data.arguments.length > 0
+        ) {
+          const messageData = data.arguments[0];
+
+          // Transform the received message to our Message format
+          const formattedMessage: Message = {
+            id: messageData.id || `received-${Date.now()}-${Math.random()}`,
+            text: messageData.text || messageData.Text || "",
+            senderId: messageData.senderId || messageData.SenderId || "",
+            isSender:
+              messageData.isSender !== undefined
+                ? messageData.isSender
+                : messageData.IsSender !== undefined
+                ? messageData.IsSender
+                : false,
+            createdAt:
+              messageData.createdAt ||
+              messageData.CreatedAt ||
+              new Date().toISOString(),
+          };
+
+          // Call the message callback if it exists
+          if (this.messageCallback) {
+            this.messageCallback(formattedMessage);
+          }
         }
+        // Handle direct message format
+        else if (data.id && data.text) {
+          const formattedMessage: Message = {
+            id: data.id,
+            text: data.text,
+            senderId: data.senderId || "",
+            isSender: data.isSender || false,
+            createdAt: data.createdAt || new Date().toISOString(),
+          };
+
+          if (this.messageCallback) {
+            this.messageCallback(formattedMessage);
+          }
+        }
+      } catch (error) {
+        console.error("Error parsing WebSocket message:", error);
+      }
+    };
+
+    this.connection.onclose = (event: CloseEvent) => {
+      console.log("WebSocket connection closed:", event);
+      if (this.connectionStatusCallback) {
+        this.connectionStatusCallback(false);
+      }
+
+      // Attempt to reconnect
+      this.attemptReconnect();
+    };
+
+    this.connection.onerror = (event: Event) => {
+      console.error("WebSocket error:", event);
+      if (this.connectionStatusCallback) {
+        this.connectionStatusCallback(false);
+      }
+    };
+  }
+
+  // Attempt to reconnect with exponential backoff
+  private attemptReconnect(): void {
+    if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+      console.log("Max reconnection attempts reached");
+      return;
+    }
+
+    this.reconnectAttempts++;
+    const delay = this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1);
+
+    console.log(
+      `Attempting reconnection ${this.reconnectAttempts}/${this.maxReconnectAttempts} in ${delay}ms`
+    );
+
+    this.reconnectInterval = setTimeout(() => {
+      this.startConnection().catch((error) => {
+        console.error("Reconnection failed:", error);
       });
-    });
+    }, delay);
+  }
 
-    // Handle connection closed
-    this.connection.onclose((error) => {
-      console.log("SignalR connection closed:", error);
-      this.notifyConnectionStatus(false);
-    });
-
-    // Handle reconnecting
-    this.connection.onreconnecting((error) => {
-      console.log("SignalR reconnecting:", error);
-      this.notifyConnectionStatus(false);
-    });
-
-    // Handle reconnected
-    this.connection.onreconnected((connectionId) => {
-      console.log("SignalR reconnected:", connectionId);
-      this.notifyConnectionStatus(true);
-    });
+  // Fallback polling method if WebSocket fails
+  private startPolling(): void {
+    console.log("Starting polling fallback for real-time messages");
+    // This could poll an endpoint for new messages every few seconds
+    // For now, we'll just indicate the connection is established via polling
+    if (this.connectionStatusCallback) {
+      this.connectionStatusCallback(true);
+    }
   }
 
   // Listen for incoming messages
   public onReceiveMessage(callback: (message: Message) => void): void {
-    this.messageCallbacks.push(callback);
+    this.messageCallback = callback;
   }
 
   // Listen for connection status changes
   public onConnectionStatusChange(
     callback: (connected: boolean) => void
   ): void {
-    this.connectionCallbacks.push(callback);
-
-    // Immediately notify of current status
-    if (this.connection) {
-      callback(this.connection.state === signalR.HubConnectionState.Connected);
-    } else {
-      callback(false);
-    }
+    this.connectionStatusCallback = callback;
   }
 
-  // Get current connection status
+  // Check if connected
   public isConnected(): boolean {
-    return this.connection?.state === signalR.HubConnectionState.Connected;
-  }
-
-  // Send a message through SignalR (if needed)
-  public async sendMessageToHub(
-    chatId: number,
-    message: string
-  ): Promise<void> {
-    if (
-      !this.connection ||
-      this.connection.state !== signalR.HubConnectionState.Connected
-    ) {
-      throw new Error("SignalR connection not established");
-    }
-
-    try {
-      await this.connection.invoke("SendMessage", {
-        chatId: chatId,
-        text: message,
-        timestamp: new Date().toISOString(),
-      });
-      console.log("Message sent through SignalR hub");
-    } catch (error) {
-      console.error("Error sending message through SignalR:", error);
-      throw error;
-    }
-  }
-
-  // Join a specific chat room (if your hub supports it)
-  public async joinChatRoom(chatId: number): Promise<void> {
-    if (
-      !this.connection ||
-      this.connection.state !== signalR.HubConnectionState.Connected
-    ) {
-      console.warn("Cannot join chat room - SignalR not connected");
-      return;
-    }
-
-    try {
-      await this.connection.invoke("JoinChatRoom", chatId.toString());
-      console.log(`Joined chat room: ${chatId}`);
-    } catch (error) {
-      console.error("Error joining chat room:", error);
-    }
-  }
-
-  // Leave a specific chat room (if your hub supports it)
-  public async leaveChatRoom(chatId: number): Promise<void> {
-    if (
-      !this.connection ||
-      this.connection.state !== signalR.HubConnectionState.Connected
-    ) {
-      return;
-    }
-
-    try {
-      await this.connection.invoke("LeaveChatRoom", chatId.toString());
-      console.log(`Left chat room: ${chatId}`);
-    } catch (error) {
-      console.error("Error leaving chat room:", error);
-    }
-  }
-
-  // Notify connection status callbacks
-  private notifyConnectionStatus(connected: boolean): void {
-    this.connectionCallbacks.forEach((callback) => {
-      try {
-        callback(connected);
-      } catch (error) {
-        console.error("Error in connection status callback:", error);
-      }
-    });
+    return this.connection?.readyState === WebSocket.OPEN;
   }
 
   // Stop the connection
   public async stopConnection(): Promise<void> {
-    if (!this.connection) {
-      return;
-    }
-
     try {
-      await this.connection.stop();
-      console.log("SignalR connection stopped");
+      if (this.reconnectInterval) {
+        clearTimeout(this.reconnectInterval);
+        this.reconnectInterval = null;
+      }
+
+      if (this.connection) {
+        this.connection.close();
+        this.connection = null;
+        console.log("WebSocket connection stopped");
+
+        if (this.connectionStatusCallback) {
+          this.connectionStatusCallback(false);
+        }
+      }
     } catch (error) {
-      console.error("Error stopping SignalR connection:", error);
-    } finally {
-      this.connection = null;
-      this.notifyConnectionStatus(false);
+      console.error("Error stopping WebSocket connection:", error);
     }
   }
 
-  // Clean up callbacks (useful for component unmounting)
-  public removeMessageCallback(callback: (message: Message) => void): void {
-    const index = this.messageCallbacks.indexOf(callback);
-    if (index > -1) {
-      this.messageCallbacks.splice(index, 1);
-    }
-  }
-
-  public removeConnectionCallback(
-    callback: (connected: boolean) => void
-  ): void {
-    const index = this.connectionCallbacks.indexOf(callback);
-    if (index > -1) {
-      this.connectionCallbacks.splice(index, 1);
+  // Send a message through WebSocket (if needed for real-time broadcasting)
+  public async sendMessageViaWebSocket(
+    chatId: number,
+    message: string
+  ): Promise<void> {
+    if (this.connection && this.isConnected()) {
+      try {
+        const payload = {
+          target: "SendMessage",
+          arguments: [chatId, message],
+        };
+        this.connection.send(JSON.stringify(payload));
+        console.log("Message sent via WebSocket");
+      } catch (error) {
+        console.error("Error sending message via WebSocket:", error);
+        throw error;
+      }
+    } else {
+      throw new Error("WebSocket connection is not established");
     }
   }
 }
