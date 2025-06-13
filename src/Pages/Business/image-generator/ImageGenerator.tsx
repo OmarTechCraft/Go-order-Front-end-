@@ -16,7 +16,7 @@ const ImageGenerator: React.FC = () => {
   const [recentPrompts, setRecentPrompts] = useState<string[]>([]);
 
   const FAL_KEY =
-    "329d633c-e612-4abc-8add-cd8529cd7dc1:20b38060f8e15a7891289e5f47990709";
+    "5e52d37d-4813-4995-ab5f-bd9483f8b658:87bb47a0e479e43c046cc8cd0c3af2bf";
 
   useEffect(() => {
     const timer = setTimeout(() => {

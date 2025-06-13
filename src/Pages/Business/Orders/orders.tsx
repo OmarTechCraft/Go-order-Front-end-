@@ -101,6 +101,15 @@ const ORDER_STATUSES = [
   "Delivered",
 ];
 
+// Define state transitions
+const STATE_TRANSITIONS = {
+  Pending: "In progress",
+  "In progress": "Cooked",
+  Cooked: "Out to delivery",
+  "Out to delivery": "Delivered",
+  Delivered: null, // Cannot move to any other state
+};
+
 export default function AllOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -162,6 +171,9 @@ export default function AllOrders() {
   ) => {
     try {
       await updateOrderStatus(orderId, newStatus);
+      // Close the details popup when order moves to another state
+      setShowDetailsPopup(false);
+      setSelectedOrder(null);
       // Refresh orders after status update
       fetchOrders(selectedStatus);
     } catch (error) {
@@ -218,6 +230,13 @@ export default function AllOrders() {
     fetchOrders(selectedStatus);
   };
 
+  // Get the next status for an order
+  const getNextStatus = (currentStatus: string): string | null => {
+    return (
+      STATE_TRANSITIONS[currentStatus as keyof typeof STATE_TRANSITIONS] || null
+    );
+  };
+
   // Get user info from localStorage with proper error handling
   useEffect(() => {
     const userDataString = localStorage.getItem("user");
@@ -244,7 +263,7 @@ export default function AllOrders() {
         <div className="content-area">
           <div className="orders-content">
             <div className="page-header">
-              <h1 className="page-title">All Orders</h1>
+              <h1 className="page-title">Orders</h1>
               <button
                 className="refresh-button"
                 onClick={refreshOrders}
@@ -403,26 +422,35 @@ export default function AllOrders() {
                       </>
                     )}
 
-                    {/* Order Status Update Section */}
-                    <div className="status-update-section">
-                      <h4>Update Order Status</h4>
-                      <div className="status-buttons">
-                        {ORDER_STATUSES.slice(1).map((status) => (
+                    {/* Order Status Update Section - Only show next state */}
+                    {getNextStatus(selectedOrder.status) && (
+                      <div className="status-update-section">
+                        <h4>Move Order to Next State</h4>
+                        <div className="status-buttons">
                           <button
-                            key={status}
-                            className={`status-update-button ${
-                              selectedOrder.status === status ? "current" : ""
-                            }`}
+                            className="status-update-button next-state"
                             onClick={() =>
-                              handleUpdateOrderStatus(selectedOrder.id, status)
+                              handleUpdateOrderStatus(
+                                selectedOrder.id,
+                                getNextStatus(selectedOrder.status)!
+                              )
                             }
-                            disabled={selectedOrder.status === status}
                           >
-                            {status}
+                            Move to {getNextStatus(selectedOrder.status)}
                           </button>
-                        ))}
+                        </div>
                       </div>
-                    </div>
+                    )}
+
+                    {selectedOrder.status === "Delivered" && (
+                      <div className="status-update-section">
+                        <h4>Order Status</h4>
+                        <p className="final-status-message">
+                          This order has been delivered and cannot be moved to
+                          another state.
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

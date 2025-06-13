@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import { Info, Loader2 } from "lucide-react"
-import "./OrderTable.css"
-import { Order } from "../../Pages/Business/Orders/context/OrdersContext"
+import { Info, Loader2 } from "lucide-react";
+import "./OrderTable.css";
+import { Order } from "../../Pages/Business/Orders/context/OrdersContext";
 
 interface OrderTableProps {
-  orders: Order[]
-  loading: boolean
-  error: string | null
-  onAccept: (orderId: string) => void
-  onCancel: (orderId: string) => void
-  onDone: (orderId: string) => void
-  onViewDetails: (orderId: string) => void
+  orders: Order[];
+  loading: boolean;
+  error: string | null;
+  onAccept: (orderId: string) => void;
+  onCancel: (orderId: string) => void;
+  onDone: (orderId: string) => void;
+  onViewDetails: (orderId: string) => void;
 }
 
-export default function OrderTable({ 
-  orders, 
-  loading, 
-  error, 
-  onAccept, 
-  onCancel, 
-  onDone, 
-  onViewDetails 
+export default function OrderTable({
+  orders,
+  loading,
+  error,
+  onAccept,
+  onCancel,
+  onDone,
+  onViewDetails,
 }: OrderTableProps) {
   if (error) {
-    return <div className="error-message">{error}</div>
+    return <div className="error-message">{error}</div>;
   }
 
   if (loading && orders.length === 0) {
@@ -33,11 +33,11 @@ export default function OrderTable({
         <Loader2 className="animate-spin" size={24} />
         <p>Loading orders...</p>
       </div>
-    )
+    );
   }
 
   if (orders.length === 0) {
-    return <div className="no-orders-message">No orders found</div>
+    return <div className="no-orders-message">No orders found</div>;
   }
 
   return (
@@ -55,7 +55,6 @@ export default function OrderTable({
             <th>Status</th>
             <th>Date</th>
             <th>Total</th>
-            <th>Action</th>
             <th>Details</th>
           </tr>
         </thead>
@@ -65,50 +64,17 @@ export default function OrderTable({
               <td>#{order.id}</td>
               <td>{order.customerName}</td>
               <td>
-                <span className={`status-badge status-${order.status.toLowerCase()}`}>
+                <span
+                  className={`status-badge status-${order.status.toLowerCase()}`}
+                >
                   {order.status}
                 </span>
               </td>
               <td>{order.date}</td>
               <td>${order.totalPrice?.toFixed(2) || "0.00"}</td>
+
               <td>
-                {order.action === "pending" && (
-                  <div className="action-buttons">
-                    <button 
-                      className="btn-primary"
-                      onClick={() => onAccept(order.id)}
-                      disabled={loading}
-                    >
-                      Accept
-                    </button>
-                    <button 
-                      className="btn-secondary"
-                      onClick={() => onCancel(order.id)}
-                      disabled={loading}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                )}
-                {order.action === "in-progress" && (
-                  <div className="action-buttons">
-                    <button 
-                      className="btn-primary"
-                      onClick={() => onDone(order.id)}
-                      disabled={loading}
-                    >
-                      Done
-                    </button>
-                    <button className="btn-secondary" disabled>
-                      In progress
-                    </button>
-                  </div>
-                )}
-                {order.action === "completed" && <div className="completed-status">Completed</div>}
-                {order.action === "cancelled" && <div className="cancelled-status">Cancelled</div>}
-              </td>
-              <td>
-                <button 
+                <button
                   className="details-button"
                   onClick={() => onViewDetails(order.id)}
                   aria-label="View details"
@@ -121,5 +87,5 @@ export default function OrderTable({
         </tbody>
       </table>
     </div>
-  )
+  );
 }

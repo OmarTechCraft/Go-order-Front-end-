@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
+// Define the props interface for CustomInputField
 interface CustomInputFieldProps {
   type: string;
   placeholder: string;
-  showEyeIcon?: boolean;
+  showEyeIcon?: boolean; // Optional prop to show/hide password toggle
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string; // <--- ADDED: Optional CSS class for additional styling
+  name?: string; // <--- ADDED: The 'name' attribute for the input element
 }
 
 const CustomInputField: React.FC<CustomInputFieldProps> = ({
@@ -15,6 +18,8 @@ const CustomInputField: React.FC<CustomInputFieldProps> = ({
   showEyeIcon,
   value,
   onChange,
+  className, // <--- Destructure className prop
+  name,      // <--- Destructure name prop
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -22,14 +27,17 @@ const CustomInputField: React.FC<CustomInputFieldProps> = ({
     setIsVisible((prev) => !prev);
   };
 
+  // Determine the actual input type based on showEyeIcon and visibility state
   const inputType = isVisible && showEyeIcon ? "text" : type;
 
   return (
     <div className="custom-input-container">
       <input
         type={inputType}
+        name={name} // <--- Passed the 'name' prop to the native <input>
         placeholder={placeholder}
-        className="custom-input-field"
+        // Combine the default class with any additional classes passed via props
+        className={custom-input-field ${className || ""}}
         value={value}
         onChange={onChange}
       />
