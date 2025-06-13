@@ -1,3 +1,5 @@
+/* src/styles/register.css */
+
 :root {
   --primary-purple: #8a5bc6;
   --primary-purple-light: #a77bdd;
@@ -18,6 +20,10 @@
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
+
+  /* Validation colors */
+  --success-color: #28a745;
+  --error-color: #dc3545;
 }
 
 /* Reset and global styles */
@@ -42,7 +48,7 @@ body {
   overflow: hidden;
 }
 
-/* Left side (form) - MODIFIED FOR CENTERING */
+/* Left side (form) */
 .auth-left {
   width: calc(100% - var(--right-width));
   background-color: var(--background-white);
@@ -66,7 +72,7 @@ body {
     var(--primary-purple-dark)
   );
   position: relative;
-  overflow: visible; /* Changed from overflow: hidden */
+  overflow: visible;
 }
 
 /* Animation container */
@@ -74,8 +80,8 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
-  overflow: visible; /* Changed from overflow: hidden to allow elements to extend beyond */
-  z-index: 5; /* Higher z-index to appear above both sides */
+  overflow: visible;
+  z-index: 5;
   left: 0;
   top: 0;
 }
@@ -85,14 +91,14 @@ body {
   position: absolute;
   border-radius: 50%;
   opacity: 0.6;
-  z-index: 6; /* Above the container but below the illustration */
+  z-index: 6;
 }
 
 .shape-1 {
   width: 100px;
   height: 100px;
   top: 15%;
-  left: -5%; /* Moved further left to extend into white area */
+  left: -5%;
   background: var(--primary-purple-light);
   animation: float 15s ease-in-out infinite;
 }
@@ -101,7 +107,7 @@ body {
   width: 60px;
   height: 60px;
   top: 60%;
-  left: -10%; /* Moved further left to extend into white area */
+  left: -10%;
   background: var(--accent-purple-light);
   animation: float 18s ease-in-out infinite 2s;
 }
@@ -136,12 +142,12 @@ body {
 .auth-illustration {
   position: absolute;
   top: 10%;
-  left: -30%; /* Adjusted left position to extend more into the white area */
+  left: -30%;
   width: 160%;
   max-width: none;
   animation: floatImage 8s ease-in-out infinite;
   filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
-  z-index: 10; /* Higher z-index to appear above both sides */
+  z-index: 10;
 }
 
 @keyframes floatImage {
@@ -179,7 +185,7 @@ body {
   color: var(--primary-purple);
   font-size: 28px;
   font-weight: 700;
-  margin-bottom: 0; /* Remove bottom margin since it's now fixed */
+  margin-bottom: 0;
 }
 
 .animate-logo {
@@ -218,7 +224,7 @@ body {
   }
 }
 
-/* Content container - MODIFIED FOR PERFECT CENTERING */
+/* Content container */
 .auth-content {
   max-width: 500px;
   width: 100%;
@@ -292,7 +298,7 @@ body {
   }
 }
 
-/* Error message animation */
+/* General error message styling (now hidden by default) */
 .error-message {
   background-color: rgba(231, 76, 60, 0.1);
   color: #e74c3c;
@@ -303,6 +309,18 @@ body {
   font-size: 14px;
   animation: fadeIn 0.5s ease;
   position: relative;
+  overflow: hidden;
+  width: 100%;
+  text-align: center;
+  transition: opacity 0.3s ease, margin-bottom 0.3s ease, padding 0.3s ease;
+}
+
+.error-message.hidden {
+  opacity: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  height: 0;
   overflow: hidden;
 }
 
@@ -356,7 +374,7 @@ body {
   }
 }
 
-/* Form container with enhanced appearance */
+/* Form container */
 .auth-form {
   background-color: var(--background-white);
   padding: var(--spacing-lg);
@@ -364,7 +382,7 @@ body {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
   transition: all 0.5s ease;
   position: relative;
-  width: 100%; /* Take up full width of parent */
+  width: 100%;
 }
 
 .form-submitting {
@@ -407,6 +425,135 @@ body {
   transform: translateY(-2px);
 }
 
+/* Input Field height and validation feedback */
+.custom-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.custom-input-field {
+  width: 100%;
+  padding: 12px var(--spacing-sm);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  transition: all var(--transition-speed) ease;
+  background-color: var(--background-white);
+  height: 42px; /* Enforce consistent height for all text inputs */
+}
+
+.custom-input-field:focus {
+  outline: none;
+  border-color: var(--primary-purple);
+  box-shadow: 0 0 0 3px rgba(138, 91, 198, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Validation states for input fields */
+.custom-input-field.is-invalid {
+  border-color: var(--error-color);
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2); /* Red shadow on invalid */
+  animation: shakeInput 0.3s ease-in-out; /* Subtle shake on error */
+}
+
+.custom-input-field.is-valid {
+  border-color: var(--success-color);
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2); /* Green shadow on valid */
+}
+
+/* Keyframe for input shake animation */
+@keyframes shakeInput {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  50% {
+    transform: translateX(3px);
+  }
+  75% {
+    transform: translateX(-3px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Inline error message styling */
+.error-message-inline {
+  font-size: 12px;
+  color: var(--error-color);
+  margin-top: 5px;
+  text-align: left;
+  padding-left: 2px;
+  max-height: 0; /* Start hidden for slide down */
+  overflow: hidden; /* Hide overflow during animation */
+  opacity: 0; /* Start invisible for fade in */
+  /* Combine transitions for smooth effect */
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out,
+    transform 0.3s ease-out;
+}
+
+/* State when the error message is active/shown */
+.error-message-inline.show {
+  max-height: 50px; /* Adjust as needed for message height */
+  opacity: 1;
+  transform: translateY(0); /* Ensure it slides down */
+  animation: fadeIn 0.3s ease-out, slideInDown 0.3s ease-out; /* Apply animations on show */
+}
+
+/* Keyframe for sliding in error message */
+@keyframes slideInDown {
+  from {
+    transform: translateY(-10px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Custom eye icon for password fields within CustomInputField */
+.custom-eye-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--text-color-light); /* Or a specific icon color */
+  font-size: 16px;
+  transition: color 0.2s ease;
+}
+
+.custom-eye-icon:hover {
+  color: var(--primary-purple);
+}
+
+/* Input ripple effect */
+.input-ripple {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary-purple-light);
+  border-radius: 50%;
+  opacity: 0.5;
+  transform: translateY(-50%);
+  animation: rippleEffect 0.5s ease-out forwards;
+}
+
+@keyframes rippleEffect {
+  0% {
+    opacity: 0.5;
+    transform: translateY(-50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50%) scale(2);
+  }
+}
+
 /* Category select styles with animation */
 .custom-select {
   width: 100%;
@@ -417,7 +564,7 @@ body {
   color: var(--text-color);
   background-color: var(--background-white);
   transition: all var(--transition-speed) ease;
-  height: 42px;
+  height: 42px; /* Ensure consistent height for select */
   cursor: pointer;
   appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3e%3cpath fill='none' d='M0 0h24v24H0z'/%3e%3cpath fill='%238a5bc6' d='M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z'/%3e%3c/svg%3e");
@@ -432,6 +579,17 @@ body {
   border-color: var(--primary-purple);
   box-shadow: 0 0 0 3px rgba(138, 91, 198, 0.2);
   transform: translateY(-2px);
+}
+
+.custom-select.is-invalid {
+  border-color: var(--error-color);
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+  animation: shakeInput 0.3s ease-in-out;
+}
+
+.custom-select.is-valid {
+  border-color: var(--success-color);
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
 }
 
 .select-animate {
@@ -470,25 +628,28 @@ body {
   }
 }
 
-/* File upload section with improved visuals */
+/* File upload section with improved visuals and dynamic content */
 .upload-section {
   display: flex;
-  align-items: center;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: flex-start; /* Align content to start */
   gap: var(--spacing-sm);
   position: relative;
+  width: 100%; /* Take full width of its parent group */
 }
 
 .file-input {
   display: none;
 }
 
-/* Thumbnail preview with animation */
+/* Thumbnail preview for uploaded images */
 .thumbnail-preview {
-  width: 40px;
-  height: 40px;
+  width: 100px; /* Adjust size as needed */
+  height: 100px; /* Adjust size as needed */
   object-fit: cover;
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
+  box-shadow: var(--box-shadow);
   transition: all 0.3s ease;
   opacity: 0;
   transform: scale(0.8);
@@ -509,53 +670,36 @@ body {
   }
 }
 
-/* Input animation */
-.input-animate {
+/* Style for the "Change Photo" button */
+.change-photo-button {
+  background-color: transparent !important;
+  color: var(--primary-purple) !important;
+  border: 1.5px solid var(--primary-purple) !important;
+  font-size: 12px !important; /* Smaller text for change button */
+  padding: 6px 12px !important; /* Smaller padding */
+  height: auto !important; /* Auto height */
+  border-radius: var(--border-radius) !important;
   transition: all 0.3s ease;
+  align-self: flex-start; /* Align with preview */
 }
 
-.input-focused {
-  transform: translateY(-2px);
-  border-color: var(--primary-purple) !important;
-  box-shadow: 0 0 0 3px rgba(138, 91, 198, 0.2) !important;
-}
-
-/* Input ripple effect */
-.input-ripple {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  width: 8px;
-  height: 8px;
-  background-color: var(--primary-purple-light);
-  border-radius: 50%;
-  opacity: 0.5;
-  transform: translateY(-50%);
-  animation: rippleEffect 0.5s ease-out forwards;
-}
-
-@keyframes rippleEffect {
-  0% {
-    opacity: 0.5;
-    transform: translateY(-50%) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-50%) scale(2);
-  }
+.change-photo-button:hover {
+  background-color: var(--accent-purple-ultralight) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 8px rgba(138, 91, 198, 0.2) !important;
 }
 
 /* Register button */
 .register-button {
   width: 100%;
-  margin: var(--spacing-md) auto; /* Center the button horizontally */
+  margin: var(--spacing-md) auto;
   height: 48px;
   border-radius: 24px !important;
   font-size: 16px !important;
   font-weight: 600 !important;
   text-transform: uppercase;
   letter-spacing: 1px;
-  transition: all 0.3s ease !important;
+  transition: all 0.3s ease !important; /* Keep existing transitions for hover etc. */
   position: relative;
   overflow: hidden;
   background: linear-gradient(
@@ -565,7 +709,7 @@ body {
   ) !important;
   border: none !important;
   box-shadow: 0 4px 15px rgba(138, 91, 198, 0.4) !important;
-  display: block; /* Ensure it's a block element for centering */
+  display: block;
 }
 
 .register-button:hover {
@@ -574,11 +718,20 @@ body {
 }
 
 .register-button:active {
-  transform: translateY(-1px) !important;
+  /* REMOVED: transform: translateY(-1px) !important; */
+  /* REMOVED: box-shadow or background changes to keep it static on click */
+  /* Keep default browser active state or set explicitly to maintain consistent look */
+  transform: none !important; /* Ensure no movement */
+  box-shadow: 0 4px 15px rgba(138, 91, 198, 0.4) !important; /* Re-apply normal shadow */
+  background: linear-gradient(
+    45deg,
+    var(--primary-purple),
+    var(--primary-purple-dark)
+  ) !important; /* Re-apply normal background */
 }
 
-/* Button ripple effect */
 .register-button::after {
+  /* This ripple effect will still play, but won't cause the button to scale/move */
   content: "";
   display: block;
   position: absolute;
@@ -796,40 +949,81 @@ body {
   }
 }
 
-/* Success animation */
-.success-animation {
-  animation: successFade 0.5s ease forwards;
+/* Success animation for the form container */
+.auth-content.registration-success {
+  animation: fadeOutAndShrink 0.7s ease-out forwards;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-@keyframes successFade {
+@keyframes fadeOutAndShrink {
   to {
-    filter: blur(3px);
-    opacity: 0.7;
+    opacity: 0;
+    transform: scale(0.95);
+    visibility: hidden;
   }
 }
 
-.success-checkmark {
+/* Success message overlay */
+.registration-success-message {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 100;
+  background-color: var(--success-color);
+  color: white;
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.8);
+  animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards 0.5s;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  max-width: 400px;
+}
+
+@keyframes popIn {
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Success checkmark */
+.success-checkmark {
   width: 80px;
   height: 80px;
-  z-index: 10;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  margin-bottom: var(--spacing-sm);
 }
 
 .checkmark {
-  width: 80px;
-  height: 80px;
+  width: 50px;
+  height: 50px;
+  stroke-width: 3;
+  stroke: var(--success-color);
+  fill: none;
 }
 
 .checkmark-circle {
   stroke-dasharray: 166;
   stroke-dashoffset: 166;
-  stroke-width: 2;
-  stroke-miterlimit: 10;
-  stroke: var(--primary-purple);
-  fill: none;
   animation: checkmarkStroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
 }
 
@@ -837,8 +1031,6 @@ body {
   transform-origin: 50% 50%;
   stroke-dasharray: 48;
   stroke-dashoffset: 48;
-  stroke-width: 3;
-  stroke: var(--primary-purple);
   animation: checkmarkCheck 0.3s 0.4s cubic-bezier(0.65, 0, 0.45, 1) forwards;
 }
 
@@ -854,26 +1046,7 @@ body {
   }
 }
 
-/* Custom input styles with animation */
-.custom-input-field {
-  width: 100%;
-  padding: 12px var(--spacing-sm);
-  border: 1.5px solid var(--border-color);
-  border-radius: var(--border-radius);
-  font-size: 14px;
-  transition: all var(--transition-speed) ease;
-  position: relative;
-  background-color: var(--background-white);
-}
-
-.custom-input-field:focus {
-  outline: none;
-  border-color: var(--primary-purple);
-  box-shadow: 0 0 0 3px rgba(138, 91, 198, 0.2);
-  transform: translateY(-2px);
-}
-
-/* Custom button overrides with animation */
+/* Custom upload button overrides */
 .custom-upload-button {
   position: relative;
   overflow: hidden;
@@ -885,6 +1058,10 @@ body {
   padding: 8px 16px !important;
   font-weight: 500 !important;
   font-size: 14px !important;
+  height: 42px; /* Ensure consistent height for upload buttons */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .custom-upload-button:hover {
@@ -910,6 +1087,63 @@ body {
   }
 }
 
+/* New: Toast Notification styles */
+.toast-notification {
+  position: fixed;
+  top: 20px; /* Distance from the top */
+  right: 20px; /* Distance from the right */
+  background-color: #f44336; /* Red background for error */
+  color: white;
+  padding: 15px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 2000; /* Ensure it's above everything else */
+  opacity: 0;
+  transform: translateX(100%); /* Start off-screen to the right */
+  animation: slideInFromRight 0.5s forwards, fadeOutAfterDelay 4s forwards; /* Slide in, then fade out */
+  min-width: 250px;
+  max-width: 350px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Optional: Icon for the toast */
+.toast-notification::before {
+  content: "!"; /* Or use a Font Awesome icon */
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+/* Animation keyframes for the toast */
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOutAfterDelay {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  80% {
+    /* Stay visible for most of the duration */
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100%); /* Slide out to the right when fading */
+  }
+}
+
 /* Responsive adjustments */
 @media (max-width: 992px) {
   :root {
@@ -930,29 +1164,29 @@ body {
     top: 15px;
     left: 15px;
     font-size: 24px;
-    z-index: 1001; /* Higher z-index for mobile */
+    z-index: 1001;
   }
   .auth-left {
     width: 100%;
     order: 2;
     padding: var(--spacing-md) var(--spacing-sm);
-    padding-top: 60px; /* Adjust for smaller logo on mobile */
+    padding-top: 60px;
   }
 
   .auth-right {
     width: 100%;
-    height: 250px; /* Increased height to show image completely */
+    height: 250px;
     order: 1;
-    overflow: hidden; /* Ensure image stays within purple area */
+    overflow: hidden;
   }
 
   .auth-illustration {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Center the image */
-    width: 90%; /* Reduce width to fit completely */
-    max-width: 300px; /* Set maximum width */
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 300px;
     height: auto;
     animation: floatImage 8s ease-in-out infinite;
     filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));

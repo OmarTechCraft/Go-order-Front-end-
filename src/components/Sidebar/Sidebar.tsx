@@ -12,6 +12,8 @@ import {
   FaSignOutAlt,
   FaAngleDown,
   FaCheck,
+  FaExclamationTriangle,
+  FaTimes,
 } from "react-icons/fa";
 import "./Sidebar.css";
 import { getUserProfile } from "../../service/Profile_service";
@@ -48,7 +50,7 @@ const navItems = [
   },
   { label: "Add New Category", icon: <FaPlusSquare />, path: "/add-category" },
   {
-    label: "Add  Subcategory",
+    label: "Add Subcategory",
     icon: <FaLayerGroup />,
     path: "/add-subcategory",
   },
@@ -62,12 +64,36 @@ const Sidebar: React.FC<SidebarProps> = ({
   toggleMobileMenu,
 }) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const [userData, setUserData] = useState<User | null>(initialUser || null);
   const [isLoading, setIsLoading] = useState(!initialUser);
 
+  // Check authentication status
   useEffect(() => {
+    const checkAuthentication = () => {
+      const token = localStorage.getItem("token");
+      const refreshToken = localStorage.getItem("refreshToken");
+
+      if (token || refreshToken) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+        // Redirect to login if not authenticated
+        navigate("/login");
+        return;
+      }
+      setAuthChecked(true);
+    };
+
+    checkAuthentication();
+  }, [navigate]);
+
+  useEffect(() => {
+    if (!authChecked || !isAuthenticated) return;
+
     const fetchUserProfile = async () => {
       try {
         setIsLoading(true);
@@ -79,6 +105,9 @@ const Sidebar: React.FC<SidebarProps> = ({
         });
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
+        // If profile fetch fails, might indicate invalid token
+        setIsAuthenticated(false);
+        navigate("/login");
       } finally {
         setIsLoading(false);
       }
@@ -87,7 +116,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     if (!initialUser) {
       fetchUserProfile();
     }
-  }, [initialUser]);
+  }, [initialUser, authChecked, isAuthenticated, navigate]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -118,17 +147,23 @@ const Sidebar: React.FC<SidebarProps> = ({
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("user");
-    // Clear any other auth-related items you might have
     localStorage.removeItem("userRole");
     localStorage.removeItem("authExpiration");
+    localStorage.removeItem("id");
 
     setShowLogoutModal(false);
-    navigate("/home"); // Navigate to home page after confirming logout
+    setIsAuthenticated(false);
+    navigate("/login");
   };
 
   const cancelLogout = () => {
     setShowLogoutModal(false);
   };
+
+  // Don't render sidebar if not authenticated
+  if (!authChecked || !isAuthenticated) {
+    return null;
+  }
 
   return (
     <>
@@ -136,12 +171,17 @@ const Sidebar: React.FC<SidebarProps> = ({
         ref={sidebarRef}
         className={`sidebar ${isMobileMenuOpen ? "open" : ""}`}
       >
+        <div className="sidebar-gradient"></div>
         <div className="sidebar-content">
           <ul className="nav-list">
-            {navItems.map((item) => {
+            {navItems.map((item, index) => {
               const isLogout = item.label === "Logout";
               return (
-                <li className="nav-item" key={item.label}>
+                <li
+                  className="nav-item"
+                  key={item.label}
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
                   <NavLink
                     to={item.path}
                     className={({ isActive }) => (isActive ? "active" : "")}
@@ -159,6 +199,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     {item.rightIcon && (
                       <span className="nav-right-icon">{item.rightIcon}</span>
                     )}
+                    <div className="nav-item-hover"></div>
                   </NavLink>
                 </li>
               );
@@ -167,21 +208,30 @@ const Sidebar: React.FC<SidebarProps> = ({
 
           <div className="user-info">
             {isLoading ? (
-              <div className="loading-state">Loading profile...</div>
+              <div className="loading-state">
+                <div className="loading-spinner"></div>
+                <span>Loading profile...</span>
+              </div>
             ) : userData ? (
               <>
-                <img
-                  src={userData.avatarUrl || "/photos/boy1.png"}
-                  alt="User Avatar"
-                  className="user-avatar"
-                />
+                <div className="user-avatar-container">
+                  <img
+                    src={userData.avatarUrl || "/photos/boy1.png"}
+                    alt="User Avatar"
+                    className="user-avatar"
+                  />
+                  <div className="user-status-indicator"></div>
+                </div>
                 <div className="user-details">
                   <h4>{userData.name}</h4>
                   <p>{userData.email}</p>
                 </div>
               </>
             ) : (
-              <div className="error-state">Could not load profile</div>
+              <div className="error-state">
+                <FaExclamationTriangle />
+                <span>Could not load profile</span>
+              </div>
             )}
           </div>
         </div>
@@ -194,13 +244,25 @@ const Sidebar: React.FC<SidebarProps> = ({
       {showLogoutModal && (
         <div className="logout-modal-overlay">
           <div className="logout-modal">
-            <h3>Are you sure you want to logout?</h3>
+            <div className="logout-modal-header">
+              <div className="logout-icon">
+                <FaSignOutAlt />
+              </div>
+              <button className="close-modal" onClick={cancelLogout}>
+                <FaTimes />
+              </button>
+            </div>
+            <div className="logout-modal-body">
+              <h3>Confirm Logout</h3>
+              <p>Are you sure you want to sign out of your account?</p>
+            </div>
             <div className="logout-modal-actions">
               <button className="cancel-btn" onClick={cancelLogout}>
-                Cancel
+                <span>Cancel</span>
               </button>
               <button className="confirm-btn" onClick={confirmLogout}>
-                Yes
+                <FaSignOutAlt />
+                <span>Sign Out</span>
               </button>
             </div>
           </div>

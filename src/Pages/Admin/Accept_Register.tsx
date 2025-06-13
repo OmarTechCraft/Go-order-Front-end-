@@ -34,6 +34,11 @@ const AcceptRegister: React.FC = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [actionType, setActionType] = useState<ActionType | null>(null);
 
+  // Image modal state
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string>("");
+  const [imageLoading, setImageLoading] = useState(false);
+
   // Load data on component mount and when mode changes
   useEffect(() => {
     const fetchData = async () => {
@@ -70,6 +75,31 @@ const AcceptRegister: React.FC = () => {
     setSelectedId(id);
     setActionType("reject");
     setShowConfirmModal(true);
+  };
+
+  // Handle View ID Image button click
+  const handleViewImage = (imageUrl: string) => {
+    setImageLoading(true);
+    setSelectedImage(imageUrl);
+    setShowImageModal(true);
+  };
+
+  // Handle image load complete
+  const handleImageLoad = () => {
+    setImageLoading(false);
+  };
+
+  // Handle image load error
+  const handleImageError = () => {
+    setImageLoading(false);
+    setError("Failed to load image.");
+  };
+
+  // Close image modal
+  const closeImageModal = () => {
+    setShowImageModal(false);
+    setSelectedImage("");
+    setImageLoading(false);
   };
 
   // Confirm action in the modal
@@ -122,18 +152,34 @@ const AcceptRegister: React.FC = () => {
 
     return businessData.map((item) => (
       <div key={item.id} className="registration-card">
-        <h3 className="registration-info">
-          Business Name: {item.businessName}
-        </h3>
-        <p className="registration-info">Email: {item.email}</p>
-        <p className="registration-info">Phone: {item.phoneNumber}</p>
-        <p className="registration-info">Address: {item.address}</p>
-        <p className="registration-info">
-          Category: {item.globalCategory?.name || "N/A"}
-        </p>
-        <p className="registration-info">
-          Subcategory: {item.specificCategory?.name || "N/A"}
-        </p>
+        <div className="card-header">
+          <h3 className="registration-info card-title">
+            Business Name: {item.businessName}
+          </h3>
+          {item.idImage && (
+            <button
+              className="exclamation-button"
+              onClick={() => handleViewImage(item.idImage)}
+              title="View ID Image"
+            >
+              !
+            </button>
+          )}
+        </div>
+        <div className="card-content">
+          <p className="registration-info">Email: {item.email}</p>
+          <p className="registration-info">Phone: {item.phoneNumber}</p>
+          <p className="registration-info">Address: {item.address}</p>
+          <p className="registration-info">
+            Category: {item.globalCategory?.name || "N/A"}
+          </p>
+          <p className="registration-info">
+            Subcategory: {item.specificCategory?.name || "N/A"}
+          </p>
+          <p className="registration-info">
+            ID Image: {item.idImage ? "Provided" : "Not provided"}
+          </p>
+        </div>
         <div className="registration-actions">
           <CustomButton
             text="Accept"
@@ -159,18 +205,33 @@ const AcceptRegister: React.FC = () => {
 
     return deliveryData.map((item) => (
       <div key={item.id} className="registration-card">
-        <h3 className="registration-info">
-          Delivery Man: {item.firstName} {item.lastName}
-        </h3>
-        <p className="registration-info">Phone: {item.phoneNumber || "N/A"}</p>
-        <p className="registration-info">Email: {item.email || "N/A"}</p>
-        <p className="registration-info">Address: {item.address || "N/A"}</p>
-        <p className="registration-info">
-          Vehicle Type: {item.vehicleType || "N/A"}
-        </p>
-        <p className="registration-info">
-          ID Photo: {item.idImage ? "Provided" : "Not provided"}
-        </p>
+        <div className="card-header">
+          <h3 className="registration-info card-title">
+            Delivery Man: {item.firstName} {item.lastName}
+          </h3>
+          {item.idImage && (
+            <button
+              className="exclamation-button"
+              onClick={() => handleViewImage(item.idImage)}
+              title="View ID Image"
+            >
+              !
+            </button>
+          )}
+        </div>
+        <div className="card-content">
+          <p className="registration-info">
+            Phone: {item.phoneNumber || "N/A"}
+          </p>
+          <p className="registration-info">Email: {item.email || "N/A"}</p>
+          <p className="registration-info">Address: {item.address || "N/A"}</p>
+          <p className="registration-info">
+            Vehicle Type: {item.vehicleType || "N/A"}
+          </p>
+          <p className="registration-info">
+            ID Photo: {item.idImage ? "Provided" : "Not provided"}
+          </p>
+        </div>
         <div className="registration-actions">
           <CustomButton
             text="Accept"
@@ -255,6 +316,42 @@ const AcceptRegister: React.FC = () => {
                 >
                   Confirm
                 </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Image Modal */}
+        {showImageModal && (
+          <div
+            className="image-modal-overlay animate-fade-in"
+            onClick={closeImageModal}
+          >
+            <div
+              className="image-modal-content animate-scale-in"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="image-modal-header">
+                <h2>ID Image</h2>
+                <button className="close-button" onClick={closeImageModal}>
+                  ×
+                </button>
+              </div>
+              <div className="image-container">
+                {imageLoading && (
+                  <div className="image-loading">
+                    <div className="loading-spinner"></div>
+                    Loading image...
+                  </div>
+                )}
+                <img
+                  src={selectedImage}
+                  alt="ID Document"
+                  className="modal-image animate-image-appear"
+                  onLoad={handleImageLoad}
+                  onError={handleImageError}
+                  style={{ display: imageLoading ? "none" : "block" }}
+                />
               </div>
             </div>
           </div>

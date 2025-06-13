@@ -26,19 +26,52 @@ import Messages from "./Pages/Business/Messages";
 import AddCategoryBusiness from "./Pages/Business/AddCategoryBusiness";
 import AddSubCategoryBusiness from "./Pages/Business/Add_SubCategory_Business";
 import AddProductBusiness_1 from "./Pages/Business/add-product-business_1";
-import "./App.css";
 import BusDashboard from "./Pages/Business/BusDashboard";
 import BusSettings from "./Pages/Business/BusSettings";
 import BusPrivacy from "./Pages/Business/BusPrivacy";
 import BusTerms from "./Pages/Business/BusTerms";
 import Notifications from "./Pages/Business/Notifications";
-import AllOrders from "./Pages/Business/Orders/all-orders";
-import WaitingOrders from "./Pages/Business/Orders/waiting-orders";
-import InProgressOrders from "./Pages/Business/Orders/in-progress-orders";
-import DoneOrders from "./Pages/Business/Orders/done-orders";
-import { OrdersProvider } from "./Pages/Business/Orders/context/OrdersContext";
+import AllOrders from "./Pages/Business/Orders/orders";
 import MarketingAILayout from "./Pages/Business/MarketingAI/layout";
 import MarketingRouter from "./Pages/Business/MarketingAI/marketing-router";
+
+// Temporary placeholder components for missing order components
+const WaitingOrders: React.FC = () => (
+  <div style={{ padding: "20px", textAlign: "center" }}>
+    <h2>Waiting Orders</h2>
+    <p>
+      This component is under development. Please create the WaitingOrders
+      component.
+    </p>
+  </div>
+);
+
+const InProgressOrders: React.FC = () => (
+  <div style={{ padding: "20px", textAlign: "center" }}>
+    <h2>In Progress Orders</h2>
+    <p>
+      This component is under development. Please create the InProgressOrders
+      component.
+    </p>
+  </div>
+);
+
+const DoneOrders: React.FC = () => (
+  <div style={{ padding: "20px", textAlign: "center" }}>
+    <h2>Done Orders</h2>
+    <p>
+      This component is under development. Please create the DoneOrders
+      component.
+    </p>
+  </div>
+);
+
+// Temporary OrdersProvider placeholder
+const OrdersProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  return <>{children}</>;
+};
 
 // Create a 404 Not Found component
 const NotFound: React.FC = () => {

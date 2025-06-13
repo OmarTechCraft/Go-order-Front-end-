@@ -11,6 +11,7 @@
   background-size: 40%;
   margin-top: 50px;
   animation: fadeIn 0.5s ease-in-out;
+  position: relative;
 }
 
 @keyframes fadeIn {
@@ -22,11 +23,87 @@
   }
 }
 
+/* Exclamation Button - Fixed position at top right */
+.exclamation-button {
+  position: fixed;
+  top: 120px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #6a378b, #8e44ad);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(106, 55, 139, 0.4);
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 15px rgba(106, 55, 139, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(106, 55, 139, 0.6);
+  }
+}
+
+.exclamation-button:hover {
+  transform: scale(1.1) rotate(5deg);
+  background: linear-gradient(135deg, #8e44ad, #9b59b6);
+  box-shadow: 0 8px 25px rgba(106, 55, 139, 0.6);
+  animation: none;
+}
+
+.exclamation-button:active {
+  transform: scale(0.95) rotate(-2deg);
+  transition: transform 0.1s ease;
+}
+
+.exclamation-button::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #6a378b, #8e44ad, #9b59b6, #6a378b);
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.exclamation-button:hover::before {
+  opacity: 1;
+  animation: rotateGradient 1s linear infinite;
+}
+
+@keyframes rotateGradient {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /* Main content area to the right of the Sidebar */
 .accept-register-content {
   margin-left: 240px; /* Matches your Sidebar width */
   flex: 1;
   padding: 24px;
+  padding-right: 120px; /* Make space for exclamation button */
   animation: slideInRight 0.5s ease-out;
 }
 
@@ -51,36 +128,42 @@
 .tab-button {
   font-size: 18px;
   font-weight: 600;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
   background: none;
-  color: #000; /* Changed to black */
+  color: #000;
   cursor: pointer;
   position: relative;
-  transition: color 0.3s, transform 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
 }
 
 .tab-button:hover {
   transform: translateY(-2px);
+  background-color: rgba(106, 55, 139, 0.05);
 }
 
 .tab-button::after {
   content: "";
   position: absolute;
   bottom: -4px;
-  left: 0;
+  left: 50%;
   width: 0;
   height: 3px;
-  background-color: #6a378b; /* Changed to requested purple */
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg, #6a378b, #8e44ad);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+  border-radius: 2px;
 }
 
 .tab-button.active-tab {
-  color: #6a378b; /* Changed to requested purple */
+  color: #6a378b;
+  background-color: rgba(106, 55, 139, 0.1);
+  transform: scale(1.02);
 }
 
 .tab-button.active-tab::after {
-  width: 100%;
+  width: 80%;
   animation: expandUnderline 0.3s ease-out;
 }
 
@@ -89,19 +172,19 @@
     width: 0;
   }
   to {
-    width: 100%;
+    width: 80%;
   }
 }
 
 /* Section title for the registrations */
 .section-title {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 24px;
-  color: #000; /* Changed to black */
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 32px;
+  color: #000;
   position: relative;
   display: inline-block;
-  padding-bottom: 8px;
+  padding-bottom: 12px;
 }
 
 .section-title::after {
@@ -109,9 +192,10 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 60px;
-  height: 3px;
-  background-color: #6a378b; /* Purple underline */
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #6a378b, #8e44ad);
+  border-radius: 2px;
   animation: expandWidth 0.8s ease-out;
 }
 
@@ -120,27 +204,48 @@
     width: 0;
   }
   to {
-    width: 60px;
+    width: 80px;
   }
 }
 
 /* Grid layout for registration cards */
 .registration-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
 }
 
 /* Registration cards */
 .registration-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 16px;
-  background-color: rgba(138, 91, 198, 0.15); /* Light purple background */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: cardAppear 0.5s ease-out;
+  border: 1px solid rgba(106, 55, 139, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  background: linear-gradient(
+    135deg,
+    rgba(106, 55, 139, 0.08),
+    rgba(142, 68, 173, 0.05)
+  );
+  box-shadow: 0 4px 20px rgba(106, 55, 139, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: cardAppear 0.6s ease-out;
   animation-fill-mode: both;
+  position: relative;
+  overflow: hidden;
+}
+
+.registration-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #6a378b, transparent);
+  transition: left 0.6s ease;
+}
+
+.registration-card:hover::before {
+  left: 100%;
 }
 
 .registration-cards-grid .registration-card:nth-child(odd) {
@@ -153,86 +258,139 @@
 
 @keyframes cardAppear {
   from {
-    transform: translateY(15px);
+    transform: translateY(20px) scale(0.95);
     opacity: 0;
   }
   to {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
     opacity: 1;
   }
 }
 
 .registration-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(106, 55, 139, 0.2);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(106, 55, 139, 0.2);
+  border-color: rgba(106, 55, 139, 0.3);
 }
 
 .registration-info {
-  margin: 0 0 8px 0;
+  margin: 0 0 12px 0;
   font-size: 16px;
-  color: #000; /* Changed to black */
+  color: #333;
+  transition: color 0.3s ease;
 }
 
 .registration-info:first-child {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: #6a378b; /* Purple for titles */
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #6a378b;
+  background: linear-gradient(135deg, #6a378b, #8e44ad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Button container for Accept/Reject */
 .registration-actions {
   display: flex;
-  gap: 16px;
-  margin-top: 16px;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
 }
 
 /* Accept button style */
 .accept-button {
-  background-color: #f3f3f3 !important;
-  color: #000 !important;
-  border: 1px solid #ccc !important;
-  border-radius: 4px !important;
-  padding: 10px 20px !important;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+  color: #495057 !important;
+  border: 2px solid #dee2e6 !important;
+  border-radius: 8px !important;
+  padding: 12px 24px !important;
   font-size: 16px !important;
+  font-weight: 600 !important;
   cursor: pointer !important;
-  transition: all 0.3s ease !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   position: relative;
   overflow: hidden;
 }
 
+.accept-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(40, 167, 69, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.accept-button:hover::before {
+  left: 100%;
+}
+
 .accept-button:hover {
-  background-color: rgba(106, 55, 139, 0.1) !important;
-  border-color: #6a378b !important;
-  transform: scale(1.02) !important;
+  background: linear-gradient(135deg, #28a745, #20c997) !important;
+  color: white !important;
+  border-color: #28a745 !important;
+  transform: translateY(-2px) scale(1.05) !important;
+  box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3) !important;
 }
 
 .accept-button:active {
-  transform: scale(0.98) !important;
+  transform: translateY(0) scale(0.98) !important;
 }
 
 /* Reject button style */
 .reject-button {
-  background-color: #f3f3f3 !important;
-  color: #000 !important;
-  border: 1px solid #ccc !important;
-  border-radius: 4px !important;
-  padding: 10px 20px !important;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+  color: #495057 !important;
+  border: 2px solid #dee2e6 !important;
+  border-radius: 8px !important;
+  padding: 12px 24px !important;
   font-size: 16px !important;
+  font-weight: 600 !important;
   cursor: pointer !important;
-  transition: all 0.3s ease !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   position: relative;
   overflow: hidden;
 }
 
+.reject-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(220, 53, 69, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.reject-button:hover::before {
+  left: 100%;
+}
+
 .reject-button:hover {
-  background-color: rgba(106, 55, 139, 0.1) !important;
-  border-color: #6a378b !important;
-  transform: scale(1.02) !important;
+  background: linear-gradient(135deg, #dc3545, #e74c3c) !important;
+  color: white !important;
+  border-color: #dc3545 !important;
+  transform: translateY(-2px) scale(1.05) !important;
+  box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3) !important;
 }
 
 .reject-button:active {
-  transform: scale(0.98) !important;
+  transform: translateY(0) scale(0.98) !important;
 }
 
 /* Loading and error states */
@@ -247,11 +405,13 @@
 
 .error-message {
   color: #e74c3c;
-  padding: 16px;
-  background-color: #fde8e7;
-  border-radius: 4px;
-  margin-bottom: 16px;
+  padding: 20px;
+  background: linear-gradient(135deg, #ffeaea, #ffe0e0);
+  border-radius: 12px;
+  margin-bottom: 20px;
   animation: shake 0.5s ease-in-out;
+  border-left: 4px solid #e74c3c;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.1);
 }
 
 @keyframes shake {
@@ -276,13 +436,13 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  animation: fadeInBackdrop 0.3s ease;
+  animation: fadeInBackdrop 0.4s ease;
 }
 
 @keyframes fadeInBackdrop {
@@ -297,20 +457,177 @@
 /* Modal content box */
 .confirm-modal-content {
   position: relative;
-  background-color: #fff;
-  padding: 32px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #ffffff, #f8f9fa);
+  padding: 40px;
+  border-radius: 16px;
   width: 90%;
-  max-width: 450px;
+  max-width: 480px;
   text-align: center;
-  box-shadow: 0 10px 25px rgba(106, 55, 139, 0.3);
-  animation: scaleIn 0.3s ease-out;
-  border-top: 4px solid #6a378b;
+  box-shadow: 0 20px 60px rgba(106, 55, 139, 0.3);
+  animation: scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-top: 6px solid transparent;
+  background-clip: padding-box;
+  border-image: linear-gradient(90deg, #6a378b, #8e44ad) 1;
 }
 
 @keyframes scaleIn {
   from {
-    transform: scale(0.9);
+    transform: scale(0.8) rotate(-5deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.confirm-modal-content h2 {
+  background: linear-gradient(135deg, #6a378b, #8e44ad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.confirm-modal-content p {
+  color: #495057;
+  margin-bottom: 32px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Confirmation modal actions */
+.confirm-modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+/* Cancel button in modal */
+.cancel-button {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  color: #495057;
+  padding: 12px 28px;
+  border: 2px solid #dee2e6;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex: 1;
+}
+
+.cancel-button:hover {
+  background: linear-gradient(135deg, #6c757d, #495057);
+  color: white;
+  border-color: #6c757d;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(108, 117, 125, 0.3);
+}
+
+.cancel-button:active {
+  transform: translateY(0);
+}
+
+/* Image Modal Styles */
+.image-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeInBackdrop 0.4s ease;
+  cursor: pointer;
+}
+
+.image-modal-content {
+  position: relative;
+  background: linear-gradient(135deg, #ffffff, #f8f9fa);
+  border-radius: 20px;
+  width: 90%;
+  max-width: 900px;
+  max-height: 90vh;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+  animation: scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  cursor: default;
+}
+
+.image-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  border-bottom: 1px solid rgba(106, 55, 139, 0.1);
+  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+}
+
+.image-modal-header h2 {
+  background: linear-gradient(135deg, #6a378b, #8e44ad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 32px;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.close-button:hover {
+  background: linear-gradient(135deg, #dc3545, #e74c3c);
+  color: white;
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+}
+
+.image-container {
+  position: relative;
+  padding: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  max-height: calc(90vh - 160px);
+  overflow: auto;
+  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+}
+
+.modal-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: imageZoomIn 0.5s ease-out;
+}
+
+@keyframes imageZoomIn {
+  from {
+    transform: scale(0.8);
     opacity: 0;
   }
   to {
@@ -319,52 +636,83 @@
   }
 }
 
-.confirm-modal-content h2 {
-  color: #6a378b;
-  margin-bottom: 16px;
+.modal-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
 }
 
-.confirm-modal-content p {
-  color: #000;
-  margin-bottom: 24px;
-}
-
-/* Confirmation modal actions */
-.confirm-modal-actions {
+.image-loading {
   display: flex;
-  justify-content: space-between;
-  margin-top: 24px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #6a378b;
+  font-size: 18px;
+  gap: 20px;
+  font-weight: 500;
 }
 
-/* Cancel button in modal */
-.cancel-button {
-  background-color: #fff;
-  color: #000;
-  padding: 10px 20px;
-  border: 1px solid #ccc;
+/* Image Gallery Controls */
+.image-gallery-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10001;
+}
+
+.gallery-thumbnails {
+  display: flex;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 12px;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.thumbnail-button {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #dee2e6;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  color: #495057;
+  font-weight: 600;
   cursor: pointer;
-  border-radius: 4px;
-  font-size: 16px;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
 }
 
-.cancel-button:hover {
-  background-color: #f5f5f5;
-  transform: translateY(-2px);
+.thumbnail-button:hover {
+  transform: scale(1.1);
+  background: linear-gradient(135deg, #6a378b, #8e44ad);
+  color: white;
+  border-color: #6a378b;
+  box-shadow: 0 4px 15px rgba(106, 55, 139, 0.3);
 }
 
-.cancel-button:active {
-  transform: translateY(0);
-}
-
-/* Confirm button in modal for accept action */
-.confirm-button {
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-  font-size: 16px;
-  transition: all 0.2s ease;
+.thumbnail-button.active {
+  background: linear-gradient(135deg, #6a378b, #8e44ad);
+  color: white;
+  border-color: #6a378b;
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(106, 55, 139, 0.4);
 }
 
 /* Loading animation for async operations */
@@ -376,32 +724,51 @@
 
 .loading-spinner {
   display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(106, 55, 139, 0.3);
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(106, 55, 139, 0.2);
   border-radius: 50%;
   border-top-color: #6a378b;
-  animation: spinner 0.8s linear infinite;
-  margin-right: 8px;
+  animation: spinner 1s linear infinite;
 }
 
 /* Empty state styling */
 .empty-state {
   text-align: center;
-  padding: 40px;
+  padding: 60px 40px;
   color: #6a378b;
   animation: fadeIn 0.8s ease;
 }
 
 .empty-state p {
-  color: #000;
-  margin-top: 16px;
+  color: #495057;
+  margin-top: 20px;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 /* Responsive adjustments */
+@media (max-width: 1200px) {
+  .accept-register-content {
+    padding-right: 100px;
+  }
+
+  .exclamation-button {
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+  }
+}
+
 @media (max-width: 992px) {
   .registration-cards-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .accept-register-content {
+    padding-right: 80px;
   }
 }
 
@@ -409,10 +776,20 @@
   .accept-register-content {
     margin-left: 0;
     padding: 16px;
+    padding-right: 70px;
+  }
+
+  .exclamation-button {
+    top: 100px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
   }
 
   .registration-cards-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .tab-buttons {
@@ -421,21 +798,58 @@
   }
 
   .section-title {
-    font-size: 22px;
+    font-size: 24px;
   }
 
   .confirm-modal-content {
-    padding: 24px;
+    padding: 32px 24px;
+    margin: 0 16px;
+  }
+
+  .image-modal-content {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .image-modal-header {
+    padding: 20px 24px;
+  }
+
+  .image-container {
+    padding: 20px;
+  }
+
+  .gallery-thumbnails {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .thumbnail-button {
+    width: 35px;
+    height: 35px;
+    font-size: 12px;
   }
 }
 
 @media (max-width: 480px) {
+  .exclamation-button {
+    top: 90px;
+    right: 10px;
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+
+  .accept-register-content {
+    padding-right: 50px;
+  }
+
   .section-title {
     font-size: 20px;
   }
 
   .registration-card {
-    padding: 12px;
+    padding: 20px 16px;
   }
 
   .registration-info {
@@ -448,6 +862,41 @@
   }
 
   .confirm-modal-content {
-    padding: 20px;
+    padding: 24px 20px;
+    margin: 0 12px;
+  }
+
+  .image-modal-content {
+    width: 98%;
+    max-height: 98vh;
+  }
+
+  .image-modal-header {
+    padding: 16px 20px;
+  }
+
+  .image-modal-header h2 {
+    font-size: 18px;
+  }
+
+  .image-container {
+    padding: 16px;
+  }
+
+  .close-button {
+    width: 35px;
+    height: 35px;
+    font-size: 28px;
+  }
+
+  .gallery-thumbnails {
+    padding: 6px;
+    gap: 4px;
+  }
+
+  .thumbnail-button {
+    width: 30px;
+    height: 30px;
+    font-size: 11px;
   }
 }
