@@ -56,19 +56,20 @@ const PasswordReset: React.FC = () => {
     setIsLoading(true); // Indicate loading state
 
     try {
-      // 2. Prepare URL-encoded data
-      const formData = new URLSearchParams();
-      formData.append("userId", userId);
-      formData.append("token", token);
-      formData.append("newPassword", newPassword);
+      // 2. URL-encode the token before sending
+      const encodedToken = encodeURIComponent(token);
 
-      // Send data to API with URL-encoded format
+      // Send data to API in JSON format with URL-encoded token
       const response = await axiosInstance.post(
         "/api/Auth/PasswordReset",
-        formData,
+        {
+          userId: userId,
+          token: encodedToken,
+          newPassword: newPassword,
+        },
         {
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded", // Set content type for URL-encoded
+            "Content-Type": "application/json", // Keep JSON content type
           },
         }
       );
