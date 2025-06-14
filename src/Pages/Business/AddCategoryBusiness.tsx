@@ -57,19 +57,6 @@ const AddCategoryBusiness: React.FC = () => {
     };
   }, [openMenuId]);
 
-  // Handle body scroll locking when a modal is open
-  useEffect(() => {
-    if (showPopup || showDeleteConfirm) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    // Cleanup function
-    return () => {
-      document.body.style.overflow = ""; // Ensure overflow is reset on unmount
-    };
-  }, [showPopup, showDeleteConfirm]);
-
   // Fetch categories from API
   const fetchCategories = async () => {
     setIsLoading(true);
@@ -205,15 +192,17 @@ const AddCategoryBusiness: React.FC = () => {
   return (
     <div className="add-category-business-page">
       <Navbar />
-      {/* Sidebar is now a direct child of the main page container */}
-      <Sidebar_2 />
 
-      {/* Main content wrapped in a div that can be blurred */}
+      {/* Wrap main content with a container that will be blurred if the popup is active */}
       <div
-        className={`page-content-wrapper${
+        className={`page-content${
           showPopup || showDeleteConfirm ? " blurred" : ""
         }`}
       >
+        {/* Sidebar */}
+        <Sidebar_2 />
+
+        {/* Main content area */}
         <div className="add-category-business-content">
           {/* Header: Page title and Add My Store button */}
           <div className="add-category-business-header">

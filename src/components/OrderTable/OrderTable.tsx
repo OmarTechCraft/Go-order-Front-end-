@@ -1,26 +1,25 @@
+// src/components/OrderTable/OrderTable.tsx
 "use client";
 
 import { Info, Loader2 } from "lucide-react";
 import "./OrderTable.css";
-import { Order } from "../../Pages/Business/Orders/context/OrdersContext";
+// Import Order from your service file (OrderStatus is used within Order, so no need to import explicitly here)
+import { Order } from "../../service/orders_service"; 
 
 interface OrderTableProps {
   orders: Order[];
   loading: boolean;
   error: string | null;
-  onAccept: (orderId: string) => void;
-  onCancel: (orderId: string) => void;
-  onDone: (orderId: string) => void;
-  onViewDetails: (orderId: string) => void;
+  onAccept: (orderId: number) => void;
+  onCancel: (orderId: number) => void;
+  onDone: (orderId: number) => void;
+  onViewDetails: (orderId: number) => void;
 }
 
 export default function OrderTable({
   orders,
   loading,
   error,
-  onAccept,
-  onCancel,
-  onDone,
   onViewDetails,
 }: OrderTableProps) {
   if (error) {
@@ -65,7 +64,7 @@ export default function OrderTable({
               <td>{order.customerName}</td>
               <td>
                 <span
-                  className={`status-badge status-${order.status.toLowerCase()}`}
+                  className={`status-badge status-${order.status.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   {order.status}
                 </span>

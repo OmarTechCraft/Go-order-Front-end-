@@ -1,20 +1,20 @@
 import "./App.css";
 import PrivacyNotice from "./Pages/public/PrivacyNotice";
 import MainTerms from "./Pages/public/MainTerms";
-import Dashboard from "./Pages/Dashboard";
-import Settings from "./Pages/Settings";
-import PrivacyPolicy from "./Pages/PrivacyPolicy";
-import TermsAndConditions from "./Pages/TermsAndConditions";
+import Dashboard from "./Pages/Admin/Dashboard";
+import Settings from "./Pages/Admin/Settings";
+import PrivacyPolicy from "./Pages/Admin/PrivacyPolicy";
+import TermsAndConditions from "./Pages/Admin/TermsAndConditions";
 import "./i18n"; // should be before app rendering
 import ImageGenerator from "./Pages/Business/image-generator/ImageGenerator";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Pages/public/Home";
-import MyLogin from "./Pages/Login";
-import Register from "./Pages/Register";
-import DeliverWithUs from "./Pages/DeliverWithUs";
+import MyLogin from "./Pages/public/Login";
+import Register from "./Pages/public/Register";
+import DeliverWithUs from "./Pages/public/DeliverWithUs";
 import Profile from "./Pages/Admin/Profile";
-import Reviews from "./Pages/Reviews";
+import Reviews from "./Pages/Business/Reviews";
 import Profile_B from "./Pages/Business/Profile_B";
 import ManageBusiness from "./Pages/Admin/manage-business";
 import ManageDeliveryMan from "./Pages/Admin/ManageDeliveryMan";
@@ -30,10 +30,11 @@ import BusDashboard from "./Pages/Business/BusDashboard";
 import BusSettings from "./Pages/Business/BusSettings";
 import BusPrivacy from "./Pages/Business/BusPrivacy";
 import BusTerms from "./Pages/Business/BusTerms";
-import Notifications from "./Pages/Business/Notifications";
 import AllOrders from "./Pages/Business/Orders/orders";
 import MarketingAILayout from "./Pages/Business/MarketingAI/layout";
 import MarketingRouter from "./Pages/Business/MarketingAI/marketing-router";
+import ScrollToTop from './components/ScrollToTop'; // Import the new ScrollToTop component
+
 
 // Temporary placeholder components for missing order components
 const WaitingOrders: React.FC = () => (
@@ -148,6 +149,7 @@ const MyApp: React.FC = () => {
   return (
     <OrdersProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           {/* Main Routes */}
           <Route path="/" element={<Home />} />
@@ -199,7 +201,6 @@ const MyApp: React.FC = () => {
           <Route path="/Bus-settings" element={<BusSettings />} />
           <Route path="/Bus-privacy-policy" element={<BusPrivacy />} />
           <Route path="/Bus-terms-and-conditions" element={<BusTerms />} />
-          <Route path="/notifications" element={<Notifications />} />
 
           {/* Marketing AI Routes */}
           <Route

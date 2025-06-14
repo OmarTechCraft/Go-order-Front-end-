@@ -10,11 +10,9 @@ import {
   FaImages,
   FaBullhorn,
   FaShoppingCart,
-  FaSignOutAlt,
-  FaChevronDown,
-  FaChevronUp,
+  FaSignOutAlt, // Keep this for the logout icon
   FaBars,
-  FaTimes,
+  FaTimes, // Keep this for close button
 } from "react-icons/fa";
 
 // NEW ICON IMPORTS
@@ -52,7 +50,6 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
   const navigate = useNavigate();
 
   // State to handle toggling of the "Orders" submenu
-  const [ordersOpen, setOrdersOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   // State for user profile data
@@ -66,10 +63,6 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
   const [overlayVisible, setOverlayVisible] = useState(isMobileMenuOpen);
 
   const isActive = (path: string) => location.pathname === path;
-
-  const handleOrdersToggle = () => {
-    setOrdersOpen((prev) => !prev);
-  };
 
   // Use useCallback to memoize the function and fix the ESLint warning
   const handleToggleMobileMenu = useCallback(
@@ -206,24 +199,30 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
         />
       )}
 
-      {/* Logout Confirmation Modal */}
+      {/* Logout Confirmation Modal - REPLACED WITH SIDEBAR'S MODAL */}
       {showLogoutModal && (
         <div className="logout-modal-overlay">
           <div className="logout-modal">
-            <div className="logout-modal-content">
-              <h3>Confirm Logout</h3>
-              <p>
-                Are you sure you want to logout? All your session data will be
-                cleared.
-              </p>
-              <div className="logout-modal-buttons">
-                <button className="logout-cancel-btn" onClick={cancelLogout}>
-                  Cancel
-                </button>
-                <button className="logout-confirm-btn" onClick={confirmLogout}>
-                  Logout
-                </button>
+            <div className="logout-modal-header">
+              <div className="logout-icon">
+                <FaSignOutAlt />
               </div>
+              <button className="close-modal" onClick={cancelLogout}>
+                <FaTimes />
+              </button>
+            </div>
+            <div className="logout-modal-body">
+              <h3>Confirm Logout</h3>
+              <p>Are you sure you want to sign out of your account?</p>
+            </div>
+            <div className="logout-modal-actions">
+              <button className="cancel-btn" onClick={cancelLogout}>
+                <span>Cancel</span>
+              </button>
+              <button className="confirm-btn" onClick={confirmLogout}>
+                <FaSignOutAlt />
+                <span>Sign Out</span>
+              </button>
             </div>
           </div>
         </div>
@@ -339,54 +338,14 @@ const Sidebar_2: React.FC<Sidebar_2Props> = ({
               </Link>
             </li>
 
-            <li className="sidebar_2-orders" onClick={handleOrdersToggle}>
-              <div className="sidebar_2-orders-title">
+            <li className={isActive("/orders/all") ? "active" : ""}>
+              <Link
+                to="/orders/all"
+                onClick={() => handleNavigate("/orders/all")}
+              >
                 <FaShoppingCart className="sidebar_2-icon" />
-                <span>Orders</span>
-                {ordersOpen ? (
-                  <FaChevronUp className="sidebar_2-chevron-icon" />
-                ) : (
-                  <FaChevronDown className="sidebar_2-chevron-icon" />
-                )}
-              </div>
-              {ordersOpen && (
-                <ul className="sidebar_2-orders-submenu">
-                  <li className={isActive("/orders/all") ? "active" : ""}>
-                    <Link
-                      to="/orders/all"
-                      onClick={() => handleNavigate("/orders/all")}
-                    >
-                      All Orders
-                    </Link>
-                  </li>
-                  <li className={isActive("/orders/waiting") ? "active" : ""}>
-                    <Link
-                      to="/orders/waiting"
-                      onClick={() => handleNavigate("/orders/waiting")}
-                    >
-                      Waiting
-                    </Link>
-                  </li>
-                  <li
-                    className={isActive("/orders/in-progress") ? "active" : ""}
-                  >
-                    <Link
-                      to="/orders/in-progress"
-                      onClick={() => handleNavigate("/orders/in-progress")}
-                    >
-                      In Progress
-                    </Link>
-                  </li>
-                  <li className={isActive("/orders/done") ? "active" : ""}>
-                    <Link
-                      to="/orders/done"
-                      onClick={() => handleNavigate("/orders/done")}
-                    >
-                      Done
-                    </Link>
-                  </li>
-                </ul>
-              )}
+                <span> Orders </span>
+              </Link>
             </li>
 
             {/* Logout */}

@@ -10,7 +10,6 @@ import {
   FaPlusSquare,
   FaLayerGroup,
   FaSignOutAlt,
-  FaAngleDown,
   FaCheck,
   FaExclamationTriangle,
   FaTimes,
@@ -37,7 +36,6 @@ const navItems = [
     label: "Dashboard",
     icon: <FaChartBar />,
     path: "/dashboard",
-    rightIcon: <FaAngleDown />,
   },
   { label: "Profile", icon: <FaUser />, path: "/profile" },
   { label: "Settings", icon: <FaCog />, path: "/settings" },
@@ -196,9 +194,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                   >
                     <span className="nav-icon">{item.icon}</span>
                     <span className="nav-label">{item.label}</span>
-                    {item.rightIcon && (
-                      <span className="nav-right-icon">{item.rightIcon}</span>
-                    )}
+                   
                     <div className="nav-item-hover"></div>
                   </NavLink>
                 </li>

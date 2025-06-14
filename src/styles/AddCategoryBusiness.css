@@ -1,33 +1,27 @@
 /* Base styles */
 .add-category-business-page {
   position: relative;
-  display: flex; /* Use flexbox to arrange sidebar and content wrapper */
+  display: flex;
   min-height: 100vh;
   background-color: #fff;
   /* Removed margin-left: 240px; from here */
   padding-top: 60px; /* Height of fixed Navbar */
 }
 
-/* This new wrapper will contain all the page content *except* the sidebar
-   and will be blurred when the pop-up is active. */
-.page-content-wrapper {
-  flex: 1; /* Allows it to take up remaining space next to sidebar */
-  margin-left: 240px; /* This creates space for the fixed sidebar */
+/* This wrapper will be blurred when the pop-up is active */
+.page-content {
+  display: flex;
+  width: 100%;
   transition: filter 0.3s ease;
-  min-height: calc(100vh - 60px); /* Ensure it takes full height below navbar */
-  position: relative; /* Needed for stacking context if you add children with absolute positioning */
-  z-index: 1; /* Keep it above the general page background but below modals */
+  padding-left: 240px; /* Added padding-left to create space for the fixed sidebar */
 }
 
-.page-content-wrapper.blurred {
+.page-content.blurred {
   filter: blur(5px);
-  /* Prevent interaction with blurred content */
-  pointer-events: none;
-  user-select: none;
 }
 
 .add-category-business-content {
-  /* No margin or padding changes needed here, as it's inside page-content-wrapper */
+  flex: 1;
   padding: 24px;
 }
 
@@ -208,6 +202,7 @@
   align-items: center;
   justify-content: center;
   z-index: 999;
+  /* Removed animation for instant appearance */
 }
 
 /* The white content box */
@@ -218,7 +213,8 @@
   width: 480px;
   padding: 24px;
   position: relative;
-  color: #000;
+  /* Removed animation for instant appearance */
+  color: #000; /* Make sure text is black */
   max-width: 90vw;
   max-height: 90vh;
   overflow-y: auto;
@@ -228,7 +224,7 @@
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 24px;
-  color: #000;
+  color: #000; /* Make sure title is black */
 }
 
 /* Form fields */
@@ -242,7 +238,7 @@
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 6px;
-  color: #000;
+  color: #000; /* Make sure labels are black */
 }
 
 .text-input {
@@ -250,7 +246,7 @@
   border-radius: 8px;
   padding: 12px;
   font-size: 14px;
-  color: #000;
+  color: #000; /* Make sure input text is black */
 }
 
 /* Upload section: placeholder on left, upload button on right */
@@ -426,12 +422,12 @@
 /* Mobile phones (up to 576px) */
 @media (max-width: 576px) {
   .add-category-business-page {
-    /* No margin-left here now, as it's handled by flex and sidebar's fixed position */
+    margin-left: 0;
     padding-top: 56px;
   }
 
-  .page-content-wrapper {
-    margin-left: 0; /* No margin on small screens as sidebar is mobile-specific */
+  .page-content {
+    padding-left: 0; /* No padding-left on small screens when sidebar is mobile-specific */
   }
 
   .add-category-business-content {
@@ -510,11 +506,12 @@
 /* Small tablets (577px to 767px) */
 @media (min-width: 577px) and (max-width: 767px) {
   .add-category-business-page {
+    margin-left: 0;
     padding-top: 56px;
   }
 
-  .page-content-wrapper {
-    margin-left: 0; /* No margin on small screens when sidebar is mobile-specific */
+  .page-content {
+    padding-left: 0; /* No padding-left on small screens when sidebar is mobile-specific */
   }
 
   .add-category-business-content {
@@ -561,12 +558,12 @@
 /* Tablets (768px to 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
   .add-category-business-page {
-    /* No margin-left here */
+    margin-left: 0; /* Resetting this from the previous value might be needed depending on your root layout */
     padding-top: 60px;
   }
 
-  .page-content-wrapper {
-    margin-left: 240px; /* Re-apply margin-left for sidebar space */
+  .page-content {
+    padding-left: 240px; /* Re-apply padding-left for sidebar space */
   }
 
   .add-category-business-content {
@@ -596,8 +593,10 @@
 
 /* Laptops and larger screens (1024px and above) */
 @media (min-width: 1024px) {
-  .page-content-wrapper {
-    margin-left: 240px; /* Ensure margin for fixed sidebar */
+ 
+
+  .page-content {
+    padding-left: 240px; /* Ensure padding for fixed sidebar */
   }
 
   .categories-grid {

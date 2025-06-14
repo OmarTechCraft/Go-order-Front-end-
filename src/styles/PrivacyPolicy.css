@@ -1,51 +1,207 @@
-/* General Page Styling */
+/* PrivacyPolicy.css */
+
+/* --- Keyframe Animations --- */
+/* Animation for a subtle fade-in and upward movement */
+@keyframes fadeInUp {
+  from {
+    opacity: 0; /* Start completely transparent */
+    transform: translateY(20px); /* Start 20px below its final position */
+  }
+  to {
+    opacity: 1; /* End fully opaque */
+    transform: translateY(0); /* End at its original vertical position */
+  }
+}
+
+/* --- General Page Styling --- */
+body {
+  margin: 0; /* Remove default body margin */
+  padding: 0; /* Remove default body padding */
+  background-color: #f8f8f8; /* Light background color for the entire page */
+  font-family: 'Inter', sans-serif; /* Modern, clean sans-serif font for better readability */
+  color: #333; /* Default text color */
+}
+
+/* Main content area that contains the terms and conditions */
+.main-content {
+  padding-top: 60px; /* Crucial: Pushes content down to prevent overlap with a typical fixed Navbar */
+  padding-bottom: 40px; /* Adds space at the bottom of the content area */
+  min-height: calc(100vh - 60px); /* Ensures the content area takes up at least the remaining viewport height */
+  display: flex; /* Use flexbox to center the terms container horizontally */
+  justify-content: center; /* Centers the content container */
+  align-items: flex-start; /* Aligns content to the top within the main-content area */
+}
+
+/* Styling for the container holding all the terms and conditions text */
 .terms-container {
-  font-family: Arial, sans-serif;
-  line-height: 2;
-  color: #333;
-  margin-left: 20px;
+  max-width: 800px; /* Limits the maximum width for optimal readability on larger screens */
+  width: 90%; /* Makes the container fluid, taking up 90% of its parent's width */
+  background-color: #fff; /* White background for the content box */
+  padding: 30px; /* Internal spacing within the container */
+  border-radius: 12px; /* Rounded corners for a softer, modern look */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* Subtle shadow for depth and visual separation */
+  animation: fadeInUp 0.8s ease-out forwards; /* Applies the fade-in animation on load */
+  line-height: 1.8; /* Improved line height for better readability of paragraph text */
 }
 
-
-.terms-container h1 {
-    font-weight: bold;
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    margin-top: -95px;
-    line-height: 5;
-    margin-left: 50px;
-}
-.terms-container p {
-    font-size: 16px;
-    line-height: 2;
-    color: #444;
+/* Header section containing the back button and the page title */
+.terms-header {
+  display: flex; /* Uses flexbox for horizontal arrangement of items */
+  align-items: center; /* Vertically aligns items (button and title) in the middle */
+  margin-bottom: 25px; /* Space below the header section */
+  padding-bottom: 15px; /* Internal padding at the bottom of the header */
+  border-bottom: 1px solid #eee; /* A light, subtle separator line */
 }
 
-
-
-.terms-container strong {
-    font-weight: bold;
-}
-
-.terms-container ul {
-    list-style-type: disc;
-    padding-left: 20px;
-}
-
-.terms-container li {
-    margin-bottom: 8px;
-}
+/* Styling for the back navigation button */
+/* This section controls the appearance and horizontal positioning (margin-right) of the back button independently. */
 .back-button {
-    border: none;
-    background: none;
-    font-size: 20px;
-    margin-bottom: 17px;
-    cursor: pointer;
-    color: #333;
-  }
-  .terms-header {
-    margin-top: -50px;
+  display: flex; /* Use flexbox for centering the icon */
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.05); /* Very subtle light border for definition */
+  background-color: #e8f0fe; /* Light blue background for better visibility */
+  color: #2c3e50; /* Darker color for the arrow icon to contrast with light blue */
+  font-size: 20px; /* Base font size for the icon (increased for larger button) */
+  width: 48px; /* Enlarged width for a more prominent button */
+  height: 48px; /* Enlarged height for a more prominent button */
+  border-radius: 50%; /* Makes the button circular */
+  cursor: pointer; /* Indicates it's clickable */
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Smooth transitions for hover effects */
+  margin-left: -32px; /* This creates the gap between the button and the header */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Slightly more prominent shadow */
+  flex-shrink: 0; /* Prevents button from shrinking if space is limited */
+  margin-top: -70px; /* Shift the button slightly upwards */
+}
+
+.back-button:hover {
+  background-color: #d0e4ff; /* Slightly darker blue on hover */
+  transform: translateX(-4px); /* Slight slide effect to the left on hover */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* More pronounced shadow on hover */
+}
+
+.back-button:active {
+  transform: translateX(0); /* Resets the slide effect when clicked */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08); /* Resets shadow to a subtle state when active */
+}
+
+/* Styling for the actual arrow icon within the button */
+.back-icon {
+  font-size: 24px; /* Specific size for the icon, larger to fit the button */
+}
+
+/* Styling for the main page heading (e.g., "Terms & Conditions") */
+/* This section controls the appearance of the header independently. */
+.header1 {
+  font-size: 28px; /* Larger font size for prominence */
+  font-weight: 700; /* Bolder font weight */
+  color: #2c3e50; /* A strong, modern dark blue color */
+  margin: 0; /* Removes default margins to ensure proper alignment with flexbox */
+  line-height: 1.2; /* Tighter line height for headings */
+}
+
+/* Styling for secondary headings (e.g., "1. Use of Services") */
+.terms-container h2 {
+  font-size: 22px; /* Slightly smaller than the main heading */
+  font-weight: 600; /* Semi-bold font weight */
+  color: #34495e; /* A slightly softer dark blue color */
+  margin-top: 30px; /* Space above each section heading */
+  margin-bottom: 15px; /* Space below each section heading */
+  padding-bottom: 5px; /* Internal padding at the bottom */
+  border-bottom: 1px dashed #eee; /* A light dashed separator line */
+}
+
+/* Styling for general paragraph text */
+.terms-container p {
+  font-size: 16px;
+  line-height: 1.8; /* Generous line spacing for readability */
+  color: #444; /* Dark gray text color */
+  margin-bottom: 15px; /* Space between paragraphs */
+}
+
+/* Styling for bolded text within paragraphs */
+.terms-container strong {
+  font-weight: 700; /* Makes bold text stand out clearly */
+  color: #333; /* Ensures bold text is a strong dark color */
+}
+
+/* Styling for unordered lists */
+.terms-container ul {
+  list-style-type: disc; /* Uses traditional disc bullets */
+  padding-left: 25px; /* Indents the list items */
+  margin-bottom: 20px; /* Space below the entire list */
+}
+
+/* Styling for individual list items */
+.terms-container li {
+  margin-bottom: 10px; /* Space between individual list items */
+  font-size: 16px;
+  line-height: 1.6;
+  color: #555; /* Slightly lighter text color for list items */
+}
+
+/* --- Responsive Adjustments --- */
+
+/* Styles for screens up to 768px wide (e.g., tablets) */
+@media (max-width: 768px) {
+  .main-content {
+    padding-top: 55px; /* Adjust padding for potentially smaller Navbars on tablets */
+    padding-left: 15px; /* Add horizontal padding to the main content area */
+    padding-right: 15px;
   }
 
-  
+  .terms-container {
+    padding: 20px; /* Reduce internal padding for smaller screens */
+    width: 95%; /* Allow the container to take up more width */
+  }
+
+  .back-button {
+    width: 44px; /* Slightly reduce button size for tablets */
+    height: 44px;
+    font-size: 18px; /* Adjust icon size */
+    margin-top: -3px; /* Adjust for tablet screens */
+  }
+
+  .back-icon {
+    font-size: 22px;
+  }
+
+  .header1 {
+    font-size: 24px; /* Adjust main heading size for mobile readability */
+  }
+
+  .terms-container h2 {
+    font-size: 20px; /* Adjust subheading size */
+  }
+
+  .terms-container p,
+  .terms-container li {
+    font-size: 15px; /* Slightly smaller text for better mobile fit */
+  }
+}
+
+/* Styles for screens up to 480px wide (e.g., smartphones) */
+@media (max-width: 480px) {
+  .main-content {
+    padding-top: 50px; /* Further adjust padding for very small screens */
+  }
+  .terms-container {
+    padding: 15px; /* Further reduce internal padding */
+  }
+  .back-button {
+    width: 40px; /* Further reduce button size for smartphones */
+    height: 40px;
+    font-size: 16px; /* Adjust icon size */
+    margin-right: 15px; /* Reduce gap slightly */
+    margin-top: -2px; /* Adjust for smartphone screens */
+  }
+  .back-icon {
+    font-size: 20px;
+  }
+  .header1 {
+    font-size: 22px; /* Smallest heading size for compact displays */
+  }
+  .terms-container h2 {
+    font-size: 18px; /* Smallest subheading size */
+  }
+}

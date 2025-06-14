@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaSignOutAlt, FaTimes } from "react-icons/fa"; // Import icons needed for the modal
 import "./HomeNav.css"; // Ensure your CSS file is correctly linked
 
 const Navbar = () => {
@@ -162,33 +163,30 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Logout confirmation modal */}
+      {/* Logout Confirmation Modal - REPLACED WITH SIDEBAR'S MODAL */}
       {showLogoutModal && (
         <div className="logout-modal-overlay">
           <div className="logout-modal">
-            <div className="logout-modal-content">
-              {" "}
-              {/* Added this div */}
-              <h3>Confirm Logout</h3> {/* Updated title */}
-              <p>
-                Are you sure you want to logout? All your session data will be
-                cleared.
-              </p>{" "}
-              {/* Updated message */}
-              <div className="logout-modal-buttons">
-                {" "}
-                {/* Renamed this div */}
-                <button className="logout-cancel-btn" onClick={cancelLogout}>
-                  {" "}
-                  {/* Renamed class */}
-                  Cancel
-                </button>
-                <button className="logout-confirm-btn" onClick={confirmLogout}>
-                  {" "}
-                  {/* Renamed class */}
-                  Logout
-                </button>
+            <div className="logout-modal-header">
+              <div className="logout-icon">
+                <FaSignOutAlt />
               </div>
+              <button className="close-modal" onClick={cancelLogout}>
+                <FaTimes />
+              </button>
+            </div>
+            <div className="logout-modal-body">
+              <h3>Confirm Logout</h3>
+              <p>Are you sure you want to sign out of your account?</p>
+            </div>
+            <div className="logout-modal-actions">
+              <button className="cancel-btn" onClick={cancelLogout}>
+                <span>Cancel</span>
+              </button>
+              <button className="confirm-btn" onClick={confirmLogout}>
+                <FaSignOutAlt />
+                <span>Sign Out</span>
+              </button>
             </div>
           </div>
         </div>

@@ -1,7 +1,19 @@
+// src/service/orders_service.ts
 import axiosInstance from "../api/api";
 
-// Define interfaces for API responses
-interface Address {
+// --- CORE SHARED INTERFACES AND TYPES ---
+
+// Define a union type for explicit order statuses
+export type OrderStatus = // ADDED "Accepted" to the union type
+  | "Pending"
+  | "Accepted" // <--- ADDED THIS LINE!
+  | "In progress"
+  | "Cooked"
+  | "Out to delivery"
+  | "Delivered"
+  | "Canceled";
+
+export interface Address {
   id: number;
   country: string;
   city: string;
@@ -11,13 +23,13 @@ interface Address {
   floorNumber: number;
 }
 
-interface Business {
+export interface Business {
   id: string;
   businessName: string;
   image: string;
 }
 
-interface Category {
+export interface Category {
   id: number;
   name: string;
   businessId: string;
@@ -26,11 +38,11 @@ interface Category {
   subCategories: string[];
 }
 
-interface Image {
+export interface Image {
   url: string;
 }
 
-interface Variant {
+export interface Variant {
   id: number;
   price: number;
   image: string;
@@ -40,14 +52,14 @@ interface Variant {
   weight: string;
 }
 
-interface Ingredient {
+export interface Ingredient {
   id: number;
   name: string;
   price: number;
   image: string;
 }
 
-interface Product {
+export interface Product {
   id: number;
   name: string;
   price: number;
@@ -60,33 +72,39 @@ interface Product {
   ingredients: Ingredient[];
 }
 
-interface OrderItem {
+export interface OrderItem {
   variantId: number;
   quantity: number;
   product: Product;
 }
 
-interface Order {
+export interface Order {
   id: number;
   totalPrice: number;
-  status: string;
+  status: OrderStatus; // Using the defined union type
   deliveryFee: number;
   address: Address;
   business: Business;
   items: OrderItem[];
   createdAt: string;
+  customerName?: string;
+  date?: string;
 }
 
+// --- API Request/Response Interfaces ---
+
 interface UpdateOrderStatusRequest {
-  status: string;
+  status: OrderStatus;
 }
+
+// --- API Calls ---
 
 /**
  * Fetch orders from the API
- * @param status - Optional status filter (Pending, In progress, Cooked, Out to delivery, Delivered)
+ * @param status - Optional status filter (OrderStatus)
  * @returns Promise<Order[]>
  */
-export const getOrders = async (status?: string): Promise<Order[]> => {
+export const getOrders = async (status?: OrderStatus): Promise<Order[]> => {
   try {
     const params = status ? { status } : {};
 
@@ -95,7 +113,7 @@ export const getOrders = async (status?: string): Promise<Order[]> => {
     });
 
     if (response.status === 200) {
-      return response.data;
+      return response.data as Order[];
     } else {
       throw new Error(`Failed to fetch orders: ${response.status}`);
     }
@@ -120,7 +138,7 @@ export const getOrderById = async (orderId: number): Promise<Order[]> => {
     const response = await axiosInstance.get(`/api/Business/Order/${orderId}`);
 
     if (response.status === 200) {
-      return response.data;
+      return response.data as Order[];
     } else {
       throw new Error(`Failed to fetch order: ${response.status}`);
     }
@@ -138,12 +156,12 @@ export const getOrderById = async (orderId: number): Promise<Order[]> => {
 /**
  * Update order status
  * @param orderId - The ID of the order to update
- * @param status - The new status (Pending, In progress, Cooked, Out to delivery, Delivered)
+ * @param status - The new status (OrderStatus)
  * @returns Promise<void>
  */
 export const updateOrderStatus = async (
   orderId: number,
-  status: string
+  status: OrderStatus
 ): Promise<void> => {
   try {
     const requestBody: UpdateOrderStatusRequest = {
@@ -169,6 +187,7 @@ export const updateOrderStatus = async (
   }
 };
 
+
 /**
  * Helper function to get orders with error handling and retry logic
  * @param status - Optional status filter
@@ -176,7 +195,7 @@ export const updateOrderStatus = async (
  * @returns Promise<Order[]>
  */
 export const getOrdersWithRetry = async (
-  status?: string,
+  status?: OrderStatus,
   retries: number = 3
 ): Promise<Order[]> => {
   for (let i = 0; i <= retries; i++) {
@@ -198,25 +217,26 @@ export const getOrdersWithRetry = async (
 
 /**
  * Helper function to validate status values
- * @param status - Status to validate
+ * @param status - Status to validate (string because input could be anything)
  * @returns boolean
  */
 export const isValidStatus = (status: string): boolean => {
-  const validStatuses = [
+  const validStatuses: OrderStatus[] = [
     "Pending",
+    "Accepted", // <--- ADDED THIS HERE TOO for consistency with validStatuses array
     "In progress",
     "Cooked",
     "Out to delivery",
     "Delivered",
+    "Canceled",
   ];
-
-  return validStatuses.includes(status);
+  return (validStatuses as string[]).includes(status);
 };
 
 /**
  * Get available status options
- * @returns string[]
+ * @returns OrderStatus[]
  */
-export const getAvailableStatuses = (): string[] => {
+export const getAvailableStatuses = (): OrderStatus[] => {
   return ["Pending", "In progress", "Cooked", "Out to delivery", "Delivered"];
 };

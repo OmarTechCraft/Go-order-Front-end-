@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import "../styles/Dashboard.css";
+import "../../styles/Dashboard.css";
 import { Users, MousePointer, Grid, TrendingUp } from "lucide-react";
-import Navbar from "../components/navbar/Navbar";
+import Navbar from "../../components/navbar/Navbar";
 import {
   XAxis,
   YAxis,
@@ -12,7 +12,7 @@ import {
   Area,
   AreaChart,
 } from "recharts";
-import axiosInstance from "../api/api";
+import axiosInstance from "../../api/api";
 
 interface DashboardData {
   totalOrders: number;

@@ -1,50 +1,52 @@
 import React, { useState, useEffect } from "react";
 import "./ImageGenerator.css";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { useNavigate } from "react-router-dom";
+import { Copy } from "lucide-react"; // Import the Copy icon
 
 import Nav_2 from "../../../components/navbar copy/Navbar";
 import Sidebar_2 from "../../../components/Sidebar_2/Sidebar_2";
 
 const ImageGenerator: React.FC = () => {
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const navigate = useNavigate();
 
-  const [prompt, setPrompt] = useState<string>("");
-  const [generatedImage, setGeneratedImage] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [showContent, setShowContent] = useState<boolean>(false);
-  const [recentPrompts, setRecentPrompts] = useState<string[]>([]);
+  const [igPrompt, setIgPrompt] = useState<string>("");
+  const [igGeneratedImage, setIgGeneratedImage] = useState<string | null>(null);
+  const [igIsLoading, setIgIsLoading] = useState<boolean>(false);
+  const [igError, setIgError] = useState<string | null>(null);
+  const [igShowContent, setIgShowContent] = useState<boolean>(false);
+  const [igRecentPrompts, setIgRecentPrompts] = useState<string[]>([]);
+  const [copiedPromptIndex, setCopiedPromptIndex] = useState<number | null>(null); // State for copy feedback
 
   const FAL_KEY =
     "5e52d37d-4813-4995-ab5f-bd9483f8b658:87bb47a0e479e43c046cc8cd0c3af2bf";
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setShowContent(true);
-    }, 300);
+      setIgShowContent(true);
+    }, 100);
     return () => clearTimeout(timer);
   }, []);
 
   const generateImage = async () => {
-    // Check if the user is logged in
     const token = localStorage.getItem("token");
     if (!token) {
-      setError(
+      setIgError(
         "You must be logged in to generate images. Redirecting to login..."
       );
       setTimeout(() => {
-        navigate("/login"); // Redirect to login page after a short delay
-      }, 2000); // Redirect after 2 seconds
+        navigate("/login");
+      }, 2000);
       return;
     }
 
-    if (!prompt.trim()) {
-      setError("Please enter a prompt");
+    if (!igPrompt.trim()) {
+      setIgError("Please enter a prompt");
       return;
     }
 
-    setIsLoading(true);
-    setError(null);
+    setIgIsLoading(true);
+    setIgError(null);
+    setIgGeneratedImage(null);
 
     try {
       const response = await fetch("https://fal.run/fal-ai/flux/dev", {
@@ -54,161 +56,212 @@ const ImageGenerator: React.FC = () => {
           Authorization: `Key ${FAL_KEY}`,
         },
         body: JSON.stringify({
-          prompt: prompt,
+          prompt: igPrompt,
           num_images: 1,
           size: "512x512",
         }),
       });
 
-      if (!response.ok) throw new Error(`Error: ${response.status}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          `Error: ${response.status} - ${errorData.detail || "Unknown error"}`
+        );
+      }
 
       const data = await response.json();
       if (data.images?.length > 0) {
-        setGeneratedImage(data.images[0].url);
-        setRecentPrompts((prev) => [...new Set([prompt, ...prev.slice(0, 4)])]);
+        setIgGeneratedImage(data.images[0].url);
+        setIgRecentPrompts((prev) =>
+          [igPrompt, ...prev].filter((value, index, self) => self.indexOf(value) === index).slice(0, 5)
+        );
       } else {
-        throw new Error("No image was generated");
+        throw new Error("No image was generated. Please try a different prompt.");
       }
-    } catch (err) {
-      console.error(err);
-      setError("Failed to generate image. Please try again.");
+    } catch (err: any) {
+      console.error("Image generation failed:", err);
+      setIgError(err.message || "Failed to generate image. Please try again.");
     } finally {
-      setIsLoading(false);
+      setIgIsLoading(false);
     }
   };
 
   const handlePromptSuggestionClick = (suggestion: string) => {
-    setPrompt(suggestion);
+    setIgPrompt(suggestion);
+    setIgError(null);
   };
 
+  const handleDownloadImage = () => {
+    if (igGeneratedImage) {
+      const link = document.createElement('a');
+      link.href = igGeneratedImage;
+      link.download = `generated_image_${Date.now()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
+  const handleCopyPrompt = (text: string, index: number) => {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        setCopiedPromptIndex(index);
+        setTimeout(() => setCopiedPromptIndex(null), 1500); // Show "Copied!" for 1.5 seconds
+      })
+      .catch(err => {
+        console.error('Failed to copy prompt: ', err);
+      });
+  };
+
+
   return (
-    <div className="image-generator-page">
+    <div className="ig-main-layout">
       <Nav_2 />
       <Sidebar_2 />
-      <div className={`image-generator-content ${showContent ? "show" : ""}`}>
-        <div className="card">
-          <div className="content">
-            <div className="image-container">
+      <div className={`ig-content-wrapper ${igShowContent ? "ig-show-content" : ""}`}>
+
+        <div className="ig-generator-card">
+          <div className="ig-card-inner">
+            {/* Image Display Area */}
+            <div className="ig-image-display-area">
               <div
-                className={`image-frame ${
-                  isLoading ? "loading" : generatedImage ? "generated" : ""
+                className={`ig-image-frame ${
+                  igIsLoading ? "ig-loading-frame" : igGeneratedImage ? "ig-generated-frame" : ""
                 }`}
               >
-                {isLoading ? (
-                  <div className="loading-spinner">
-                    <div className="spinner"></div>
-                    <p className="loading-text">Generating...</p>
+                {igIsLoading ? (
+                  <div className="ig-loading-spinner-container">
+                    <div className="ig-spinner"></div>
+                    <p className="ig-loading-text">Generating image...</p>
                   </div>
-                ) : generatedImage ? (
+                ) : igGeneratedImage ? (
                   <img
-                    src={generatedImage}
-                    alt="Generated"
-                    className="generated-image"
+                    src={igGeneratedImage}
+                    alt="AI Generated"
+                    className="ig-generated-image"
                   />
                 ) : (
-                  <img
-                    src="/images/nasser.png"
-                    alt="Placeholder"
-                    className="image"
-                  />
+                  <div className="ig-placeholder-wrapper">
+                    <img
+                      src="/images/nasser.png"
+                      alt="Placeholder"
+                      className="ig-placeholder-image"
+                    />
+                    {/* Enhanced placeholder text */}
+                    <p className="ig-placeholder-text">💡 Describe your vision to the AI!</p>
+                  </div>
                 )}
               </div>
 
-              {generatedImage && !isLoading && (
-                <div className="image-actions">
+              {igGeneratedImage && !igIsLoading && (
+                <div className="ig-image-actions">
                   <button
-                    onClick={() => window.open(generatedImage!, "_blank")}
-                    className="action-button"
+                    onClick={handleDownloadImage}
+                    className="ig-action-button ig-download-button"
+                    aria-label="Download generated image"
                   >
                     Download
                   </button>
                   <button
-                    onClick={() => setGeneratedImage(null)}
-                    className="action-button"
+                    onClick={() => {
+                      setIgGeneratedImage(null);
+                      setIgPrompt("");
+                      setIgError(null);
+                    }}
+                    className="ig-action-button ig-new-image-button"
+                    aria-label="Generate new image"
                   >
-                    New
+                    New Image
                   </button>
                 </div>
               )}
             </div>
 
-            <div className="form-container">
-              <div className="tagline">
-                "Create Stunning AI-Generated images effortlessly."
+            {/* Prompt Input and Controls Area */}
+            <div className="ig-input-controls-area">
+              <h2 className="ig-internal-heading">Generate Your AI Image Instantly</h2>
+              <div className="ig-tagline">
+                "Transforming your words into visuals."
               </div>
-              <p className="label">Generate unique images</p>
+              <p className="ig-label">Enter your creative prompt:</p>
 
-              <div className="input-group">
-                <input
-                  type="text"
-                  placeholder="Describe your image idea..."
-                  className="input"
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && generateImage()}
-                />
-                {/* Display error message here */}
-                {error && <p className="error">{error}</p>}
+              <div className="ig-input-group">
+                <textarea
+                  placeholder="e.g., A majestic dragon flying over a medieval castle at sunset, highly detailed, fantasy art"
+                  className="ig-prompt-input"
+                  value={igPrompt}
+                  onChange={(e) => setIgPrompt(e.target.value)}
+                  onKeyPress={(e) => e.key === "Enter" && !igIsLoading && generateImage()}
+                  rows={3}
+                ></textarea>
+                {igError && <p className="ig-error-message">{igError}</p>}
               </div>
 
               <button
-                className={`button ${isLoading ? "loading" : ""}`}
+                className={`ig-generate-button ${igIsLoading ? "ig-loading-button" : ""}`}
                 onClick={generateImage}
-                disabled={isLoading}
+                disabled={igIsLoading}
               >
-                {isLoading ? "Generating..." : "Generate Image"}
+                {igIsLoading ? "Generating..." : "Generate Image"}
               </button>
 
-              {recentPrompts.length > 0 && (
-                <div className="recent-prompts">
-                  <p className="recent-label">Recent prompts:</p>
-                  <div className="prompt-tags">
-                    {recentPrompts.map((prompt, index) => (
+              {igRecentPrompts.length > 0 && (
+                <div className="ig-recent-prompts-section">
+                  <p className="ig-section-label">Your Recent Prompts:</p>
+                  <div className="ig-prompt-tag-list">
+                    {igRecentPrompts.map((prompt, index) => (
                       <span
                         key={index}
-                        className="prompt-tag"
+                        className="ig-prompt-tag"
                         onClick={() => handlePromptSuggestionClick(prompt)}
                       >
                         {prompt}
+                        <button
+                          className="ig-copy-prompt-button"
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent tag click from triggering
+                            handleCopyPrompt(prompt, index);
+                          }}
+                          aria-label={`Copy prompt: ${prompt}`}
+                          title="Copy to clipboard"
+                        >
+                          {copiedPromptIndex === index ? "Copied!" : <Copy size={14} />}
+                        </button>
                       </span>
                     ))}
                   </div>
                 </div>
               )}
 
-              <div className="prompt-suggestions">
-                <p className="suggestion-label">Try these ideas:</p>
-                <div className="suggestion-tags">
-                  <span
-                    className="suggestion-tag"
-                    onClick={() =>
-                      handlePromptSuggestionClick(
-                        "A serene mountain landscape with a lake"
-                      )
-                    }
-                  >
-                    Mountain landscape
-                  </span>
-                  <span
-                    className="suggestion-tag"
-                    onClick={() =>
-                      handlePromptSuggestionClick(
-                        "A futuristic city with flying cars"
-                      )
-                    }
-                  >
-                    Futuristic city
-                  </span>
-                  <span
-                    className="suggestion-tag"
-                    onClick={() =>
-                      handlePromptSuggestionClick(
-                        "A cute cat wearing sunglasses"
-                      )
-                    }
-                  >
-                    Cat with sunglasses
-                  </span>
+              <div className="ig-prompt-suggestions-section">
+                <p className="ig-section-label">Feeling stuck? Try these ideas:</p>
+                <div className="ig-prompt-tag-list">
+                  {[
+                    "A cozy living room with a fireplace and a cat sleeping on the rug, warm lighting, hyperrealistic",
+                    "An astronaut exploring a vibrant alien jungle, bioluminescent plants, futuristic, digital painting",
+                    "A vintage robot serving coffee in a bustling cafe, steampunk style, intricate gears, sepia tones",
+                    "A majestic griffin soaring through a cloud-filled sky above ancient ruins, epic fantasy art",
+                    "A minimalist abstract painting with soft pastel colors and flowing lines"
+                  ].map((prompt, index) => (
+                    <span
+                      key={index}
+                      className="ig-prompt-tag ig-suggestion-tag"
+                      onClick={() => handlePromptSuggestionClick(prompt)}
+                    >
+                      {prompt}
+                      <button
+                        className="ig-copy-prompt-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCopyPrompt(prompt, index + igRecentPrompts.length); // Offset index for uniqueness
+                        }}
+                        aria-label={`Copy suggestion: ${prompt}`}
+                        title="Copy to clipboard"
+                      >
+                        {copiedPromptIndex === (index + igRecentPrompts.length) ? "Copied!" : <Copy size={14} />}
+                      </button>
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>

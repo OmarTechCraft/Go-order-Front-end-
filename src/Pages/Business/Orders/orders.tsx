@@ -1,3 +1,4 @@
+// src/Pages/Business/Orders/orders.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -5,94 +6,16 @@ import OrderTable from "../../../components/OrderTable/OrderTable";
 import "./orders.css";
 import Nav_2 from "../../../components/navbar copy/Navbar";
 import Sidebar_2 from "../../../components/Sidebar_2/Sidebar_2";
-import { getOrders, updateOrderStatus } from "../../../service/orders_service";
+// Import all necessary types from your service file
+import { getOrders, updateOrderStatus, Order, OrderStatus, OrderItem, Ingredient } from "../../../service/orders_service"; 
 
-// Define proper types to match your API response
-interface Address {
-  id: number;
-  country: string;
-  city: string;
-  street: string;
-  note: string;
-  buildingNumber: number;
-  floorNumber: number;
-}
-
-interface Business {
-  id: string;
-  businessName: string;
-  image: string;
-}
-
-interface Category {
-  id: number;
-  name: string;
-  businessId: string;
-  parentCategoryId: number;
-  image: string;
-  subCategories: string[];
-}
-
-interface Image {
-  url: string;
-}
-
-interface Variant {
-  id: number;
-  price: number;
-  image: string;
-  stock: number;
-  color: string;
-  size: string;
-  weight: string;
-}
-
-interface Ingredient {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-}
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  rating: number;
-  stock: number;
-  category: Category;
-  businessId: string;
-  images: Image[];
-  variants: Variant[];
-  ingredients: Ingredient[];
-}
-
-interface OrderItem {
-  variantId: number;
-  quantity: number;
-  product: Product;
-}
-
-interface Order {
-  id: number;
-  totalPrice: number;
-  status: string;
-  deliveryFee: number;
-  address: Address;
-  business: Business;
-  items: OrderItem[];
-  createdAt: string;
-  customerName?: string; // Added for compatibility
-  date?: string; // Added for compatibility
-}
-
-interface UserData {
+interface UserData { // Keep this here as it's specific to this file
   id: string;
   name: string;
   email: string;
 }
 
-const ORDER_STATUSES = [
+const ORDER_STATUSES: (OrderStatus | "All")[] = [ // Allow "All" for the filter UI
   "All",
   "Pending",
   "In progress",
@@ -101,37 +24,41 @@ const ORDER_STATUSES = [
   "Delivered",
 ];
 
-// Define state transitions
-const STATE_TRANSITIONS = {
+// Define state transitions using OrderStatus
+const STATE_TRANSITIONS: { [key in OrderStatus]?: OrderStatus | null } = {
   Pending: "In progress",
   "In progress": "Cooked",
   Cooked: "Out to delivery",
   "Out to delivery": "Delivered",
   Delivered: null, // Cannot move to any other state
+  Canceled: null, // Canceled orders cannot transition
 };
 
 export default function AllOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedStatus, setSelectedStatus] = useState<string>("All");
+  const [selectedStatus, setSelectedStatus] = useState<OrderStatus | "All">("All"); // Use OrderStatus for filter
   const [showCancelDialog, setShowCancelDialog] = useState<boolean>(false);
   const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
   const [showDetailsPopup, setShowDetailsPopup] = useState<boolean>(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   // Fetch orders based on selected status
-  const fetchOrders = async (status?: string) => {
+  const fetchOrders = async (status?: OrderStatus | "All") => { // Parameter expects OrderStatus or "All"
     try {
       setLoading(true);
       setError(null);
+      // Pass 'undefined' to getOrders service if "All" is selected
       const fetchedOrders = await getOrders(
         status === "All" ? undefined : status
       );
 
-      // Transform the data to match the expected format
-      const transformedOrders = fetchedOrders.map((order: any) => ({
+      // Transform the data to match the expected format for display
+      const transformedOrders: Order[] = fetchedOrders.map((order: any) => ({
         ...order,
+        // Ensure status is correctly mapped to OrderStatus union type
+        status: order.status as OrderStatus,
         customerName: order.address
           ? `${order.address.street}, ${order.address.city}`
           : "Unknown Customer",
@@ -161,13 +88,13 @@ export default function AllOrders() {
     return () => clearInterval(interval);
   }, [selectedStatus]);
 
-  const handleStatusChange = (status: string) => {
+  const handleStatusChange = (status: OrderStatus | "All") => { // Parameter expects OrderStatus or "All"
     setSelectedStatus(status);
   };
 
   const handleUpdateOrderStatus = async (
     orderId: number,
-    newStatus: string
+    newStatus: OrderStatus // Use OrderStatus for newStatus
   ) => {
     try {
       await updateOrderStatus(orderId, newStatus);
@@ -182,23 +109,23 @@ export default function AllOrders() {
     }
   };
 
-  const handleAccept = async (orderId: string) => {
+  const handleAccept = async (orderId: number) => {
     try {
-      await handleUpdateOrderStatus(parseInt(orderId), "In progress");
+      await handleUpdateOrderStatus(orderId, "In progress");
     } catch (error) {
       console.error("Failed to accept order:", error);
     }
   };
 
-  const handleCancel = (orderId: string) => {
-    setSelectedOrderId(parseInt(orderId));
+  const handleCancel = (orderId: number) => {
+    setSelectedOrderId(orderId);
     setShowCancelDialog(true);
   };
 
   const confirmCancel = async () => {
-    if (selectedOrderId) {
+    if (selectedOrderId !== null) { // Check for null explicitly
       try {
-        await handleUpdateOrderStatus(selectedOrderId, "Cancelled");
+        await handleUpdateOrderStatus(selectedOrderId, "Canceled");
         setShowCancelDialog(false);
         setSelectedOrderId(null);
       } catch (error) {
@@ -207,16 +134,16 @@ export default function AllOrders() {
     }
   };
 
-  const handleDone = async (orderId: string) => {
+  const handleDone = async (orderId: number) => {
     try {
-      await handleUpdateOrderStatus(parseInt(orderId), "Delivered");
+      await handleUpdateOrderStatus(orderId, "Delivered");
     } catch (error) {
       console.error("Failed to complete order:", error);
     }
   };
 
-  const handleViewDetails = (orderId: string) => {
-    const order = orders.find((o) => o.id === parseInt(orderId));
+  const handleViewDetails = (orderId: number) => {
+    const order = orders.find((o) => o.id === orderId);
     setSelectedOrder(order || null);
     setShowDetailsPopup(true);
   };
@@ -231,10 +158,8 @@ export default function AllOrders() {
   };
 
   // Get the next status for an order
-  const getNextStatus = (currentStatus: string): string | null => {
-    return (
-      STATE_TRANSITIONS[currentStatus as keyof typeof STATE_TRANSITIONS] || null
-    );
+  const getNextStatus = (currentStatus: OrderStatus): OrderStatus | null => {
+    return STATE_TRANSITIONS[currentStatus] || null;
   };
 
   // Get user info from localStorage with proper error handling
@@ -405,8 +330,9 @@ export default function AllOrders() {
                                     <>
                                       <h5>Ingredients:</h5>
                                       <ul>
+                                        {/* Ingredient type inferred correctly now */}
                                         {item.product.ingredients.map(
-                                          (ingredient) => (
+                                          (ingredient: Ingredient) => ( 
                                             <li key={ingredient.id}>
                                               {ingredient.name}
                                             </li>

@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/TermsAndConditions.css";
+import "../../styles/TermsAndConditions.css";
 import { FaArrowLeft } from "react-icons/fa"; // This will be used for the back button
-import Navbar from "../components/navbar/Navbar";
+import Navbar from "../../components/navbar/Navbar";
 
 const TermsAndConditions: React.FC = () => {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const TermsAndConditions: React.FC = () => {
             >
               <FaArrowLeft />
             </button>
-            <h1>Privacy & Policy</h1>
+            <h1>Terms & Conditions</h1>
           </div>
           <p>
             Welcome to <strong>GoOrder</strong>, a mobile application that

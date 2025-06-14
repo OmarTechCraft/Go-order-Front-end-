@@ -1,283 +1,334 @@
-/* General Layout */
-.image-generator-container {
+/* src/Pages/ImageGenerator/ImageGenerator.css */
+
+/* --- Color Variables (New Palette) --- */
+:root {
+  --ig-primary-dark-purple: #6A0DAD; /* Deep rich purple (like sidebar/logo) */
+  --ig-primary-light-purple: #9b59b6; /* Lighter shade of primary */
+  --ig-accent-purple-gradient-start: #7d3f98; /* Gradient start */
+  --ig-accent-purple-gradient-end: #ac79c2; /* Gradient end, more "whited" */
+  --ig-bg-light-gray: #f8f8fc; /* Very subtle, cool off-white background */
+  --ig-text-dark: #333333;
+  --ig-text-medium: #555555;
+  --ig-text-light: #888888;
+  --ig-border-light: #e0e0f0; /* Soft purple-tinted border */
+  --ig-error-red: #e74c3c;
+  --ig-success-green: #2ecc71;
+}
+
+
+/* --- Main Layout --- */
+.ig-main-layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #f5f7fa;
+  background-color: var(--ig-bg-light-gray);
 }
 
-.main-content {
-  flex: 1;
-  padding-top: 60px; /* Match Nav_2 header height */
+/* This div holds the content of the image generator page */
+.ig-content-wrapper {
+  flex-grow: 1;
+  padding-top: 40px;
+  padding-left: 260px;
   display: flex;
   flex-direction: column;
-  overflow-y: auto; /* Allow scrolling on the main content */
+  align-items: center;
+  justify-content: flex-start; /* Ensure content starts from the top */
+  overflow-y: auto;
   position: relative;
+  transition: padding-left 0.3s ease-in-out, opacity 0.5s ease-out, transform 0.5s ease-out;
+  box-sizing: border-box;
+  opacity: 0;
+  transform: translateY(20px);
 }
 
-.content-area {
-  flex: 1;
-  padding: 24px;
-  padding-bottom: 60px; /* Add padding at the bottom for better spacing */
-  animation: fadeIn 0.5s ease-out;
+.ig-content-wrapper.ig-show-content {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-/* Card styling */
-.card {
-  background-color: white;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  width: 100%;
-  max-width: 1100px;
+/* --- Generator Card --- */
+.ig-generator-card {
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 1200px;
   padding: 40px;
-  margin: 0 auto; /* Center the card */
+  margin-bottom: 50px;
+  margin-top: 30px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  margin-top: 50px;
+  animation: igZoomIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; /* Softer ease for zoomIn */
 }
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+.ig-generator-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
 }
 
-.header {
-  .header {
-    text-align: center;
-    /* Remove any fixed/absolute positioning */
-    position: static;
-    padding-top: 0;
-  }
-}
-
-.title {
-  font-size: 42px;
-  font-weight: 800;
-  background: linear-gradient(135deg, #bb41d0, #8b5cf6);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 6px;
-}
-
-.subtitle {
-  font-size: 24px;
-  font-weight: 600;
-  color: #4b5563;
-  margin-top: 4px;
-  opacity: 0.85;
-}
-
-/* Content layout */
-.content {
+.ig-card-inner {
   display: flex;
   flex-direction: row;
-  gap: 48px;
-  align-items: center;
+  gap: 50px;
+  align-items: flex-start; /* Aligns content blocks to the top */
   justify-content: space-between;
 }
 
-/* Image container styling */
-.image-container {
+/* --- Image Display Area --- */
+.ig-image-display-area {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  animation: fadeInLeft 0.8s ease-out;
+  justify-content: flex-start; /* Aligns image frame to the top within its area */
+  animation: igFadeInLeft 0.8s ease-out;
+  padding-top: 5px; /* Small padding to align with heading's top line visually */
 }
 
-.image-frame {
-  width: 350px;
-  height: 350px;
-  border-radius: 16px;
+.ig-image-frame {
+  width: 450px;
+  height: 480px;
+  border-radius: 20px;
   overflow: hidden;
-  background-color: #f4f0ff;
+  background-color: var(--ig-bg-light-gray);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 16px rgba(139, 92, 246, 0.15);
-  transition: all 0.4s ease;
+  box-shadow: 0 10px 25px rgba(106, 13, 173, 0.2);
+  transition: all 0.4s ease-out; /* Smoother transitions */
   position: relative;
+  border: 3px solid transparent;
 }
 
-.image-frame::before {
+.ig-image-frame::before {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     135deg,
-    rgba(187, 65, 208, 0.1),
-    rgba(139, 92, 246, 0.1)
+    rgba(106, 13, 173, 0.05),
+    rgba(175, 82, 231, 0.05)
   );
   z-index: 0;
+  transition: opacity 0.3s ease-out; /* Smooth transition for background shimmer */
 }
 
-.image-frame.loading {
-  background-color: #f0e7ff;
-  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.25);
+.ig-loading-frame {
+  background-color: #f0e6fa; /* Lighter purple when loading */
+  box-shadow: 0 10px 30px rgba(106, 13, 173, 0.3);
   transform: scale(1.02);
+  border-color: var(--ig-primary-dark-purple);
+  animation: igPulseBorder 1.5s infinite alternate ease-in-out; /* Subtle pulse animation */
 }
 
-.image-frame.generated {
+.ig-generated-frame {
   transform: scale(1.02);
-  box-shadow: 0 12px 28px rgba(139, 92, 246, 0.25);
+  box-shadow: 0 15px 35px rgba(106, 13, 173, 0.35);
+  border-color: var(--ig-primary-light-purple);
 }
 
-.image {
-  width: 65%;
-  height: 65%;
-  object-fit: contain;
+.ig-placeholder-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  text-align: center;
   z-index: 1;
-  transition: transform 0.4s ease;
+  animation: igFadeIn 0.8s ease-out; /* Fade in the placeholder */
 }
 
-.image:hover {
+.ig-placeholder-image {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+  opacity: 0.7;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother ease */
+}
+
+.ig-placeholder-image:hover {
   transform: scale(1.05);
 }
 
-.generated-image {
+.ig-placeholder-text {
+  color: var(--ig-text-light);
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+.ig-generated-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   z-index: 1;
-  animation: zoomIn 0.5s ease-out;
+  animation: igZoomIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother ease */
 }
 
-.image-actions {
+.ig-image-actions {
   display: flex;
-  gap: 12px;
-  margin-top: 16px;
-  animation: fadeIn 0.5s ease-out;
+  gap: 15px;
+  margin-top: 25px;
+  animation: igFadeIn 0.6s ease-out;
 }
 
-.action-button {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
-  background-color: white;
-  font-size: 14px;
-  font-weight: 500;
-  color: #555;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.action-button:hover {
-  background-color: #f5f5f5;
-  border-color: #bb41d0;
-  color: #bb41d0;
-}
-
-.action-button svg {
-  transition: transform 0.2s ease;
-}
-
-.action-button:hover svg {
-  transform: translateY(-2px);
-}
-
-/* Form container styling */
-.form-container {
-  flex: 1;
-  animation: fadeInRight 0.8s ease-out;
-}
-
-.tagline {
-  font-size: 18px;
+.ig-action-button {
+  padding: 12px 25px;
+  border-radius: 12px;
+  border: none;
+  font-size: 1.0em;
   font-weight: 600;
-  color: #4b5563;
-  margin-bottom: 24px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out, transform 0.1s ease-out; /* Faster transform for click feedback */
+  background-color: #f0f0f0;
+  color: var(--ig-text-dark);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.ig-action-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.ig-action-button:active {
+    transform: translateY(0px); /* Reset on active for click feedback */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+
+.ig-download-button {
+  background-color: var(--ig-primary-light-purple);
+  color: white;
+}
+
+.ig-download-button:hover {
+  background-color: var(--ig-primary-dark-purple);
+}
+
+.ig-new-image-button {
+  background-color: var(--ig-border-light);
+  color: var(--ig-text-medium);
+}
+
+.ig-new-image-button:hover {
+  background-color: #d0d0e0;
+}
+
+
+/* --- Prompt Input and Controls Area --- */
+.ig-input-controls-area {
+  flex: 1.2;
+  animation: igFadeInRight 0.8s ease-out;
+}
+
+/* New internal heading */
+.ig-internal-heading {
+  font-size: 2.2em;
+  font-weight: 700;
+  color: var(--ig-primary-dark-purple);
+  margin-bottom: 20px;
+  text-align: left; /* Align to left to match prompt input */
+  line-height: 1.2;
+}
+
+
+.ig-tagline {
+  font-size: 1.2em;
+  font-weight: 600;
+  color: var(--ig-text-medium);
+  margin-bottom: 30px;
   position: relative;
-  padding-left: 20px;
+  padding-left: 30px;
   line-height: 1.6;
 }
 
-.tagline::before {
+.ig-tagline::before {
+  content: "❝";
   position: absolute;
   left: 0;
   top: 0;
-  font-size: 36px;
-  color: #bb41d0;
-  opacity: 0.7;
-  line-height: 1;
+  font-size: 3em;
+  color: var(--ig-primary-light-purple);
+  opacity: 0.8;
+  line-height: 0.8;
+  font-family: serif;
 }
 
-.label {
+.ig-label {
   font-weight: 600;
-  color: #4b5563;
-  margin-bottom: 12px;
+  color: var(--ig-text-dark);
+  margin-bottom: 15px;
   display: block;
-  font-size: 16px;
+  font-size: 1.1em;
 }
 
-.input-group {
-  margin-bottom: 24px;
+.ig-input-group {
+  margin-bottom: 25px;
   position: relative;
 }
 
-.input {
+.ig-prompt-input {
   width: 100%;
-  padding: 14px 18px;
-  border: 2px solid #e0e7ff;
-  border-radius: 12px;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  background-color: #f9faff;
+  padding: 15px 20px;
+  border: 2px solid var(--ig-border-light);
+  border-radius: 15px;
+  font-size: 1.05em;
+  transition: all 0.3s ease-in-out; /* Smoother transitions */
+  background-color: #fdfefe;
+  min-height: 100px;
+  resize: vertical;
+  font-family: 'Inter', sans-serif;
 }
 
-.input:focus {
+.ig-prompt-input:focus {
   outline: none;
-  border-color: #8b5cf6;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+  border-color: var(--ig-primary-light-purple);
+  box-shadow: 0 0 0 4px rgba(106, 13, 173, 0.25);
   background-color: white;
 }
 
-.input:hover {
-  border-color: #c4b5fd;
+.ig-prompt-input:hover {
+  border-color: var(--ig-primary-light-purple);
 }
 
-.error {
-  color: #ef4444;
-  font-size: 14px;
+.ig-error-message {
+  color: var(--ig-error-red);
+  font-size: 0.9em;
   margin-top: 8px;
-  animation: shake 0.4s ease-in-out;
+  animation: igShake 0.4s ease-in-out;
 }
 
-.button {
+.ig-generate-button {
   width: 100%;
-  background: linear-gradient(135deg, #bb41d0, #8b5cf6);
+  background: linear-gradient(135deg, var(--ig-accent-purple-gradient-start), var(--ig-accent-purple-gradient-end));
   color: white;
-  font-weight: 600;
-  padding: 14px 24px;
-  border-radius: 12px;
+  font-weight: 700;
+  padding: 16px 28px;
+  border-radius: 15px;
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.1s ease-out; /* Smoother ease for button */
   position: relative;
   overflow: hidden;
-  font-size: 16px;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+  font-size: 1.1em;
+  letter-spacing: 0.8px;
+  box-shadow: 0 6px 18px rgba(106, 13, 173, 0.4);
 }
 
-.button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+.ig-generate-button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 22px rgba(106, 13, 173, 0.5);
 }
 
-.button:active:not(:disabled) {
-  transform: translateY(1px);
+.ig-generate-button:active:not(:disabled) {
+  transform: translateY(0px); /* Reset on active for click feedback */
+  box-shadow: 0 4px 10px rgba(106, 13, 173, 0.3);
 }
 
-.button:disabled {
-  background: linear-gradient(135deg, #d8b4df, #c4b5fd);
+.ig-generate-button:disabled {
+  background: linear-gradient(135deg, #b0a0e7, #c1b9ff);
   cursor: not-allowed;
   box-shadow: none;
 }
 
-.button::before {
+.ig-generate-button::before {
   content: "";
   position: absolute;
   top: 0;
@@ -287,231 +338,277 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.3),
     transparent
   );
   transition: all 0.6s;
 }
 
-.button:hover::before {
+.ig-generate-button:hover::before {
   left: 100%;
 }
 
-.button.loading::before {
-  animation: shimmer 1.5s infinite;
+.ig-loading-button::before {
+  animation: igShimmer 1.5s infinite;
 }
 
-/* Loading spinner */
-.loading-spinner {
+/* Loading spinner for image frame */
+.ig-loading-spinner-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 2;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
-.spinner {
+.ig-spinner {
   display: inline-block;
-  width: 60px;
-  height: 60px;
-  border: 3px solid rgba(139, 92, 246, 0.1);
-  border-left-color: #8b5cf6;
+  width: 70px;
+  height: 70px;
+  border: 4px solid rgba(106, 13, 173, 0.15);
+  border-left-color: var(--ig-primary-dark-purple);
+  border-top-color: var(--ig-primary-dark-purple);
   border-radius: 50%;
-  animation: spin 1.2s linear infinite;
+  animation: igSpin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
 
-.loading-text {
-  margin-top: 16px;
-  color: #8b5cf6;
-  font-size: 16px;
-  font-weight: 500;
-}
-
-/* Prompt suggestions */
-.prompt-suggestions,
-.recent-prompts {
-  margin-top: 24px;
-}
-
-.suggestion-label,
-.recent-label {
-  font-size: 14px;
+.ig-loading-text {
+  margin-top: 20px;
+  color: var(--ig-primary-dark-purple);
+  font-size: 1.2em;
   font-weight: 600;
-  color: #555;
-  margin-bottom: 8px;
 }
 
-.suggestion-tags,
-.prompt-tags {
+/* Prompt sections */
+.ig-recent-prompts-section,
+.ig-prompt-suggestions-section {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid var(--ig-border-light);
+}
+
+.ig-section-label {
+  font-size: 0.95em;
+  font-weight: 600;
+  color: var(--ig-text-medium);
+  margin-bottom: 15px;
+}
+
+.ig-prompt-tag-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 }
 
-.suggestion-tag,
-.prompt-tag {
-  display: inline-block;
-  padding: 6px 12px;
-  background-color: #f3f4f6;
-  border-radius: 20px;
-  font-size: 13px;
-  color: #4b5563;
+.ig-prompt-tag {
+  display: inline-flex; /* Use inline-flex for text and button */
+  align-items: center;
+  padding: 8px 16px;
+  background-color: #eef2ff;
+  border-radius: 25px;
+  font-size: 0.9em;
+  color: #5c6bc0;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid var(--ig-border-light);
+  gap: 6px; /* Space between text and copy button */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08); /* Subtle shadow */
 }
 
-.suggestion-tag:hover {
-  background-color: #e9d5ff;
-  color: #6d28d9;
-}
-.suggestion-tag {
-  background-color: #f0e7ff;
-  color: #7c3aed;
-  border: 1px solid #ddd1fb;
-}
-.prompt-tag {
-  background-color: #f0e7ff;
-  color: #7c3aed;
-  border: 1px solid #ddd1fb;
+.ig-prompt-tag:hover {
+  background-color: #dadafa;
+  color: #483d8b;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
-.prompt-tag:hover {
-  background-color: #e9d5ff;
-  color: #6d28d9;
+.ig-copy-prompt-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #888; /* Default icon color */
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease-in-out;
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.ig-copy-prompt-button:hover {
+  color: var(--ig-primary-light-purple); /* Highlight on hover */
 }
 
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Style for "Copied!" text */
+.ig-copy-prompt-button span {
+  font-size: 0.8em;
+  font-weight: 600;
+  color: var(--ig-success-green);
+  transition: opacity 0.3s ease-out;
 }
 
-@keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+
+.ig-suggestion-tag {
+    background-color: #f3f4f6;
+    color: #4b5563;
+    border-color: #e0e0e0;
 }
 
-@keyframes fadeInRight {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.ig-suggestion-tag:hover {
+    background-color: #e0e0e0;
+    color: #374151;
 }
 
-@keyframes zoomIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+/* --- Animations --- */
+@keyframes igFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+@keyframes igFadeInDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes shimmer {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
-  }
+@keyframes igFadeInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
-@keyframes shake {
-  0%,
-  100% {
-    transform: translateX(0);
+@keyframes igFadeInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes igZoomIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes igSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes igShimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes igShake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@keyframes igPulseBorder { /* New animation for loading frame */
+  0% { border-color: rgba(106, 13, 173, 0.5); }
+  50% { border-color: rgba(106, 13, 173, 1); }
+  100% { border-color: rgba(106, 13, 173, 0.5); }
+}
+
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1200px) {
+  .ig-generator-card {
+    padding: 30px;
   }
-  10%,
-  30%,
-  50%,
-  70%,
-  90% {
-    transform: translateX(-5px);
+  .ig-image-frame {
+    width: 400px;
+    height: 500px; /* Adjusted for consistency: 100px taller than width */
   }
-  20%,
-  40%,
-  60%,
-  80% {
-    transform: translateX(5px);
+  .ig-internal-heading {
+    font-size: 1.8em;
   }
 }
 
-/* Responsive adjustments */
-@media (max-width: 900px) {
-  .content {
+@media (max-width: 992px) { /* Tablet and smaller desktops */
+  .ig-content-wrapper {
+    padding-left: 80px;
+    padding-right: 20px;
+    padding-top: 80px;
+  }
+  .ig-card-inner {
     flex-direction: column;
+    gap: 40px;
+    align-items: center; /* Center items when stacked vertically */
   }
+  .ig-image-display-area {
+    padding-top: 0; /* Remove top padding when stacked */
+  }
+  .ig-image-frame {
+    width: 380px;
+    height: 480px; /* Adjusted for consistency: 100px taller than width */
+  }
+  .ig-tagline {
+    padding-left: 20px;
+    font-size: 1.1em;
+    text-align: center; /* Center tagline when stacked */
+  }
+  .ig-tagline::before {
+    position: static; /* Remove absolute positioning */
+    display: block; /* Make it take up space */
+    margin-bottom: 10px; /* Add space below quote */
+  }
+  .ig-internal-heading {
+    text-align: center; /* Center internal heading when stacked */
+  }
+}
 
-  .card {
-    padding: 24px;
+@media (max-width: 768px) { /* Mobile devices */
+  .ig-content-wrapper {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 70px;
+  }
+  .ig-generator-card {
+    padding: 20px;
+    width: 100%;
+    margin-top: 20px;
+  }
+  .ig-internal-heading {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+  }
+  .ig-image-frame {
+    width: 100%;
+    max-width: 320px;
+    height: 420px; /* Adjusted for consistency: ~100px taller than max-width */
+    margin-bottom: 25px;
+  }
+  .ig-action-button {
+    padding: 10px 20px;
+    font-size: 0.9em;
+  }
+  .ig-tagline {
+    font-size: 1em;
+    padding-left: 15px;
+  }
+  .ig-tagline::before {
+    font-size: 2em;
+  }
+  .ig-prompt-input {
+    min-height: 80px;
+    font-size: 0.95em;
+  }
+  .ig-generate-button {
+    padding: 14px 20px;
+    font-size: 1em;
+  }
+  .ig-section-label {
+    font-size: 0.9em;
+  }
+  .ig-prompt-tag {
+    padding: 7px 14px;
+    font-size: 0.85em;
   }
 }
 
-@media (max-width: 768px) {
-  .image-frame {
-    width: 280px;
-    height: 280px;
-    margin-bottom: 24px;
-  }
-
-  .title {
-    font-size: 32px;
-  }
-
-  .subtitle {
-    font-size: 20px;
-  }
+/* Optional: If Sidebar_2 can expand/collapse, adjust padding-left accordingly */
+/*
+.ig-main-layout.sidebar-collapsed .ig-content-wrapper {
+  padding-left: 80px; // Adjust if your collapsed sidebar is 80px
 }
-
-/* Adjust for the nav and sidebar integration */
-@media (min-width: 1024px) {
-  .main-content {
-    flex: 1;
-    padding-top: 60px; /* Match Nav_2 header height */
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    position: relative;
-    width: 80%;
-  }
-
-  .main-content.sidebar-expanded {
-    margin-left: 2000px; /* Match expanded sidebar width */
-  }
-}
+*/

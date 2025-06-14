@@ -1,16 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
-import CustomInputField from "../components/InputField";
-import CustomButton from "../components/Button";
+import CustomInputField from "../../components/InputField";
+import CustomButton from "../../components/Button";
 import { FaGoogle, FaFacebookF, FaApple, FaSpinner } from "react-icons/fa";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import "../styles/login.css";
+import "../../styles/login.css";
 import { Link, useNavigate } from "react-router-dom";
 import {
   login,
   forgotPassword,
   confirmEmailByCode,
   resetPassword,
-} from "../service/authentication_Service";
+} from "../../service/authentication_Service";
 
 interface LoginError {
   response?: {

@@ -1,11 +1,11 @@
 // DeliverWithUs.tsx
 import React, { useRef, useState } from "react";
-import CustomInputField from "../components/InputField";
-import CustomButton from "../components/Button";
+import CustomInputField from "../../components/InputField";
+import CustomButton from "../../components/Button";
 import { FaGoogle, FaFacebookF, FaApple, FaSpinner } from "react-icons/fa";
-import "../styles/deliverWithUs.css";
+import "../../styles/deliverWithUs.css";
 import { Link } from "react-router-dom";
-import axiosInstance from "../api/api";
+import axiosInstance from "../../api/api";
 
 interface FormData {
   firstName: string;

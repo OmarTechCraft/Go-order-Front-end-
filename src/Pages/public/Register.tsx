@@ -1,10 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
-import CustomInputField from "../components/InputField";
-import CustomButton from "../components/Button";
+import CustomInputField from "../../components/InputField";
+import CustomButton from "../../components/Button";
 import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
-import "../styles/register.css";
+import "../../styles/register.css";
 import { Link, useNavigate } from "react-router-dom"; // Import Link from react-router-dom
-import api from "../api/api"; // Your API client
+import api from "../../api/api"; // Your API client
 
 interface RegisterFormData {
   name: string;

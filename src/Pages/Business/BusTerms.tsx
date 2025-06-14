@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./BusTerms.css";
+import "../../styles/BusTerms.css";
 import { FaArrowLeft } from "react-icons/fa"; // This will be used for the back button
 import Navbar from "../../components/navbar copy/Navbar";
 import Sidebar_2 from "../../components/Sidebar_2/Sidebar_2";

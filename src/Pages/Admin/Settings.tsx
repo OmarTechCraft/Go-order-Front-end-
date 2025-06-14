@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/Settings.css";
-import Navbar from "../components/navbar/Navbar";
+import "../../styles/Settings.css";
+import Navbar from "../../components/navbar/Navbar";
 import { useTranslation } from "react-i18next";
 
 const Settings = () => {
