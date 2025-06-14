@@ -37,25 +37,21 @@ img {
     justify-content: flex-start; /* Align content to the top initially */
     padding: 2.5rem 1rem;
     margin: 0;
-    overflow: hidden; /* Important for absolute positioning and background image */
     box-sizing: border-box;
     text-align: center;
     /* Base padding-top for mobile - adjusted in specific media queries */
     padding-top: 80px; /* Default space for navbar on mobile */
     padding-bottom: 2rem; /* Ensure space at the bottom on mobile */
+
+    /* KEY CHANGES FOR BACKGROUND IMAGE */
+    background-image: url('/images/main.jpg');
+    background-size: cover; /* This makes the image cover the entire container */
+    background-position: center top; /* Positions the image from the top center */
+    background-repeat: no-repeat; /* Prevents the image from tiling */
+    overflow: hidden; /* Important for preventing scroll if image overflows slightly */
 }
 
-.background-image {
-    width: 100%;
-    height: 100%; /* Image covers the full height of the container on mobile */
-    object-fit: cover;
-    object-position: center top; /* Focuses the image on the top part when covered */
-    position: absolute;
-    top: 0; /* Positioned at the very top of the .offer-container */
-    left: 0;
-    z-index: -1; /* Ensure it stays behind text */
-    margin-top: 0; /* No margin-top for mobile */
-}
+/* REMOVED: .background-image rule as the img tag is no longer used for the background */
 
 .offer-text {
     position: relative; /* Keep relative for mobile flow within flex container */
@@ -196,13 +192,8 @@ img {
         justify-content: flex-start;
         padding-top: 2.5rem; /* Original padding-top for content positioning */
         padding-bottom: 5rem; /* Ensures background image can extend */
-    }
-
-    .background-image {
-        height: 110%; /* Makes the image taller than the container to extend downwards */
-        top: 0; /* Positioned at the top of the .offer-container */
-        margin-top: 60px; /* Shifts image down to start exactly below a 60px fixed Navbar */
-        object-position: center top; /* Ensure top of image is visible and not cropped on desktop */
+        /* Adjust background position for desktop to account for fixed Navbar */
+        background-position: center 60px; /* Shifts background down by 60px to start below a 60px fixed Navbar */
     }
 
     .offer-text {
@@ -232,7 +223,6 @@ img {
 
     .tagline {
         text-align: left;
-  
     }
 
     .cta-reviews {
@@ -256,13 +246,7 @@ img {
         padding-top: 100px; /* Increased padding-top for tablets to push content and image down */
         min-height: 75vh; /* Increase min-height to accommodate shifted content/image */
         padding-bottom: 2rem; /* Ensure space at the bottom on tablets */
-    }
-
-    .background-image {
-        height: 100%; /* Image covers container height */
-        top: 0;
-        margin-top: 0;
-        object-position: center top; /* Ensure top of image is visible on tablets */
+        background-position: center top; /* Ensure background starts from top on tablets */
     }
 
     .offer-text {
@@ -271,7 +255,7 @@ img {
         margin-top: 0; /* Reset margin-top on tablets */
     }
 .offer-heading {
-   margin-top: 70px;
+    margin-top: 70px;
 }
 
     .cta-reviews {
@@ -292,13 +276,6 @@ img {
         /* KEY CHANGE FOR SMALL MOBILE: Shift text content down using padding-top */
         padding-top: 8rem; /* Increased to push text well below background image on small mobiles */
         margin-top: 0;
-    }
-
-    .background-image {
-        height: 100%; /* Image covers container height */
-        top: 0;
-        margin-top: 0;
-        object-position: center top; /* Ensure top of image is visible on small mobiles */
     }
 
     .cta-reviews {
@@ -497,12 +474,14 @@ img {
     z-index: 1;
 }
 
-/* ========== FIFTH SECTION - We Deliver Section (ORIGINAL) ========== */
+/* ========== FIFTH SECTION - We Deliver Section (MODIFIED) ========== */
 .phase5-container {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    /* REMOVED: justify-content: space-between; */
+    justify-content: center; /* ALIGNED ITEMS TO THE CENTER OF THE CONTAINER */
+    gap: 8rem; /* ADDED: This creates the gap between the image and text */
     width: 100%;
     padding: 3.125rem 2rem;
     background-color: white;
@@ -585,7 +564,7 @@ img {
 .phase5-content {
     flex: 1 1 45%;
     text-align: left;
-    margin-left: 0;
+    margin-left: 0; /* Ensures no unintended left margin */
     min-width: 300px;
     padding-right: 1rem;
     box-sizing: border-box;
@@ -995,6 +974,11 @@ p a:hover {
     .phase5-content {
         order: 2;
     }
+    /* Responsive gap adjustment for column layout */
+    .phase5-container {
+        gap: 2rem; /* Reduce gap when items stack vertically */
+    }
+
 
     .content-wrapper {
         flex-direction: column;
@@ -1103,6 +1087,14 @@ p a:hover {
         max-width: 100%;
         padding: 0 0.5rem;
     }
+    /* Responsive gap adjustment for very small screens */
+    .phase5-container {
+        gap: 1.5rem; /* Further reduce gap on very small screens */
+    }
+    .phase5-image {
+        margin-bottom: 1.5rem;
+    }
+
 
     .download-btn {
         width: 95%;

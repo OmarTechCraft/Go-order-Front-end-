@@ -20,11 +20,7 @@ const Home: React.FC = () => {
 
       {/* First Section - OfferSection */}
       <div className="offer-container">
-        <img
-          className="background-image"
-          src="images/main.jpg"
-          alt="Offer Background"
-        />
+        {/* The background image is now handled by CSS on .offer-container */}
         <div className="offer-text">
           <div className="offer-title">
             <h1 className="offer-heading">Claim Best Offer</h1>
