@@ -1,20 +1,23 @@
 import React, { useState, useRef, useEffect } from "react";
 import CustomInputField from "../../components/InputField";
-import CustomButton from "../../components/Button";
+import CustomButton from "../../components/Button"; // This import will now correctly type CustomButton
 import { FaGoogle, FaFacebookF, FaApple, FaSpinner } from "react-icons/fa";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import "../../styles/login.css";
+import "../../styles/login.css"; // Ensure this CSS file is updated if needed
 import { Link, useNavigate } from "react-router-dom";
 import {
   login,
   forgotPassword,
-  confirmEmailByCode,
-  resetPassword,
+  // Removed confirmEmailByCode, resetPassword as they are now handled by the /password-reset page
 } from "../../service/authentication_Service";
 
 interface LoginError {
   response?: {
     status: number;
+    data?: {
+      // Added data to the error response interface
+      message?: string;
+    };
   };
 }
 
@@ -27,28 +30,16 @@ const MyLogin: React.FC = () => {
   const [passwordError, setPasswordError] = useState("");
   const [loginError, setLoginError] = useState("");
 
-  const [showModal, setShowModal] = useState(false);
-  const [showOTPModal, setShowOTPModal] = useState(false);
-  const [showNewPasswordModal, setShowNewPasswordModal] = useState(false);
-  const [showSpinner, setShowSpinner] = useState(false);
+  const [showModal, setShowModal] = useState(false); // Controls the "Forgot Password" email input modal
+  const [showSpinner, setShowSpinner] = useState(false); // For general loading indications
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // For login password visibility
 
-  const [forgotEmail, setForgotEmail] = useState("");
-  const [forgotEmailError, setForgotEmailError] = useState("");
-  const [modalAnimation, setModalAnimation] = useState("");
+  const [forgotEmail, setForgotEmail] = useState(""); // Email for forgot password flow
+  const [forgotEmailError, setForgotEmailError] = useState(""); // Error for forgot password email input
+  const [modalAnimation, setModalAnimation] = useState(""); // For modal entry/exit animations
+  const [emailSentMessage, setEmailSentMessage] = useState<string | null>(null); // Message after sending forgot password email
 
-  // States for forgot password flow
-  const [otpCode, setOtpCode] = useState("");
-  const [otpError, setOtpError] = useState("");
-  const [passwordResetError, setPasswordResetError] = useState("");
-  const [userId, setUserId] = useState("");
-  const [resetToken, setResetToken] = useState("");
-
-  const otpRefs = useRef<HTMLInputElement[]>([]);
   const formRef = useRef<HTMLDivElement>(null);
 
   // Animation effect when component mounts
@@ -58,25 +49,23 @@ const MyLogin: React.FC = () => {
     }
   }, []);
 
-  const validateForm = () => {
+  // Validation for the main login form
+  const validateLoginForm = () => {
     let isValid = true;
 
-    // Reset errors
     setEmailError("");
     setPasswordError("");
     setLoginError("");
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) {
       setEmailError("Email is required");
       isValid = false;
     } else if (!emailRegex.test(email)) {
-      setEmailError("Please enter a valid email");
+      setEmailError("Please enter a valid email address");
       isValid = false;
     }
 
-    // Password validation
     if (!password) {
       setPasswordError("Password is required");
       isValid = false;
@@ -85,235 +74,109 @@ const MyLogin: React.FC = () => {
     return isValid;
   };
 
+  // Handles the main login process
   const handleLogin = async () => {
-    if (!validateForm()) return;
+    if (!validateLoginForm()) return;
 
     setShowSpinner(true);
 
     try {
       const userData = await login(email, password);
 
-      // Store token/user data in localStorage for session persistence
       localStorage.setItem("token", userData.token);
       localStorage.setItem("user", JSON.stringify(userData));
+      localStorage.setItem("id", userData.id); // Assuming id is always available for storing
 
-      // Redirect based on user role
-      const role = userData.role.toLowerCase();
+      const role = userData.role?.toLowerCase(); // Use optional chaining for safety
       if (role === "super_admin" || role === "admin") {
         navigate("/dashboard");
       } else if (role === "business") {
         navigate("/BusDashboard");
       } else {
-        navigate("/");
+        navigate("/"); // Default redirect for other roles
       }
     } catch (err: unknown) {
       const error = err as LoginError;
       if (error.response) {
         const status = error.response.status;
+        // Check if there's a specific error message from the backend
+        const errorMessage =
+          error.response.data?.message || "An error occurred during login.";
         if (status === 400 || status === 401) {
-          setLoginError("Invalid email or password");
+          setLoginError(errorMessage);
         } else if (status === 404) {
-          setLoginError("User not found");
+          setLoginError("User not found.");
         } else {
-          setLoginError("An error occurred during login");
+          setLoginError("An unexpected error occurred. Please try again.");
         }
       } else {
         setLoginError("Network error. Please try again later.");
       }
-      console.error(err);
+      console.error("Login failed:", err);
     } finally {
       setShowSpinner(false);
     }
   };
 
+  // Opens the "Forgot Password" email input modal
   const openModal = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     setModalAnimation("modal-enter");
     setShowModal(true);
-    // Reset all forgot password states
+    // Reset states for forgot password flow
     setForgotEmail("");
     setForgotEmailError("");
-    setOtpCode("");
-    setOtpError("");
-    setNewPassword("");
-    setConfirmPassword("");
-    setPasswordResetError("");
-    setUserId("");
-    setResetToken("");
+    setEmailSentMessage(null); // Ensure no previous success message is shown
   };
 
+  // Closes the "Forgot Password" email input modal
   const closeModal = () => {
     setModalAnimation("modal-exit");
     setTimeout(() => {
       setShowModal(false);
       setForgotEmail("");
       setForgotEmailError("");
-    }, 300);
+      setEmailSentMessage(null); // Clear the message when modal is fully closed
+    }, 300); // Match CSS animation duration
   };
 
-  // Step 1: Send forgot password email
-  const handleContinueForgotPassword = async () => {
+  // Handles sending the "Forgot Password" email
+  const handleSendForgotPasswordEmail = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(forgotEmail)) {
-      setForgotEmailError("Please enter a valid email");
+    if (!forgotEmail.trim() || !emailRegex.test(forgotEmail)) {
+      setForgotEmailError("Please enter a valid email address.");
       return;
     }
+    setForgotEmailError(""); // Clear previous error
 
     setShowSpinner(true);
     try {
       await forgotPassword(forgotEmail);
-      setModalAnimation("modal-exit");
-      setTimeout(() => {
-        setShowModal(false);
-        setModalAnimation("modal-enter");
-        setShowOTPModal(true);
-      }, 300);
-    } catch (error) {
-      setForgotEmailError("Failed to send reset code. Please try again.");
-      console.error("Forgot password error:", error);
-    } finally {
-      setShowSpinner(false);
-    }
-  };
-
-  const closeOTPModal = () => {
-    setModalAnimation("modal-exit");
-    setTimeout(() => {
-      setShowOTPModal(false);
-      setOtpCode("");
-      setOtpError("");
-    }, 300);
-  };
-
-  // Step 2: Verify OTP code
-  const handleContinueOTP = async () => {
-    if (!otpCode || otpCode.length !== 6) {
-      setOtpError("Please enter a valid 6-digit code");
-      return;
-    }
-
-    setShowSpinner(true);
-    try {
-      const response = await confirmEmailByCode(parseInt(otpCode));
-
-      // Store the userId and token from the response for password reset
-      if (response && response.userId && response.token) {
-        setUserId(response.userId);
-        setResetToken(response.token);
-      } else {
-        // If the response doesn't have userId/token, we'll need to handle this differently
-        // For now, we'll continue to the next step and handle the error there if needed
-        console.warn("No userId or token received from OTP verification");
+      // On success, display the message to check email
+      setEmailSentMessage(
+        "A password reset link has been sent to your email. Please check your inbox (and spam folder) to continue the password reset process."
+      );
+    } catch (error: unknown) {
+      const err = error as {
+        response?: { data?: string | { message?: string } };
+      };
+      let errorMessage = "Failed to send reset email. Please try again.";
+      if (err.response?.data) {
+        if (typeof err.response.data === "string") {
+          errorMessage = err.response.data;
+        } else if (err.response.data.message) {
+          errorMessage = err.response.data.message;
+        }
       }
-
-      setModalAnimation("modal-exit");
-      setTimeout(() => {
-        setShowOTPModal(false);
-        setModalAnimation("modal-enter");
-        setShowNewPasswordModal(true);
-      }, 300);
-    } catch (error) {
-      setOtpError("Invalid or expired code. Please try again.");
-      console.error("OTP verification error:", error);
+      setForgotEmailError(errorMessage);
+      setEmailSentMessage(null); // Ensure success message is not shown
+      console.error("Forgot password email send error:", error);
     } finally {
       setShowSpinner(false);
     }
   };
 
-  const closeNewPasswordModal = () => {
-    setModalAnimation("modal-exit");
-    setTimeout(() => {
-      setShowNewPasswordModal(false);
-      setNewPassword("");
-      setConfirmPassword("");
-      setPasswordResetError("");
-      setUserId("");
-      setResetToken("");
-    }, 300);
-  };
-
-  // Step 3: Reset password
-  const handleResetPassword = async () => {
-    // Validate passwords
-    if (!newPassword || newPassword.length < 6) {
-      setPasswordResetError("Password must be at least 6 characters long");
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      setPasswordResetError("Passwords do not match");
-      return;
-    }
-
-    setShowSpinner(true);
-    try {
-      await resetPassword(userId, resetToken, newPassword);
-
-      setModalAnimation("modal-exit");
-      setTimeout(() => {
-        setShowNewPasswordModal(false);
-        // Reset all states
-        setForgotEmail("");
-        setOtpCode("");
-        setNewPassword("");
-        setConfirmPassword("");
-        setUserId("");
-        setResetToken("");
-        setPasswordResetError("");
-        alert(
-          "Password reset successful! Please login with your new password."
-        );
-      }, 300);
-    } catch (error) {
-      setPasswordResetError("Failed to reset password. Please try again.");
-      console.error("Password reset error:", error);
-    } finally {
-      setShowSpinner(false);
-    }
-  };
-
-  const handleOTPChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    const value = e.target.value;
-    if (/^[0-9]$/.test(value)) {
-      const newOtpCode = otpCode.split("");
-      newOtpCode[index] = value;
-      setOtpCode(newOtpCode.join(""));
-
-      if (otpRefs.current[index + 1]) {
-        otpRefs.current[index + 1].focus();
-      }
-    } else if (value === "") {
-      const newOtpCode = otpCode.split("");
-      newOtpCode[index] = "";
-      setOtpCode(newOtpCode.join(""));
-
-      if (otpRefs.current[index - 1]) {
-        otpRefs.current[index - 1].focus();
-      }
-    }
-
-    // Clear error when user starts typing
-    if (otpError) {
-      setOtpError("");
-    }
-  };
-
-  const handleResendCode = async () => {
-    try {
-      setShowSpinner(true);
-      await forgotPassword(forgotEmail);
-      alert("New code sent to your email!");
-    } catch (error) {
-      alert("Failed to resend code. Please try again.");
-      console.error("Resend code error:", error);
-    } finally {
-      setShowSpinner(false);
-    }
-  };
-
+  // Toggles visibility of the login password field
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -322,7 +185,7 @@ const MyLogin: React.FC = () => {
     <>
       <div
         className={`auth-container login-page ${
-          showModal || showOTPModal || showNewPasswordModal ? "blur" : ""
+          showModal ? "blur" : "" // Only blur if the email modal is open
         }`}
       >
         <div className="auth-left">
@@ -382,7 +245,7 @@ const MyLogin: React.FC = () => {
               <a
                 href="#"
                 className="custom-forgot-link hover-effect"
-                onClick={openModal}
+                onClick={openModal} // Open the email input modal
               >
                 Forgot password?
               </a>
@@ -392,6 +255,7 @@ const MyLogin: React.FC = () => {
                 variant="primary"
                 className="sign-in-button button-pulse"
                 onClick={handleLogin}
+                disabled={showSpinner} // This prop will now be accepted
               />
 
               <div className="social-section">
@@ -428,42 +292,60 @@ const MyLogin: React.FC = () => {
         </div>
       </div>
 
-      {/* Step 1: Email Input Modal */}
+      {/* Forgot Password Email Input Modal */}
       {showModal && (
-        <div className="modal-overlay">
+        <div className="modal-overlay" onClick={closeModal}>
           <div
             className={`modal-content ${modalAnimation}`}
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="modal-title">Forgot password?</h2>
-            <p className="modal-subtitle">
-              Enter your email address and we'll send you a confirmation code to
-              reset your password.
-            </p>
+            {/* Conditional rendering based on whether email has been sent */}
+            {!emailSentMessage ? (
+              <>
+                <h2 className="modal-title">Forgot password?</h2>
+                <p className="modal-subtitle">
+                  Enter your email address to receive a password reset link.
+                </p>
 
-            <label className="modal-label">Email Address</label>
-            <input
-              type="email"
-              placeholder="username@gmail.com"
-              className="modal-input input-animate"
-              value={forgotEmail}
-              onChange={(e) => {
-                setForgotEmail(e.target.value);
-                setForgotEmailError("");
-              }}
-            />
-            {forgotEmailError && (
-              <p style={{ color: "red", marginTop: "5px" }}>
-                {forgotEmailError}
-              </p>
+                <label className="modal-label">Email Address</label>
+                <input
+                  type="email"
+                  placeholder="username@gmail.com"
+                  className="modal-input input-animate"
+                  value={forgotEmail}
+                  onChange={(e) => {
+                    setForgotEmail(e.target.value);
+                    setForgotEmailError("");
+                  }}
+                  disabled={showSpinner}
+                />
+                {forgotEmailError && (
+                  <p className="error-message">{forgotEmailError}</p>
+                )}
+
+                <CustomButton
+                  text={showSpinner ? "Sending..." : "Send Reset Link"}
+                  variant="primary"
+                  className="modal-button button-pulse"
+                  onClick={handleSendForgotPasswordEmail}
+                  disabled={showSpinner} // This prop will now be accepted
+                />
+              </>
+            ) : (
+              // Display message after email is sent
+              <>
+                <h2 className="modal-title success-email-sent">Email Sent!</h2>
+                <p className="modal-subtitle email-sent-message">
+                  {emailSentMessage}
+                </p>
+                <CustomButton
+                  text="Close"
+                  variant="primary"
+                  className="modal-button button-pulse"
+                  onClick={closeModal}
+                />
+              </>
             )}
-
-            <CustomButton
-              text="Continue"
-              variant="primary"
-              className="modal-button button-pulse"
-              onClick={handleContinueForgotPassword}
-            />
 
             <button className="modal-close-btn" onClick={closeModal}>
               ×
@@ -472,137 +354,7 @@ const MyLogin: React.FC = () => {
         </div>
       )}
 
-      {/* Step 2: OTP Input Modal */}
-      {showOTPModal && (
-        <div className="modal-overlay">
-          <div
-            className={`modal-content ${modalAnimation}`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="modal-title">Enter Verification Code</h2>
-            <p className="modal-subtitle">
-              A 6-digit code has been sent to {forgotEmail}
-            </p>
-
-            <div className="otp-input-container">
-              {Array.from({ length: 6 }, (_, i) => (
-                <input
-                  key={i}
-                  type="text"
-                  maxLength={1}
-                  className="otp-input input-animate"
-                  value={otpCode[i] || ""}
-                  ref={(ref) => {
-                    if (ref) otpRefs.current[i] = ref;
-                  }}
-                  onChange={(e) => handleOTPChange(e, i)}
-                />
-              ))}
-            </div>
-
-            {otpError && (
-              <p
-                style={{ color: "red", marginTop: "10px", textAlign: "center" }}
-              >
-                {otpError}
-              </p>
-            )}
-
-            <CustomButton
-              text="Continue"
-              variant="primary"
-              className="modal-button button-pulse"
-              onClick={handleContinueOTP}
-            />
-
-            <button
-              className="resend-button hover-effect"
-              onClick={handleResendCode}
-            >
-              Resend code
-            </button>
-
-            <button className="modal-close-btn" onClick={closeOTPModal}>
-              ×
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Step 3: New Password Modal */}
-      {showNewPasswordModal && (
-        <div className="modal-overlay">
-          <div
-            className={`modal-content new-password-modal ${modalAnimation}`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="modal-title">Create New Password</h2>
-            <p className="modal-subtitle">
-              Enter your new password to complete the reset process.
-            </p>
-
-            <label className="modal-label">New Password</label>
-            <div className="modal-input-container">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="••••••••"
-                className="modal-input input-animate"
-                value={newPassword}
-                onChange={(e) => {
-                  setNewPassword(e.target.value);
-                  setPasswordResetError("");
-                }}
-              />
-              <span
-                className="modal-eye-icon"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </span>
-            </div>
-
-            <label className="modal-label">Confirm New Password</label>
-            <div className="modal-input-container">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                placeholder="••••••••"
-                className="modal-input input-animate"
-                value={confirmPassword}
-                onChange={(e) => {
-                  setConfirmPassword(e.target.value);
-                  setPasswordResetError("");
-                }}
-              />
-              <span
-                className="modal-eye-icon"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-              </span>
-            </div>
-
-            {passwordResetError && (
-              <p
-                style={{ color: "red", marginTop: "10px", textAlign: "center" }}
-              >
-                {passwordResetError}
-              </p>
-            )}
-
-            <CustomButton
-              text="Reset Password"
-              variant="primary"
-              className="modal-button button-pulse"
-              onClick={handleResetPassword}
-            />
-
-            <button className="modal-close-btn" onClick={closeNewPasswordModal}>
-              ×
-            </button>
-          </div>
-        </div>
-      )}
-
+      {/* Global Spinner Overlay - useful for any async operation */}
       {showSpinner && (
         <div className="spinner-overlay">
           <FaSpinner className="spinner-icon" />

@@ -1,8 +1,12 @@
-```css :root {
+:root {
   --primary-purple: #8a5bc6;
   --right-width: 30%;
   --primary-purple-light: #a77bdd;
   --transition-speed: 0.3s;
+
+  /* Added for new success message */
+  --email-sent-success-color: #27ae60; /* Green for success */
+  --email-sent-bg-light: #e8f5e9; /* Light green background */
 }
 
 /* Container for the login screen */
@@ -365,10 +369,31 @@
   padding: 40px 50px;
   border-radius: 20px;
   width: 450px;
-  min-height: 320px;
+  min-height: 320px; /* Adjusted min-height to accommodate new message */
   text-align: center;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
+}
+
+/* New: Styling for the success message within the modal */
+.modal-title.success-email-sent {
+  color: var(--email-sent-success-color); /* Green text for success */
+  background: none; /* Remove gradient if title is green */
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  background-clip: unset;
+}
+
+.modal-subtitle.email-sent-message {
+  color: var(--text-dark); /* Darker text for message body */
+  background-color: var(
+    --email-sent-bg-light
+  ); /* Light green background for the message */
+  padding: 15px;
+  border-radius: var(--border-radius-md);
+  margin-top: 15px;
+  margin-bottom: 25px;
+  border: 1px solid var(--email-sent-success-color);
 }
 
 /* Close button for modal */
@@ -470,13 +495,13 @@
   transform: translateY(-2px);
 }
 
-/* Container for input + eye icon */
+/* Container for input + eye icon (not used in this simplified flow but kept for consistency) */
 .modal-input-container {
   position: relative;
   margin-bottom: 20px;
 }
 
-/* Eye icon for modal password fields */
+/* Eye icon for modal password fields (not used in this simplified flow but kept for consistency) */
 .modal-eye-icon {
   position: absolute;
   top: 50%;
@@ -497,13 +522,13 @@
   color: #ffffff;
   border-radius: 12px;
   padding: 12px;
-  width: 96% !important;
+  width: 96% !important; /* Forces width within modal */
   border: none;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-speed) ease;
-  text-transform: none;
+  text-transform: none; /* Override uppercase from CustomButton */
 }
 
 .modal-button:hover {
@@ -518,7 +543,7 @@
   transition: filter 0.3s ease;
 }
 
-/* --- OTP Inputs --- */
+/* --- OTP Inputs (REMOVED from this flow, keeping styles for other uses) --- */
 .otp-input-container {
   display: flex;
   justify-content: space-between;
@@ -542,7 +567,7 @@
   transform: translateY(-3px);
 }
 
-/* "Resend code" button */
+/* "Resend code" button (REMOVED from this flow, keeping styles for other uses) */
 .resend-button {
   background: none;
   border: none;
@@ -594,39 +619,39 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .auth-container {
-    flex-direction: row;
+    flex-direction: column; /* Stack columns on smaller screens */
     width: 100%;
     min-height: 100vh;
   }
   .auth-left {
-    width: calc(100% - var(--right-width));
-    padding: 15px;
+    width: 100%; /* Take full width */
+    padding: 20px; /* Add padding for content */
   }
   .auth-right {
-    width: var(--right-width);
-    overflow: visible; /* Changed from hidden to visible for mobile view too */
+    width: 100%; /* Take full width */
+    height: 250px; /* Give it a fixed height */
+    position: relative;
+    overflow: hidden; /* Hide overflow to contain illustration */
   }
   .auth-illustration {
-    top: 10%;
-    left: 0;
-    transform: translate(-30%, -10%);
-    width: 150%;
-    z-index: 10; /* Added z-index for mobile view */
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%) scale(1); /* Adjust scale for fit */
+    width: 100%;
+    max-width: 400px; /* Max size on mobile */
   }
   .brand-logo {
-    margin: 15px;
-    font-size: 26px;
-    position: absolute;
-    top: 0;
-    left: 0;
+    margin: 20px 0 0 20px;
+    position: static; /* Remove absolute positioning on mobile for flow */
+    text-align: left;
   }
   .login-page .auth-content {
-    width: 90%;
-    margin: -30px 0 0 11%;
-    transform: scale(1.13);
-    transform-origin: top center;
-    position: relative; /* Added position for mobile */
-    z-index: 5; /* Added z-index for mobile */
+    width: 100%; /* Full width */
+    margin: 0; /* Remove specific margins */
+    padding: 0 20px; /* Add internal padding */
+    transform: scale(1); /* Remove scaling */
+    justify-content: flex-start; /* Align content to top */
   }
   .modal-content {
     width: 90%;
@@ -636,7 +661,6 @@
   .modal-title {
     font-size: 20px;
   }
-  /* Adjust error message size for mobile */
   .error-message {
     font-size: 11px;
   }
@@ -667,7 +691,7 @@
   }
 }
 
-/* Button ripple effect */
+/* Button ripple effect (keeping existing) */
 .custom-primary-button::after {
   content: "";
   display: block;
@@ -691,7 +715,7 @@
   transition: 0s;
 }
 
-/* Focus states with animations */
+/* Focus states with animations (keeping existing) */
 input:focus,
 button:focus {
   animation: focusAnimation 0.5s ease;
@@ -709,7 +733,7 @@ button:focus {
   }
 }
 
-/* Character counter animation for inputs */
+/* Character counter animation for inputs (keeping existing) */
 .modal-input-container::after {
   content: attr(data-length);
   position: absolute;
@@ -725,7 +749,7 @@ button:focus {
   opacity: 1;
 }
 
-/* Password strength indicator animation */
+/* Password strength indicator animation (keeping existing) */
 .password-strength {
   height: 5px;
   background: #eee;
@@ -745,18 +769,16 @@ button:focus {
   width: 33%;
   background-color: #e74c3c;
 }
-
 .strength-medium {
   width: 66%;
   background-color: #f39c12;
 }
-
 .strength-strong {
   width: 100%;
   background-color: #27ae60;
 }
 
-/* Toast notification animations */
+/* Toast notification animations (keeping existing) */
 .toast-notification {
   position: fixed;
   bottom: 20px;
@@ -775,20 +797,17 @@ button:focus {
   transform: translateY(0);
   opacity: 1;
 }
-
 .toast-success {
   border-left: 5px solid #27ae60;
 }
-
 .toast-error {
   border-left: 5px solid #e74c3c;
 }
-
 .toast-info {
   border-left: 5px solid #3498db;
 }
 
-/* Loading dots animation for buttons */
+/* Loading dots animation for buttons (keeping existing) */
 .loading-dots::after {
   content: "";
   animation: loadingDots 1.5s infinite;
@@ -812,7 +831,7 @@ button:focus {
   }
 }
 
-/* Fade in animation */
+/* Fade in animation (keeping existing) */
 @keyframes fadeIn {
   from {
     opacity: 0;
