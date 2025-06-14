@@ -34,6 +34,9 @@ const AddCategoryBusiness: React.FC = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   // State to track which category is being deleted
   const [categoryToDelete, setCategoryToDelete] = useState<number | null>(null);
+  // State to track the category being edited
+  const [editingCategory, setEditingCategory] =
+    useState<CategoryResponse | null>(null);
 
   // Reference to the hidden file input element
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -74,7 +77,7 @@ const AddCategoryBusiness: React.FC = () => {
     }
   };
 
-  // Handle saving a new category
+  // Handle saving a new category or updating an existing one
   const handleSaveCategory = async () => {
     if (!categoryName.trim()) {
       setError("Category name is required");
@@ -84,26 +87,37 @@ const AddCategoryBusiness: React.FC = () => {
     setIsLoading(true);
     setError(null);
     try {
-      await CategoryService.addCategory(
-        categoryName,
-        selectedFile || undefined
-      );
+      if (editingCategory) {
+        // Update existing category
+        await CategoryService.updateCategory(
+          editingCategory.id,
+          categoryName,
+          selectedFile || undefined
+        );
+        setSuccessMessage("Category updated successfully!");
+      } else {
+        // Add new category
+        await CategoryService.addCategory(
+          categoryName,
+          selectedFile || undefined
+        );
+        setSuccessMessage("Category added successfully!");
+      }
 
       // Success! Clear form and close popup
       setCategoryName("");
       setSelectedImage(null);
       setSelectedFile(null);
       setShowPopup(false);
+      setEditingCategory(null); // Clear editing state
 
-      // Show success message
-      setSuccessMessage("Category added successfully!");
       setTimeout(() => setSuccessMessage(null), 3000);
 
       // Refresh the categories list
       fetchCategories();
     } catch (err) {
-      console.error("Error adding category:", err);
-      setError("Failed to add category. Please try again.");
+      console.error("Error saving category:", err);
+      setError("Failed to save category. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -158,6 +172,10 @@ const AddCategoryBusiness: React.FC = () => {
 
   // Handlers for opening/closing the modal
   const handleOpenPopup = () => {
+    setEditingCategory(null); // Ensure we're in "add" mode
+    setCategoryName("");
+    setSelectedImage(null);
+    setSelectedFile(null);
     setShowPopup(true);
     setError(null);
   };
@@ -168,6 +186,7 @@ const AddCategoryBusiness: React.FC = () => {
     setSelectedImage(null);
     setSelectedFile(null);
     setError(null);
+    setEditingCategory(null); // Clear editing state when closing
   };
 
   const stopPropagation = (e: React.MouseEvent) => e.stopPropagation();
@@ -187,6 +206,18 @@ const AddCategoryBusiness: React.FC = () => {
       const imageURL = URL.createObjectURL(file);
       setSelectedImage(imageURL);
     }
+  };
+
+  // Handle click on "Modify" button
+  const handleEditClick = (e: React.MouseEvent, category: CategoryResponse) => {
+    e.stopPropagation();
+    setEditingCategory(category);
+    setCategoryName(category.name);
+    setSelectedImage(category.image || null); // Use existing image if available
+    setSelectedFile(null); // Clear selected file, user will re-upload if needed
+    setShowPopup(true);
+    setOpenMenuId(null); // Close the menu
+    setError(null);
   };
 
   return (
@@ -251,6 +282,9 @@ const AddCategoryBusiness: React.FC = () => {
                     {/* Dropdown menu */}
                     {openMenuId === item.id && (
                       <div className="dropdown-menu">
+                        <button onClick={(e) => handleEditClick(e, item)}>
+                          Modify
+                        </button>
                         <button onClick={(e) => confirmDelete(e, item.id)}>
                           Delete
                         </button>
@@ -289,7 +323,9 @@ const AddCategoryBusiness: React.FC = () => {
       {showPopup && (
         <div className="popup-overlay" onClick={handleClosePopup}>
           <div className="popup-content" onClick={stopPropagation}>
-            <h2 className="popup-title">Add New Category</h2>
+            <h2 className="popup-title">
+              {editingCategory ? "Modify Category" : "Add New Category"}
+            </h2>
 
             {/* Error message in popup */}
             {error && <div className="error-message popup-error">{error}</div>}
@@ -348,7 +384,11 @@ const AddCategoryBusiness: React.FC = () => {
                 onClick={handleSaveCategory}
                 disabled={isLoading}
               >
-                {isLoading ? "Saving..." : "Save Changes"}
+                {isLoading
+                  ? "Saving..."
+                  : editingCategory
+                  ? "Save Changes"
+                  : "Add Category"}
               </button>
             </div>
           </div>

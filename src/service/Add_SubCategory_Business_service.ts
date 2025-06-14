@@ -10,11 +10,11 @@ export interface Category {
   subCategories: string[];
 }
 
-// SubCategory interface for subcategories
+// SubCategory interface for subcategories (aligned with Category for reusability where possible)
 export interface SubCategory {
-  categoryId: number;
-  categoryName: string;
-  categoryImage: string;
+  categoryId: number; // Renamed to categoryId for consistency with backend SubCategory model
+  categoryName: string; // Renamed to categoryName for consistency
+  categoryImage: string; // Renamed to categoryImage for consistency
   businessId: string;
   parentCategoryId: number;
   products: Product[];
@@ -31,9 +31,9 @@ interface Product {
   bounceRate: number;
 }
 
-export interface AddCategoryData {
+export interface CategoryFormData {
   name: string;
-  parentCategoryId?: number;
+  parentCategoryId?: number | null; // Can be null for top-level categories
   image?: File;
 }
 
@@ -65,12 +65,17 @@ export class CategoryService {
   }
 
   // Add new category (main or subcategory)
-  static async addCategory(data: AddCategoryData): Promise<void> {
+  static async addCategory(
+    data: CategoryFormData
+  ): Promise<Category | SubCategory> {
     try {
       const formData = new FormData();
       formData.append("Name", data.name);
 
-      if (data.parentCategoryId) {
+      if (
+        data.parentCategoryId !== undefined &&
+        data.parentCategoryId !== null
+      ) {
         formData.append("ParentCategoryId", data.parentCategoryId.toString());
       }
 
@@ -91,10 +96,44 @@ export class CategoryService {
     }
   }
 
+  // Update an existing category or subcategory
+  static async updateCategory(
+    id: number,
+    data: CategoryFormData
+  ): Promise<Category | SubCategory> {
+    try {
+      const formData = new FormData();
+      formData.append("Name", data.name);
+
+      if (data.image) {
+        formData.append("Image", data.image);
+      } else if (data.image === undefined) {
+        // If image is explicitly undefined, it means no new image was selected
+        // We might need a way to signal "no change to image" or "remove image"
+        // For now, if image is not provided, we won't append it to formData.
+        // If the API requires explicit signal for no image change, this needs adjustment.
+      }
+
+      const response = await axiosInstance.put(
+        `/api/Category/${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating category with ID ${id}:`, error);
+      throw error;
+    }
+  }
+
   // Delete category
   static async deleteCategory(id: number): Promise<void> {
     try {
-      await axiosInstance.delete(`/api/SpecificCategory/${id}`);
+      await axiosInstance.delete(`/api/Category/${id}`); // Changed to /api/Category/{id} as per Swagger
     } catch (error) {
       console.error("Error deleting category:", error);
       throw error;

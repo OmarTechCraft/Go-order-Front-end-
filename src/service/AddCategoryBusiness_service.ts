@@ -64,6 +64,41 @@ export const CategoryService = {
   },
 
   /**
+   * Update an existing category
+   * @param categoryId - The ID of the category to update
+   * @param name - The new category name
+   * @param image - The new category image file (optional)
+   * @returns Promise with the updated category
+   */
+  updateCategory: async (
+    categoryId: number,
+    name: string,
+    image?: File
+  ): Promise<CategoryResponse> => {
+    try {
+      const formData = new FormData();
+      formData.append("Name", name);
+      if (image) {
+        formData.append("Image", image);
+      }
+
+      const response = await axiosInstance.put(
+        `/api/Category/${categoryId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating category with ID ${categoryId}:`, error);
+      throw error;
+    }
+  },
+
+  /**
    * Delete a category
    * @param categoryId - The category ID to delete
    * @returns Promise with the result

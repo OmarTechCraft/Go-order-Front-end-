@@ -4,7 +4,7 @@
 import { Info, Loader2 } from "lucide-react";
 import "./OrderTable.css";
 // Import Order from your service file (OrderStatus is used within Order, so no need to import explicitly here)
-import { Order } from "../../service/orders_service"; 
+import { Order } from "../../service/orders_service";
 
 interface OrderTableProps {
   orders: Order[];
@@ -64,7 +64,9 @@ export default function OrderTable({
               <td>{order.customerName}</td>
               <td>
                 <span
-                  className={`status-badge status-${order.status.toLowerCase().replace(/\s+/g, '-')}`}
+                  className={`status-badge status-${order.status
+                    .toLowerCase()
+                    .replace(/\s+/g, "-")}`}
                 >
                   {order.status}
                 </span>

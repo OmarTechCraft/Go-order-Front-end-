@@ -33,8 +33,8 @@ import BusTerms from "./Pages/Business/BusTerms";
 import AllOrders from "./Pages/Business/Orders/orders";
 import MarketingAILayout from "./Pages/Business/MarketingAI/layout";
 import MarketingRouter from "./Pages/Business/MarketingAI/marketing-router";
-import ScrollToTop from './components/ScrollToTop'; // Import the new ScrollToTop component
-
+import ScrollToTop from "./components/ScrollToTop"; // Import the new ScrollToTop component
+import PasswordReset from "./Pages/public/PasswordReset"; // <--- ADD THIS IMPORT
 
 // Temporary placeholder components for missing order components
 const WaitingOrders: React.FC = () => (
@@ -164,7 +164,8 @@ const MyApp: React.FC = () => {
           <Route path="/login" element={<MyLogin />} />
           <Route path="/register" element={<Register />} />
           <Route path="/deliver-with-us" element={<DeliverWithUs />} />
-
+          <Route path="/password-reset" element={<PasswordReset />} />{" "}
+          {/* <--- ADD THIS ROUTE */}
           {/* Admin Routes */}
           <Route path="/profile" element={<Profile />} />
           <Route path="/manage-business" element={<ManageBusiness />} />
@@ -180,7 +181,6 @@ const MyApp: React.FC = () => {
             path="/settings/terms-and-conditions"
             element={<TermsAndConditions />}
           />
-
           {/* Business Routes */}
           <Route path="/profile_b" element={<Profile_B />} />
           <Route path="/reviews" element={<Reviews />} />
@@ -201,7 +201,6 @@ const MyApp: React.FC = () => {
           <Route path="/Bus-settings" element={<BusSettings />} />
           <Route path="/Bus-privacy-policy" element={<BusPrivacy />} />
           <Route path="/Bus-terms-and-conditions" element={<BusTerms />} />
-
           {/* Marketing AI Routes */}
           <Route
             path="/marketing-ai"
@@ -211,16 +210,13 @@ const MyApp: React.FC = () => {
               </MarketingAILayout>
             }
           />
-
           {/* Order Routes */}
           <Route path="/orders/all" element={<AllOrders />} />
           <Route path="/orders/waiting" element={<WaitingOrders />} />
           <Route path="/orders/in-progress" element={<InProgressOrders />} />
           <Route path="/orders/done" element={<DoneOrders />} />
-
           {/* Public Pages */}
           <Route path="/term-condition" element={<MainTerms />} />
-
           {/* 404 Catch-all Route - MUST be last */}
           <Route path="*" element={<NotFound />} />
         </Routes>
