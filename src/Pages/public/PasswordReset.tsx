@@ -151,9 +151,9 @@ const PasswordReset: React.FC = () => {
             />
           </div>
 
-          {/* Confirm New Password Input */}
+          {/* Confirm New Password-Input */}
           <div className="form-group">
-            <label htmlFor="confirm-password">Confirm New Password</label>
+            <label htmlFor="confirm-password">COnfirm New Password</label>
             <input
               type="password"
               id="confirm-password"
