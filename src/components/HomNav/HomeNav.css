@@ -26,6 +26,24 @@
   align-items: center;
 }
 
+/* Language Toggle Button */
+.language-toggle-button {
+  background-color: #f0f0f0; /* Light background for the button */
+  color: #6b44a0; /* Text color matching your theme */
+  padding: 8px 16px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+}
+
+.language-toggle-button:hover {
+  background-color: #e0e0e0;
+  color: #5a3792;
+  transform: translateY(-2px);
+}
+
 /* Shared styles for both login and logout buttons */
 .login-button,
 .logout-button {
@@ -109,7 +127,8 @@
   border-radius: 20px;
   width: 90%;
   max-width: 440px; /* Consistent max-width */
-  box-shadow: 0 20px 40px rgba(138, 91, 198, 0.2), 0 8px 24px rgba(0, 0, 0, 0.1); /* Consistent shadow */
+  box-shadow: 0 20px 40px rgba(138, 91, 198, 0.2),
+    0 8px 24px rgba(0, 0, 0, 0.1); /* Consistent shadow */
   animation: scaleIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Consistent animation */
   overflow: hidden;
   position: relative;
@@ -260,3 +279,1293 @@
   }
 }
 /* --- END LOGOUT MODAL STYLES --- */
+
+/* ======= GLOBAL ======= */
+html {
+  font-size: 16px; /* Base font size for rem units */
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; /* Prevents horizontal scroll */
+  box-sizing: border-box;
+}
+
+/* Ensure images don't overflow their containers */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ========== FIRST SECTION - OfferSection (SMALL SCREEN OPTIMIZATION) ========== */
+.offer-container {
+  position: relative;
+  width: 100vw;
+  /* Base min-height - will be overridden by media queries */
+  min-height: 70vh; /* This value helps ensure content is visible on various mobile sizes */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Align content to the top initially */
+  padding: 2.5rem 1rem;
+  margin: 0;
+  box-sizing: border-box;
+  text-align: center;
+  /* Base padding-top for mobile - adjusted in specific media queries */
+  padding-top: 80px; /* Default space for navbar on mobile */
+  padding-bottom: 2rem; /* Ensure space at the bottom on mobile */
+
+  /* KEY CHANGES FOR BACKGROUND IMAGE */
+  background-image: url("/images/main.jpg");
+  background-size: cover; /* This makes the image cover the entire container */
+  background-position: center top; /* Positions the image from the top center */
+  background-repeat: no-repeat; /* Prevents the image from tiling */
+  overflow: hidden; /* Important for preventing scroll if image overflows slightly */
+}
+
+.offer-text {
+  position: relative; /* Keep relative for mobile flow within flex container */
+  color: black;
+  width: 90%;
+  max-width: 900px;
+  padding: 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Base padding-top for mobile to push text down from background image */
+  padding-top: 8rem; /* Default text shift for mobile */
+  top: auto;
+  left: auto;
+  transform: none;
+}
+
+.offer-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0;
+  line-height: 1;
+}
+
+.offer-heading {
+  font-size: clamp(2rem, 5vw, 3.125rem);
+  font-weight: bold;
+  color: black;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.on-order-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.on-text {
+  font-size: clamp(2rem, 5vw, 3.125rem);
+  font-weight: bold;
+  color: black;
+  margin-right: 0.5rem;
+}
+
+.highlight,
+.special-o {
+  font-family: "Lobster Two", cursive;
+  font-size: clamp(3rem, 7vw, 5rem);
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1.2;
+  color: #7d2ae8;
+  display: flex;
+  align-items: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tagline {
+  font-family: "Rubik", sans-serif;
+  font-size: clamp(1.2rem, 3vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.5;
+  color: #333333;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.cta-reviews {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  width: 100%;
+  margin-bottom: 2rem; /* Ensures space below this section on mobile */
+}
+
+.get-started {
+  background-color: #7d2ae8;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1.875rem;
+  cursor: pointer;
+  font-size: 1.125rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  white-space: nowrap;
+}
+
+.get-started:hover {
+  background-color: #6a1bbf;
+  transform: translateY(-2px);
+}
+
+.collab-images {
+  display: flex;
+  align-items: center;
+}
+
+.collab-images img {
+  width: 2.8125rem;
+  height: 2.8125rem;
+  border-radius: 50%;
+  border: 0.125rem solid white;
+  object-fit: cover;
+  margin-left: -0.625rem;
+}
+
+.collab-images img:first-child {
+  margin-left: 0;
+}
+
+.customer-reviews {
+  font-size: 1rem;
+  color: black;
+  font-weight: bold;
+  text-align: center;
+  margin-left: 0;
+}
+
+.stars {
+  color: #f4b400;
+  font-weight: bold;
+}
+
+/* --- Responsive Design for First Section (Desktop UNCHANGED, Mobile SHIFTED FOR VIEWING BG) --- */
+/* For screens larger than 992px (Laptop/Desktop: Keep as is) */
+@media (min-width: 993px) {
+  .offer-container {
+    min-height: 85vh; /* This defines the height for desktop */
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: 2.5rem; /* Original padding-top for content positioning */
+    padding-bottom: 5rem; /* Ensures background image can extend */
+    /* Adjust background position for desktop to account for fixed Navbar */
+    background-position: center 60px; /* Shifts background down by 60px to start below a 60px fixed Navbar */
+  }
+
+  .offer-text {
+    position: absolute; /* Absolute positioning for precise desktop placement */
+    left: 25%;
+    right: auto; /* Ensure right is auto for LTR */
+    top: 240px; /* This 'top' value is critical to maintain current desktop text position */
+    text-align: left;
+    align-items: flex-start;
+    transform: none;
+    padding-top: 0; /* Reset padding-top for desktop as 'top' handles vertical offset */
+    margin-top: 0; /* Reset margin-top for desktop absolute positioning */
+  }
+  .offer-heading {
+    font-size: clamp(2rem, 5vw, 3.125rem);
+    font-weight: bold;
+    color: black;
+    margin-bottom: 0.5rem;
+  }
+  .offer-title {
+    align-items: flex-start;
+    margin-bottom: -6.5vh;
+  }
+
+  .on-order-container {
+    justify-content: flex-start;
+  }
+
+  .tagline {
+    text-align: left;
+  }
+
+  .cta-reviews {
+    flex-direction: row; /* Default LTR direction for row */
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 0; /* Reset margin-bottom for desktop */
+  }
+
+  .customer-reviews {
+    margin-left: 0.625rem;
+    margin-right: 0; /* Reset right margin */
+    text-align: left;
+  }
+
+  /* RTL Adjustments for first section text on desktop */
+  [dir="rtl"] .offer-text {
+    left: auto; /* Reset left */
+    right: 25%; /* Position from the right */
+    text-align: right; /* Align text to the right */
+    align-items: flex-end; /* Align flex items to the right */
+  }
+
+  [dir="rtl"] .offer-title {
+    align-items: flex-end; /* Align title items to the right */
+  }
+
+  [dir="rtl"] .on-order-container {
+    justify-content: flex-end; /* Justify 'on Order' to the right */
+  }
+
+  [dir="rtl"] .tagline {
+    text-align: right; /* Ensure tagline is right-aligned */
+  }
+
+  [dir="rtl"] .cta-reviews {
+    flex-direction: row-reverse; /* Reverse order of CTA and reviews for RTL */
+    justify-content: flex-end; /* Justify to the right in RTL */
+  }
+
+  /* Adjust margin for collabs images when reversed in RTL */
+  [dir="rtl"] .collab-images img {
+    margin-left: 0; /* Reset default */
+    margin-right: -0.625rem; /* Add margin to the right to overlap */
+  }
+
+  [dir="rtl"] .collab-images img:last-child {
+    margin-right: 0; /* No margin for the last image in reversed order */
+  }
+
+  [dir="rtl"] .customer-reviews {
+    margin-left: 0; /* Reset left margin */
+    margin-right: 0.625rem; /* Add right margin */
+    text-align: right;
+  }
+}
+
+/* For screens smaller than 992px (Tablets: Shift content down significantly) */
+@media (max-width: 992px) {
+  .offer-container {
+    margin-top: 60px;
+    /* Adjust padding-top to make background image start visible without scroll */
+    padding-top: 100px; /* Increased padding-top for tablets to push content and image down */
+    min-height: 75vh; /* Increase min-height to accommodate shifted content/image */
+    padding-bottom: 2rem; /* Ensure space at the bottom on tablets */
+    background-position: center top; /* Ensure background starts from top on tablets */
+  }
+
+  .offer-text {
+    /* KEY CHANGE FOR TABLET: Shift text content down using padding-top to avoid overlap */
+    padding-top: 10rem; /* Increased to push text well below background image on tablets */
+    margin-top: 0; /* Reset margin-top on tablets */
+    /* Mobile/Tablet: text-align and align-items are centered by default, which is fine for both LTR/RTL */
+    text-align: center;
+    align-items: center;
+  }
+  .offer-heading {
+    margin-top: 70px;
+  }
+
+  .cta-reviews {
+    margin-bottom: 1.5rem; /* Adjust margin-bottom for tablets */
+  }
+}
+
+/* For screens smaller than 576px (Small Mobile: Shift content down even more) */
+@media (max-width: 576px) {
+  .offer-container {
+    /* Adjust padding-top to make background image start visible without scroll */
+    padding-top: 90px; /* Increased padding-top for small mobiles */
+    min-height: 70vh; /* Adjusted min-height for small mobiles */
+    padding-bottom: 1.5rem; /* Adjusted padding-bottom for small mobiles */
+  }
+
+  .offer-text {
+    /* KEY CHANGE FOR SMALL MOBILE: Shift text content down using padding-top */
+    padding-top: 8rem; /* Increased to push text well below background image on small mobiles */
+    margin-top: 0;
+  }
+
+  .cta-reviews {
+    margin-bottom: 1rem; /* Adjust margin-bottom for small mobiles */
+  }
+}
+
+/* ========== SECOND SECTION - What We Serve (ORIGINAL) ========== */
+.what-we-serve-container {
+  text-align: center;
+  padding: 3.125rem 1rem;
+  margin: 0;
+  background-color: white;
+  width: 100vw;
+  box-sizing: border-box;
+}
+
+.what-we-serve-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #7d2ae8;
+  letter-spacing: 0.0625rem;
+  text-transform: uppercase;
+}
+
+.delivery-partner-heading {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: bold;
+  color: black;
+  margin-bottom: 2rem;
+}
+
+.services-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.service {
+  flex: 1 1 280px;
+  max-width: 300px;
+  text-align: center;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.service img {
+  width: 10rem;
+  height: auto;
+  margin-bottom: 1.25rem;
+}
+
+.service-title {
+  font-size: 1.375rem;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 0.5rem;
+}
+
+.service-description {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.875rem;
+  color: #333;
+  margin-top: 0.625rem;
+}
+
+/* ========== THIRD SECTION - Two Images Side by Side (ORIGINAL) ========== */
+.image-split-container {
+  display: flex;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+  background-color: #fff;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.left-image,
+.right-image {
+  flex: 1;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  padding: 0.3125rem;
+  display: block;
+  max-width: 40%;
+  box-sizing: border-box;
+}
+
+/* ========== FOURTH SECTION - Who We Are Section (ORIGINAL) ========== */
+.phase4-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background-color: white;
+  box-sizing: border-box;
+  padding: 3.125rem 2rem;
+  flex-wrap: wrap;
+}
+
+.phase4-text {
+  flex: 1 1 45%;
+  max-width: 50%;
+  margin-left: 0;
+  padding-right: 1rem;
+  box-sizing: border-box;
+  text-align: left;
+  min-width: 300px;
+}
+
+[dir="rtl"] .phase4-text {
+  text-align: right;
+  padding-right: 0;
+  padding-left: 1rem;
+}
+
+.about-us {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: #7a25f6;
+  margin-bottom: 0.625rem;
+}
+
+.who-we-are {
+  font-size: clamp(1.8rem, 4vw, 2rem);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: #000;
+}
+
+.description1 {
+  font-size: 1rem;
+  color: black;
+  line-height: 1.6;
+  max-width: 100%;
+  margin-bottom: 1.875rem;
+}
+
+.cta-container {
+  display: flex;
+  align-items: center;
+  margin-top: 1.25rem;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+[dir="rtl"] .cta-container {
+  justify-content: flex-end; /* Align content to the right */
+}
+
+.join-us {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: #000;
+  white-space: nowrap;
+}
+
+.phase4-image-container {
+  position: relative;
+  flex: 1 1 45%;
+  max-width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 0;
+  box-sizing: border-box;
+  min-width: 300px;
+}
+
+.purple-background {
+  position: absolute;
+  width: clamp(200px, 20vw, 320px);
+  height: clamp(200px, 20vw, 300px);
+  background-color: #8a5bc6;
+  border-top-left-radius: 5rem;
+  border-top-right-radius: 14.40625rem;
+  border-bottom-left-radius: 5rem;
+  border-bottom-right-radius: 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+
+.ccare-image {
+  width: auto;
+  max-width: clamp(200px, 25vw, 350px);
+  height: auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* ========== FIFTH SECTION - We Deliver Section (MODIFIED) ========== */
+.phase5-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; /* ALIGNED ITEMS TO THE CENTER OF THE CONTAINER */
+  gap: 8rem; /* ADDED: This creates the gap between the image and text */
+  width: 100%;
+  padding: 3.125rem 2rem;
+  background-color: white;
+  position: relative;
+  margin-top: 0;
+  box-sizing: border-box;
+  flex-wrap: wrap-reverse;
+}
+
+[dir="rtl"] .phase5-container {
+  flex-direction: row-reverse; /* Reverse direction for RTL */
+}
+
+.phase5-image {
+  flex: 1 1 45%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  min-width: 300px;
+  padding: 1rem;
+  box-sizing: border-sizing;
+}
+
+.phase5-image img {
+  width: 100%;
+  max-width: 760px;
+  height: auto;
+  object-fit: contain;
+  position: relative;
+  z-index: 2;
+}
+
+.truck-background {
+  width: clamp(250px, 30vw, 488px);
+  height: clamp(250px, 30vw, 461px);
+  background-color: rgba(217, 209, 227, 0.5);
+  position: absolute;
+  border-radius: 3.25rem 3.6875rem 3.125rem 3.3125rem;
+  z-index: 1;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.dot {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.dot.yellow {
+  background-color: #f4b400;
+}
+.dot.purple {
+  background-color: #7d2ae8;
+}
+
+.phase5-image .dot:nth-child(2) {
+  top: 10%;
+  left: 5%;
+}
+.phase5-image .dot:nth-child(3) {
+  top: 13%;
+  left: 70%;
+}
+.phase5-image .dot:nth-child(4) {
+  top: 30%;
+  left: 70%;
+}
+.phase5-image .dot:nth-child(5) {
+  top: 85%;
+  left: 10%;
+}
+.phase5-image .dot:nth-child(6) {
+  top: -10%;
+  left: 0%;
+}
+.phase5-image .dot:nth-child(7) {
+  top: -10%;
+  left: 0%; /* This was the 7th dot, but there are 6 defined in Home.tsx. Re-check if this is an extra */
+}
+
+/* Adjust dot positions for RTL in phase5-image */
+[dir="rtl"] .phase5-image .dot:nth-child(2) {
+  left: auto;
+  right: 5%;
+}
+[dir="rtl"] .phase5-image .dot:nth-child(3) {
+  left: auto;
+  right: 70%;
+}
+[dir="rtl"] .phase5-image .dot:nth-child(4) {
+  left: auto;
+  right: 70%;
+}
+[dir="rtl"] .phase5-image .dot:nth-child(5) {
+  left: auto;
+  right: 10%;
+}
+[dir="rtl"] .phase5-image .dot:nth-child(6) {
+  left: auto;
+  right: 70%; /* Assuming this dot mirrors the previous 70% left */
+}
+[dir="rtl"] .phase5-image .dot:nth-child(7) {
+  left: auto;
+  right: 0%; /* Assuming this dot mirrors the previous 0% left */
+}
+
+
+.phase5-content {
+  flex: 1 1 45%;
+  text-align: left;
+  margin-left: 0; /* Ensures no unintended left margin */
+  min-width: 300px;
+  padding-right: 1rem;
+  box-sizing: border-box;
+}
+
+[dir="rtl"] .phase5-content {
+  text-align: right;
+  padding-right: 0;
+  padding-left: 1rem;
+}
+
+.phase5-title {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: #000;
+  font-family: "Poppins", sans-serif;
+  line-height: 1.2;
+  margin-bottom: 1.25rem;
+}
+
+.phase5-text {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+  line-height: 1.875rem;
+  margin: 0.625rem 0 1.25rem;
+  color: #000;
+  width: auto;
+  height: auto;
+  max-width: 441px;
+}
+
+.phase5-cta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+[dir="rtl"] .phase5-cta {
+  justify-content: flex-end; /* Align content to the right */
+}
+
+.join-text {
+  font-size: clamp(1.8rem, 4vw, 2.8125rem);
+  font-weight: 700;
+  font-family: "Rubik", sans-serif;
+  line-height: 1.2;
+  color: #000;
+  white-space: nowrap;
+}
+
+/* Global Get Started Button - included here for completeness */
+.get-started {
+  background-color: #7a25f6;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 0.9375rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.get-started:hover {
+  background-color: #6a1bbf;
+  transform: translateY(-2px);
+}
+
+/* ========== SIXTH SECTION - Download Our Application (ORIGINAL) ========== */
+.phase6-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  min-height: 650px;
+  background-color: #ffffff;
+  padding: 3.125rem 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.content-wrapper {
+  width: 90vw;
+  max-width: 1250px;
+  min-height: 38.375rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f4edfb;
+  border-radius: 1.875rem;
+  padding: 3.125rem;
+  position: relative;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+}
+
+/* Adjust content wrapper layout for RTL */
+[dir="rtl"] .content-wrapper {
+  flex-direction: row-reverse; /* Reverse column order for RTL */
+}
+
+.download-app {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.4rem;
+  color: #8817ea;
+  position: absolute;
+  top: 4.4375rem;
+  left: 5.3125rem;
+  width: auto;
+  white-space: nowrap;
+}
+
+/* RTL positioning for download-app */
+[dir="rtl"] .download-app {
+  left: auto;
+  right: 5.3125rem;
+}
+
+.phase6-title {
+  font-family: "Rubik", sans-serif;
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 2.875rem);
+  line-height: 1.2;
+  color: #010f1c;
+  width: 25.25rem;
+  height: auto;
+  position: absolute;
+  top: 10.5625rem;
+  left: 5.3125rem;
+}
+
+/* RTL positioning for phase6-title */
+[dir="rtl"] .phase6-title {
+  left: auto;
+  right: 5.3125rem;
+}
+
+.phase6-text {
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: #000000;
+  position: absolute;
+  top: 18.75rem;
+  left: 5.3125rem;
+  width: 90%;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+/* RTL positioning for phase6-text */
+[dir="rtl"] .phase6-text {
+  left: auto;
+  right: 5.3125rem;
+}
+
+.download-links {
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem;
+  position: absolute;
+  top: 28.125rem;
+  left: 4.375rem;
+  flex-wrap: wrap;
+  width: calc(100% - 8.75rem);
+}
+
+/* RTL positioning for download-links */
+[dir="rtl"] .download-links {
+  left: auto;
+  right: 4.375rem;
+  flex-direction: row-reverse; /* Mirror download buttons order */
+}
+
+.download-btn {
+  display: flex;
+  align-items: center;
+  background: white;
+  color: black;
+  border-radius: 0.9375rem;
+  padding: 0.625rem 1.25rem;
+  text-decoration: none;
+  font-family: "Poppins", sans-serif;
+  width: auto;
+  min-width: 150px;
+  height: auto;
+  transition: 0.3s ease;
+  border: 0.0625rem solid #ccc;
+  box-shadow: 0px 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
+  flex: 1;
+  max-width: 301.15px;
+}
+
+.download-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.download-btn .icon {
+  font-size: 1.875rem;
+  margin-right: 0.625rem;
+}
+
+/* RTL adjustments for download button icons */
+[dir="rtl"] .download-btn .icon {
+  margin-right: 0;
+  margin-left: 0.625rem; /* Move icon to the right of text */
+}
+
+
+.download-btn span {
+  display: flex;
+  flex-direction: column;
+}
+
+.download-btn small {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.download-btn strong {
+  font-size: 1rem;
+}
+
+.phase6-image {
+  flex: 1; /* Allows flexibility */
+  display: flex;
+  justify-content: flex-end; /* Align to the right side of the flex container */
+  align-items: flex-end; /* Align to the bottom of the flex container */
+  min-width: 300px;
+  padding-left: 1rem;
+  box-sizing: border-box;
+  position: static; /* Let flexbox handle positioning */
+  margin-left: 0; /* Reset this */
+  width: auto;
+  height: auto;
+}
+
+/* RTL positioning for phase6-image */
+[dir="rtl"] .phase6-image {
+  justify-content: flex-start; /* Align to the left side of the flex container for RTL */
+  padding-left: 0;
+  padding-right: 1rem;
+}
+
+.phase6-image img {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain; /* Ensures the entire image is visible */
+  width: clamp(250px, 30vw, 450px);
+}
+
+/* RTL absolute positioning for phase6-image */
+[dir="rtl"] .phase6-image img {
+  left: 0; /* Position from the left */
+  right: auto; /* Reset right */
+}
+
+
+/* ========== SEVENTH SECTION (FOOTER) (ORIGINAL) ========== */
+.footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  background-color: white;
+  padding: 1.25rem 0;
+  width: 100%;
+  box-sizing: border-box;
+  color: black;
+  margin-left: 0;
+  flex-wrap: wrap;
+}
+
+/* RTL Adjustments for footer sections */
+[dir="rtl"] .footer {
+  flex-direction: row-reverse; /* Reverse the order of footer columns */
+}
+
+/* General Styling for Each Section */
+.footer-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 30%;
+  min-width: 250px;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+[dir="rtl"] .footer-section {
+  align-items: flex-end; /* Align content to the right */
+  text-align: right;
+}
+
+/* GoOrder Section */
+.goorder {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  color: #8a5bc6;
+  margin-bottom: 0.625rem;
+}
+
+/* Description */
+.description {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 1.125rem;
+  color: #3a393b;
+  margin-bottom: 1.25rem;
+  line-height: 1.6;
+}
+
+/* Social Section */
+.social-section {
+  margin-top: 0.625rem;
+}
+
+/* Social Title */
+.social-title {
+  font-family: "Roboto", sans-serif;
+  font-weight: 900;
+  font-size: 1.5625rem;
+  color: #263238;
+  margin-bottom: 0.625rem;
+}
+
+/* Social Icons */
+.social-icons {
+  display: flex;
+  gap: 1.5625rem;
+  font-size: 2.5rem;
+  margin-top: 0.3125rem;
+}
+
+[dir="rtl"] .social-icons {
+  flex-direction: row-reverse; /* Reverse icon order for RTL */
+}
+
+
+.social-icons img {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+  transition: transform 0.2s ease-in-out;
+}
+
+.social-icons img:hover {
+  transform: scale(1.1);
+}
+
+/* Contact Info & Get Help */
+.contact,
+.get-help {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-size: 1.5625rem;
+  color: black;
+  margin-bottom: 0.9375rem;
+}
+
+/* Links */
+.footer-section p {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+p a {
+  text-decoration: none;
+  color: #3a393b;
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+p a:hover {
+  color: #8a5bc6;
+  text-decoration: underline;
+}
+
+/* --- RESPONSIVE DESIGN (ORIGINAL for other sections) --- */
+
+/* For screens smaller than 1200px (Large Desktops/Laptops) */
+@media (max-width: 1200px) {
+  .phase4-content,
+  .phase5-container,
+  .content-wrapper {
+    padding: 3.125rem 1.5rem; /* Reduced padding */
+  }
+
+  .phase4-text,
+  .phase4-image-container,
+  .phase5-image,
+  .phase5-content {
+    max-width: 48%; /* Adjust for slightly less margin */
+  }
+}
+
+/* For screens smaller than 992px (Tablets) */
+@media (max-width: 992px) {
+  /* Rules for first section are handled in its dedicated media query */
+
+  .services-container {
+    gap: 1.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .service {
+    flex: 1 1 45%;
+    max-width: 48%;
+  }
+
+  .image-split-container {
+    flex-direction: column;
+    min-height: auto;
+    padding: 1rem 0.5rem;
+    gap: 1rem;
+  }
+
+  .left-image,
+  .right-image {
+    flex: 1 1 90%;
+    max-width: 90%;
+    margin-bottom: 1rem;
+  }
+
+  .phase4-content,
+  .phase5-container {
+    flex-direction: column;
+    padding: 2.5rem 1rem;
+    align-items: center;
+    text-align: center;
+  }
+
+  [dir="rtl"] .phase4-content,
+  [dir="rtl"] .phase5-container {
+    flex-direction: column; /* Keep column direction for tablets, just text alignment changes */
+  }
+
+  .phase4-text,
+  .phase4-image-container,
+  .phase5-image,
+  .phase5-content {
+    flex: 1 1 90%;
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 0;
+    min-width: unset;
+  }
+
+  .phase4-text {
+    order: 2;
+  }
+  .phase4-image-container {
+    order: 1;
+    margin-bottom: 2rem;
+  }
+
+  .purple-background,
+  .truck-background {
+    width: clamp(200px, 40vw, 300px);
+    height: clamp(200px, 40vw, 280px);
+  }
+
+  .ccare-image,
+  .phase5-image img {
+    max-width: 80%;
+    object-fit: contain;
+  }
+
+  .cta-container,
+  .phase5-cta {
+    justify-content: center;
+  }
+
+  .phase5-image {
+    order: 1;
+    margin-bottom: 2rem;
+  }
+  .phase5-content {
+    order: 2;
+  }
+  /* Responsive gap adjustment for column layout */
+  .phase5-container {
+    gap: 2rem; /* Reduce gap when items stack vertically */
+  }
+
+  .content-wrapper {
+    flex-direction: column;
+    padding: 2rem;
+    min-height: auto;
+    height: auto;
+  }
+
+  /* Tablet/Mobile specific RTL adjustments for Phase 6 (Download App) */
+  [dir="rtl"] .content-wrapper {
+    flex-direction: column; /* Keep column direction */
+  }
+
+  .download-app,
+  .phase6-title,
+  .phase6-text,
+  .download-links {
+    position: static;
+    width: auto;
+    left: auto;
+    top: auto;
+    text-align: center;
+    margin: 0 auto 1rem auto;
+  }
+
+  .download-links {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  [dir="rtl"] .download-links {
+    flex-direction: column; /* Keep column direction for RTL on smaller screens */
+  }
+
+
+  .download-btn {
+    width: 80%;
+    max-width: 300px;
+    margin-bottom: 1rem;
+  }
+
+  .phase6-image {
+    padding-left: 0;
+    margin-top: 2rem;
+    order: 1;
+    position: static;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+  }
+
+  .phase6-image img {
+    position: static;
+    width: clamp(200px, 50vw, 350px);
+    object-fit: contain;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+
+  [dir="rtl"] .footer {
+    flex-direction: column; /* Keep column direction for RTL on smaller screens */
+  }
+
+  .footer-section {
+    width: 90%;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 0;
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+}
+
+/* For screens smaller than 576px (Small Mobile) */
+@media (max-width: 576px) {
+  html {
+    font-size: 14px;
+  }
+
+  /* Rules for first section are handled in its dedicated media query */
+
+  .get-started {
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+  }
+  .collab-images img {
+    width: 2rem;
+    height: 2rem;
+    margin-left: -0.4rem;
+  }
+  .customer-reviews {
+    font-size: 0.8rem;
+  }
+
+  .service {
+    flex: 1 1 90%;
+    max-width: 95%;
+    margin-bottom: 1.5rem;
+  }
+
+  .phase4-content,
+  .phase5-container,
+  .content-wrapper {
+    padding: 1.5rem 0.5rem;
+  }
+
+  .phase4-text,
+  .phase4-image-container,
+  .phase5-image,
+  .phase5-content,
+  .phase6-content,
+  .phase6-image {
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+  /* Responsive gap adjustment for very small screens */
+  .phase5-container {
+    gap: 1.5rem; /* Further reduce gap on very small screens */
+  }
+  .phase5-image {
+    margin-bottom: 1.5rem;
+  }
+
+  .download-btn {
+    width: 95%;
+  }
+  .download-btn small {
+    font-size: 0.6rem;
+  }
+  .download-btn strong {
+    font-size: 0.9rem;
+  }
+
+  .footer-section {
+    width: 95%;
+  }
+  .social-icons img {
+    width: 2rem;
+    height: 2rem;
+  }
+  .footer-section p {
+    font-size: 0.9rem;
+  }
+}

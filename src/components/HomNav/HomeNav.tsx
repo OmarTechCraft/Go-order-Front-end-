@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaSignOutAlt, FaTimes } from "react-icons/fa"; // Import icons needed for the modal
+import { FaSignOutAlt, FaTimes } from "react-icons/fa";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 import "./HomeNav.css"; // Ensure your CSS file is correctly linked
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation(); // Initialize useTranslation hook
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -133,6 +135,13 @@ const Navbar = () => {
     navigate("/");
   };
 
+  // Function to toggle language - REMOVED document.body.style.direction calls
+  const toggleLanguage = () => {
+    const newLang = i18n.language === "en" ? "ar" : "en";
+    i18n.changeLanguage(newLang);
+    // document.body.style.direction is now handled by the Home component's wrapper div
+  };
+
   return (
     <>
       <nav className="navbar">
@@ -141,15 +150,20 @@ const Navbar = () => {
           onClick={handleTitleClick}
           style={{ cursor: "pointer" }}
         >
-          GoOrder
+          {t("GoOrder")}
         </h1>
         <div className="navbar-buttons">
+          {/* Language Toggle Button */}
+          <button className="language-toggle-button" onClick={toggleLanguage}>
+            {i18n.language === "en" ? "العربية" : "English"}
+          </button>
+
           <button
             className="login-button"
             onClick={handleAuthButton}
             disabled={loading}
           >
-            {loading ? "Loading..." : isLoggedIn ? "Dashboard" : "Login"}
+            {loading ? "Loading..." : isLoggedIn ? t("Dashboard") : t("Login")}
           </button>
           {isLoggedIn && (
             <button
@@ -157,13 +171,13 @@ const Navbar = () => {
               onClick={handleLogoutClick} // This now directly opens the modal
               disabled={loading}
             >
-              Logout
+              {t("Logout")}
             </button>
           )}
         </div>
       </nav>
 
-      {/* Logout Confirmation Modal - REPLACED WITH SIDEBAR'S MODAL */}
+      {/* Logout Confirmation Modal */}
       {showLogoutModal && (
         <div className="logout-modal-overlay">
           <div className="logout-modal">
@@ -176,16 +190,16 @@ const Navbar = () => {
               </button>
             </div>
             <div className="logout-modal-body">
-              <h3>Confirm Logout</h3>
-              <p>Are you sure you want to sign out of your account?</p>
+              <h3>{t("Confirm Logout")}</h3>
+              <p>{t("Are you sure you want to sign out of your account?")}</p>
             </div>
             <div className="logout-modal-actions">
               <button className="cancel-btn" onClick={cancelLogout}>
-                <span>Cancel</span>
+                <span>{t("Cancel")}</span>
               </button>
               <button className="confirm-btn" onClick={confirmLogout}>
                 <FaSignOutAlt />
-                <span>Sign Out</span>
+                <span>{t("Sign Out")}</span>
               </button>
             </div>
           </div>

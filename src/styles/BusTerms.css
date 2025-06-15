@@ -1,52 +1,191 @@
-/* General Page Styling */
+/* File: src/styles/BusTerms.css */
+/* Apply this exact same content to src/styles/BusPrivacy.css */
+
+/* --- Variables for consistent theming (DUPLICATED) --- */
+:root {
+  --navbar-height: 60px; /* Adjust if your Navbar's height is different */
+  --sidebar-width-desktop: 240px; /* Your desktop sidebar width */
+  --sidebar-width-mobile-overlay: 280px; /* Your mobile overlay sidebar width */
+
+  --primary-purple: #8a5bc6;
+  --light-purple: #b794d4;
+  --background-light: #eff0f4;
+  --background-lighter: #fdfdff;
+  --text-dark: #2d3748;
+  --text-medium: #4a5568;
+  --text-light: #718096;
+  --border-color: #e2e8f0;
+  --shadow-light: rgba(0, 0, 0, 0.08);
+  --shadow-medium: rgba(0, 0, 0, 0.15);
+  --shadow-strong: rgba(0, 0, 0, 0.3);
+
+  --transition-duration: 0.3s;
+  --transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- Basic Reset (DUPLICATED) --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: all var(--transition-duration) var(--transition-timing-function); /* Smooth transitions for elements */
+}
+
+/* --- Global Layout Styles (DUPLICATED) --- */
+/* The main layout container that holds Sidebar_2 and the routable page content */
+.main-content {
+  display: flex; /* This makes Sidebar_2 and the page-content-area flex items */
+  min-height: calc(100vh - var(--navbar-height)); /* Ensure it fills screen below navbar */
+  margin-top: var(--navbar-height); /* Pushes content down below Navbar */
+  box-sizing: border-box;
+}
+
+/* The area where your page components (like TermsConditions or BusSettings) will render */
+.page-content-area {
+  flex-grow: 1; /* This makes the content area take all available space to the right of the sidebar */
+  background-color: #f5f5f5; /* Background for the main content zone */
+  padding: 20px; /* Default padding for all pages within this area */
+  box-sizing: border-box;
+  transition: padding-left 0.3s ease-in-out; /* Smooth transition */
+  overflow-y: auto; /* Allow content inside to scroll if it overflows */
+}
+
+/* --- Page Specific Styles (.terms-container and its children) --- */
 .terms-container {
-    font-family: Arial, sans-serif;
-    line-height: 2;
-    color: #333;
-    margin-left: 20px;
-    margin-top: 20px;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background: white; /* White box background */
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+
+  /* This container sits inside .page-content-area, which has global padding.
+     To "shift left" on desktop, we simply make it align left and use padding. */
+  margin-left: 0; /* Ensures it starts at the very left of the .page-content-area */
+  margin-right: auto; /* Pushes it to the left if it has a max-width */
+  max-width: 900px; /* Limit max width for readability on large screens */
+  margin-bottom: 20px; /* Space below the terms container if it's not the last element */
+
+  /* Internal padding for content */
+  padding: 20px 30px; /* Consistent internal padding for content */
+
+  box-sizing: border-box;
+}
+
+/* Header Section for Back Button and Title */
+.terms-header-section {
+  display: flex; /* Use flexbox to align button and title */
+  align-items: center; /* Vertically align items in the middle */
+  gap: 15px; /* Space between the back button and the title */
+  margin-bottom: 20px; /* Space below the header section */
+}
+
+/* Back Button Styling */
+.back-button {
+  border: none;
+  background: none;
+  font-size: 24px; /* Larger icon for visibility */
+  cursor: pointer;
+  color: #555;
+  padding: 8px; /* Good size for click/tap target */
+  border-radius: 8px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  flex-shrink: 0; /* Prevent button from shrinking */
+}
+
+.back-button:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #000;
+}
+
+/* Main Title Styling */
+.terms-header-section h1 {
+  font-size: 28px; /* Prominent title */
+  font-weight: bold;
+  color: #333;
+  line-height: 1.2;
+  margin: 0; /* Remove default margins from h1 within flex container */
+  flex-grow: 1; /* Allow title to take remaining space */
+}
+
+/* Paragraph Styling */
+.terms-container p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 15px;
+}
+
+.terms-container strong {
+  font-weight: bold;
+}
+
+.terms-container ul {
+  list-style-type: disc;
+  padding-left: 25px;
+  margin-bottom: 15px;
+}
+
+.terms-container li {
+  margin-bottom: 8px;
+}
+
+/* --- Media Queries (DUPLICATED) --- */
+
+/* For screens smaller than 768px (tablets, mobile) */
+@media (max-width: 768px) {
+  /* Global Layout Adjustments (DUPLICATED) */
+  .main-content {
+    flex-direction: column; /* Stack children vertically on mobile (Sidebar becomes overlay) */
   }
-  
-  
-  .terms-container h1 {
-      font-weight: bold;
-      font-size: 24px;
-      font-weight: bold;
-      color: #333;
-      margin-top: -95px;
-      line-height: 5;
-      margin-left: 50px;
+
+  .page-content-area {
+    padding: 15px; /* Reduce padding for smaller screens */
+    padding-top: calc(var(--navbar-height) + 15px); /* Ensure content starts below Navbar */
   }
-  .terms-container p {
-      font-size: 16px;
-      line-height: 2;
-      color: #444;
+
+  /* Page Specific Adjustments */
+  .terms-container {
+    width: 100%;
+    max-width: none;
+    margin: 0 auto;
+    padding: 15px 20px;
   }
-  
-  
-  
-  .terms-container strong {
-      font-weight: bold;
+
+  .terms-header-section {
+    gap: 10px;
+    margin-bottom: 15px;
   }
-  
-  .terms-container ul {
-      list-style-type: disc;
-      padding-left: 20px;
-  }
-  
-  .terms-container li {
-      margin-bottom: 8px;
-  }
+
   .back-button {
-      border: none;
-      background: none;
-      font-size: 20px;
-      margin-bottom: 17px;
-      cursor: pointer;
-      color: #333;
-    }
-    .terms-header {
-      margin-top: -50px;
-    }
-  
-    
+    font-size: 20px;
+    padding: 6px;
+  }
+
+  .terms-header-section h1 {
+    font-size: 24px;
+  }
+
+  .terms-container p {
+    font-size: 15px;
+  }
+
+  .terms-container ul {
+    padding-left: 20px;
+  }
+}
+
+/* For very small mobile devices */
+@media (max-width: 480px) {
+  /* Global Layout Adjustments (DUPLICATED) */
+  .page-content-area {
+    padding: 10px;
+  }
+
+  /* Page Specific Adjustments */
+  .terms-container {
+    padding: 10px 15px;
+  }
+}

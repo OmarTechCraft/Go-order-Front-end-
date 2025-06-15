@@ -3,84 +3,132 @@ import { Link } from "react-router-dom";
 import { FaGooglePlay, FaApple } from "react-icons/fa";
 import "../../styles/Home.css"; // Consolidated CSS file
 import Navbar from "../../components/HomNav/HomeNav"; // Assuming this is your Navbar component path
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 // Dummy GetStartedButton component since its code wasn't provided
-// If you have a separate GetStartedButton.tsx, import it instead
 const GetStartedButton: React.FC = () => {
-  return <button className="get-started">Get Started</button>;
+  const { t } = useTranslation();
+  return <button className="get-started">{t("Get Started")}</button>;
 };
 
 const Home: React.FC = () => {
+  const { t, i18n } = useTranslation();
+
   return (
-    <>
-      {/* Navbar - Now included */}
+    // Apply dir attribute to the outermost div of your content
+    <div dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <div className="try">
         <Navbar />
       </div>
 
       {/* First Section - OfferSection */}
       <div className="offer-container">
-        {/* The background image is now handled by CSS on .offer-container */}
         <div className="offer-text">
           <div className="offer-title">
-            <h1 className="offer-heading">Claim Best Offer</h1>
+            <h1 className="offer-heading">{t("Claim Best Offer")}</h1>
             <div className="on-order-container">
-              <span className="on-text">on</span>
-              <span className="highlight">
-                <span className="special-o">O</span>rder
-              </span>
+              {/* Conditional rendering for 'on Order' based on language */}
+              {i18n.language === "en" ? (
+                <>
+                  <span className="on-text">{t("on")}</span>
+                  <span className="highlight">
+                    <span className="special-o">O</span>rder
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="on-text">{t("on")}</span>
+                  {/* استخدام class جديد لتطبيق نفس تصميم الـ "highlight" ولكن على كلمة كاملة */}
+                  <span className="arabic-order-style">{t("Order")}</span>
+                </>
+              )}
             </div>
           </div>
-          <p className="tagline">“Dare to Be Different, Shop With Us”</p>
-          <div className="cta-reviews">
-            <Link to="/register">
-              <GetStartedButton />
-            </Link>
-            <div className="collab-images">
-              <img src="/images/girl1.jpg" alt="Customer 1" />
-              <img src="/images/girl2.jpg" alt="Customer 2" />
-              <img src="/images/boy11.jpg" alt="Customer 3" />
-            </div>
-            <div className="customer-reviews">
-              <span>Our Happy Customer</span>
-              <div className="stars">⭐ 4.8 (12.5k Reviews)</div>
-            </div>
-          </div>
+
+          {/* تبديل مكان جملة "تجرأ على..." مع مجموعة CTA بالكامل */}
+          {i18n.language === "en" ? (
+            <>
+              {/* الترتيب الافتراضي للغة الإنجليزية */}
+              <p className="tagline">{t("“Dare to Be Different, Shop With Us”")}</p>
+              <div className="cta-reviews">
+                <Link to="/register">
+                  <GetStartedButton />
+                </Link>
+                <div className="collab-images">
+                  <img src="/images/girl1.jpg" alt="Customer 1" />
+                  <img src="/images/girl2.jpg" alt="Customer 2" />
+                  <img src="/images/boy11.jpg" alt="Customer 3" />
+                </div>
+                <div className="customer-reviews">
+                  <span>{t("Our Happy Customer")}</span>
+                  <div className="stars">⭐ 4.8 (12.5k Reviews)</div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* الترتيب للغة العربية بعد التبديل الأول (tagline) */}
+               <p className="tagline">{t("“Dare to Be Different, Shop With Us”")}</p>{" "}
+              {/* جملة التاج لاين تأتي في النهاية هنا */}
+              <div className="cta-reviews">
+                {/* تم تبديل مكان زر ابدأ الآن مع عملاؤنا السعداء */}
+                <Link to="/register">
+                  <GetStartedButton /> {/* زر "ابدأ الآن" يأتي أولاً (على اليمين) */}
+                </Link>
+
+                <div className="customer-reviews">
+                  {" "}
+                  {/* ثم نص عملاؤنا السعداء والنجوم */}
+                  <span>{t("Our Happy Customer")}</span>
+                  <div className="stars">⭐ 4.8 (12.5k Reviews)</div>
+                </div>
+
+                <div className="collab-images">
+                  {" "}
+                  {/* صور العملاء في النهاية */}
+                  <img src="/images/girl1.jpg" alt="Customer 1" />
+                  <img src="/images/girl2.jpg" alt="Customer 2" />
+                  <img src="/images/boy11.jpg" alt="Customer 3" />
+                </div>
+              </div>
+             
+            </>
+          )}
         </div>
       </div>
 
       {/* Second Section - What We Serve */}
       <div className="what-we-serve-container">
-        <p className="what-we-serve-title">WHAT WE SERVE</p>
+        <p className="what-we-serve-title">{t("WHAT WE SERVE")}</p>
         <h2 className="delivery-partner-heading">
-          Your Favourite Delivery Partner
+          {t("Your Favourite Delivery Partner")}
         </h2>
         <div className="services-container">
           <div className="service">
             <img src="/images/req.jpg" alt="Easy to Order" />
-            <h3 className="service-title">Easy To Order</h3>
+            <h3 className="service-title">{t("Easy To Order")}</h3>
             <p className="service-description">
-              You only need a few steps in ordering
+              {t("You only need a few steps in ordering")}
             </p>
           </div>
           <div className="service">
             <img src="/images/take.jpg" alt="Fastest Delivery" />
-            <h3 className="service-title">Fastest Delivery</h3>
+            <h3 className="service-title">{t("Fastest Delivery")}</h3>
             <p className="service-description">
-              Delivery that is always on time, even faster
+              {t("Delivery that is always on time, even faster")}
             </p>
           </div>
           <div className="service">
             <img src="/images/serve.jpg" alt="Best Quality" />
-            <h3 className="service-title">Best Quality</h3>
+            <h3 className="service-title">{t("Best Quality")}</h3>
             <p className="service-description">
-              Not only fast, our quality is also number one
+              {t("Not only fast, our quality is also number one")}
             </p>
           </div>
         </div>
       </div>
 
-      {/* Third Section - Two Images Side by Side */}
+      {/* Third Section - Two Images Side by Side (No text to translate here) */}
       <div className="image-split-container">
         <img
           src="/images/chch.jpg"
@@ -97,20 +145,15 @@ const Home: React.FC = () => {
       {/* Fourth Phase - Who We Are Section */}
       <div className="phase4-content">
         <div className="phase4-text">
-          <p className="about-us">About Us</p>
-          <h2 className="who-we-are">Who We Are</h2>
+          <p className="about-us">{t("About Us")}</p>
+          <h2 className="who-we-are">{t("Who We Are")}</h2>
           <p className="description1">
-            GoOrder, the leading on-demand food and Q-<br></br>commerce app for
-            everyday deliveries, has been<br></br> offering convenience and
-            reliability to its<br></br>
-            customers. We harness innovative technology<br></br> and knowledge
-            to simplify everyday life for our<br></br> customers, optimize
-            operations for our<br></br>
-            restaurants and local shops, and provide our<br></br> riders with
-            reliable earning opportunities daily.
+            {t(
+              "GoOrder, the leading on-demand food and Q-commerce app for everyday deliveries, has been offering convenience and reliability to its customers. We harness innovative technology and knowledge to simplify everyday life for our customers, optimize operations for our restaurants and local shops, and provide our riders with reliable earning opportunities daily."
+            )}
           </p>
           <div className="cta-container">
-            <p className="join-us">Join As Partner</p>
+            <p className="join-us">{t("Join As Partner")}</p>
             <Link to="/register">
               <GetStartedButton />
             </Link>
@@ -142,16 +185,14 @@ const Home: React.FC = () => {
           <div className="dot purple" style={{ top: "-10%", left: "0%" }}></div>
         </div>
         <div className="phase5-content">
-          <h2 className="phase5-title">We Deliver</h2>
+          <h2 className="phase5-title">{t("We Deliver")}</h2>
           <p className="phase5-text">
-            A GoOrder rider will be along shortly to pick<br></br> up the order
-            and deliver it to the customer.<br></br>
-            We highly recommend other restaurants to<br></br> work with Talabat
-            and experience the<br></br> benefits of their joint partnership.
-            <br></br> Delivery that is always on time, even faster.
+            {t(
+              "A GoOrder rider will be along shortly to pick up the order and deliver it to the customer. We highly recommend other restaurants to work with Talabat and experience the benefits of their joint partnership. Delivery that is always on time, even faster."
+            )}
           </p>
           <div className="phase5-cta">
-            <p className="join-text">Join as Deliver</p>
+            <p className="join-text">{t("Join as Deliver")}</p>
             <Link to="/deliver-with-us">
               <GetStartedButton />
             </Link>
@@ -163,11 +204,10 @@ const Home: React.FC = () => {
       <div className="phase6-container">
         <div className="content-wrapper">
           <div className="phase6-content">
-            <p className="download-app">DOWNLOAD APP</p>
-            <h2 className="phase6-title">Download Our Application Now!</h2>
+            <p className="download-app">{t("DOWNLOAD APP")}</p>
+            <h2 className="phase6-title">{t("Download Our Application Now!")}</h2>
             <p className="phase6-text">
-              Discover order wherever and whenever and get<br></br> your order
-              delivered quickly.
+              {t("Discover order wherever and whenever and get your order delivered quickly.")}
             </p>
             <div className="download-links">
               <a
@@ -178,8 +218,8 @@ const Home: React.FC = () => {
               >
                 <FaGooglePlay className="icon" />
                 <span>
-                  <small>GET IT ON</small>
-                  <strong>Google Play</strong>
+                  <small>{t("GET IT ON")}</small>
+                  <strong>{t("Google Play")}</strong>
                 </span>
               </a>
               <a
@@ -190,8 +230,8 @@ const Home: React.FC = () => {
               >
                 <FaApple className="icon" />
                 <span>
-                  <small>Download on the</small>
-                  <strong>App Store</strong>
+                  <small>{t("Download on the")}</small>
+                  <strong>{t("App Store")}</strong>
                 </span>
               </a>
             </div>
@@ -205,13 +245,12 @@ const Home: React.FC = () => {
       {/* Seventh Phase - Footer */}
       <div className="footer">
         <div className="footer-section goorder-section">
-          <h2 className="title goorder">GoOrder</h2>
+          <h2 className="title goorder">{t("GoOrder")}</h2>
           <p className="description">
-            Our job is to fill your tummy with delicious food and with fast and
-            free delivery.
+            {t("Our job is to fill your tummy with delicious food and with fast and free delivery.")}
           </p>
           <div className="social-section">
-            <h3 className="social-title">You can find us there</h3>
+            <h3 className="social-title">{t("You can find us there")}</h3>
             <div className="separator"></div>
             <div className="social-icons">
               <a
@@ -240,25 +279,25 @@ const Home: React.FC = () => {
           </div>
         </div>
         <div className="footer-section contact-section">
-          <h3 className="title contact">Contact info</h3>
+          <h3 className="title contact">{t("Contact info")}</h3>
           <p>
-            <strong>Phone number :</strong> +(20) 1111111111
+            <strong>{t("Phone number :")}</strong> +(20) 1111111111
           </p>
           <p>
-            <strong>Address :</strong> Egypt - Cairo
+            <strong>{t("Address :")}</strong> {t("Egypt - Cairo")}
           </p>
         </div>
         <div className="footer-section help-section">
-          <h3 className="title get-help">Get Help</h3>
+          <h3 className="title get-help">{t("Get Help")}</h3>
           <p>
-            <Link to="/privacy-notice">Privacy Notice</Link>
+            <Link to="/privacy-notice">{t("Privacy Notice")}</Link>
           </p>
           <p>
-            <Link to="/term-condition">Terms & Conditions</Link>
+            <Link to="/term-condition">{t("Terms & Conditions")}</Link>
           </p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
