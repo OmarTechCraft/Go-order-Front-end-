@@ -1,880 +1,1074 @@
-/* Add these new styles for the updated card modal */
+/* marketing-ai.css */
+:root {
+  --marketing-ai-primary-color: #bb41d0; /* Original purple */
+  --marketing-ai-primary-hover-color: #9d35b0; /* Darker purple for hover */
+  --marketing-ai-secondary-color: #6c757d; /* Muted gray for secondary elements */
+  --marketing-ai-background-color: #f8f9fa; /* Light background */
+  --marketing-ai-card-background: #ffffff; /* White cards */
+  --marketing-ai-border-color: #e0e0e0;
+  --marketing-ai-text-color: #343a40; /* Darker text for readability */
+  --marketing-ai-light-text-color: #6c757d;
+  --marketing-ai-success-color: #28a745;
+  --marketing-ai-error-color: #dc3545; /* Added for validation errors */
+  --marketing-ai-shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --marketing-ai-shadow-medium: 0 6px 20px rgba(0, 0, 0, 0.1);
+  --marketing-ai-border-radius: 8px;
+  --marketing-ai-spacing-unit: 16px;
 
-/* Card Modal - New Design */
-.card-modal-new {
-  background-color: white;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 500px;
-  padding: 30px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  position: relative;
-  margin: 0; /* Remove top margin */
+  /* Define Navbar and Sidebar dimensions as CSS variables (if not already in their own files) */
+  /* Check your nav.css or Navbar component's CSS for the exact height */
+  --navbar-actual-height: 60px; /* From your nav.css .header */
+  --sidebar-width-desktop: 240px; /* From your nav.css .sidebar */
+  --extra-top-spacing: 5px; /* Your requested extra space */
 }
 
-/* Card Visualization - New Design */
-.card-visualization-new {
-  background: linear-gradient(135deg, #bb41d0 0%, #8a5bc6 100%);
-  border-radius: 24px;
-  padding: 24px;
-  color: white;
-  margin-bottom: 10px;
-  position: relative;
-  overflow: hidden;
-  height: 180px;
-  width: 100%;
+/* Base styles that are safe to be global if applied to body/html,
+   but are now part of the module so they're scoped if applied to a container.
+   If these were truly global, they would go in App.css/index.css. */
+/* body remains global, assumed not managed by this specific CSS file */
+body {
+  font-family: "Inter", sans-serif;
+  background-color: var(--marketing-ai-background-color); /* Use prefixed variable */
+  color: var(--marketing-ai-text-color); /* Use prefixed variable */
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
 }
 
-.card-brand-new {
-  font-size: 18px;
-  font-weight: 500;
-  margin-bottom: 20px;
-}
-
-.card-number-display-new {
-  font-size: 22px;
-  letter-spacing: 2px;
-  margin-bottom: 30px;
-  font-weight: 500;
-}
-
-.card-details-row-new {
-  display: flex;
-  justify-content: flex-start;
-  gap: 40px;
-  margin-bottom: 16px;
-}
-
-.card-detail-group-new {
-  display: flex;
-  flex-direction: column;
-}
-
-.card-detail-label-new {
-  font-size: 12px;
-  opacity: 0.8;
-  margin-bottom: 4px;
-}
-
-.card-detail-value-new {
-  font-size: 14px;
-}
-
-.card-logo-new {
-  position: absolute;
-  right: 24px;
-  bottom: 24px;
-}
-
-.mastercard-logo-new {
-  display: flex;
-  align-items: center;
-}
-
-.circle-left-new {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.9);
-  margin-right: -10px;
-  z-index: 1;
-}
-
-.circle-right-new {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.9);
-  z-index: 0;
-}
-
-/* Form Fields - New Design */
-.card-form-fields-new {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.form-group-new {
-  margin-bottom: 0;
-}
-
-.form-label-new {
-  display: block;
-  font-size: 14px;
-  color: #333;
-  margin-bottom: 6px;
-  font-weight: 500;
-}
-
-.form-input-new {
-  width: 100%;
-  padding: 10px 16px;
-  border: 1px solid #d9d9d9;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 0.2s;
-  height: 42px;
-}
-
-.form-input-new:focus {
-  outline: none;
-  border-color: #bb41d0;
-}
-
-.card-number-input-container-new {
-  position: relative;
-}
-
-.card-icon-container-new {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.form-row-new {
-  display: flex;
-  gap: 16px;
-}
-
-.form-col-new {
-  flex: 1;
-}
-
-.pay-now-button-new {
-  background-color: #bb41d0;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  width: 100%;
-  margin-top: 8px;
-  height: 42px;
-}
-
-.pay-now-button-new:hover {
-  background-color: #a836b9;
-}
-
-/* Keep all the existing CSS below */
+/* Overall app layout wrapper (from layout.tsx .app-container) */
 .app-container {
   display: flex;
   min-height: 100vh;
-  background-color: #f4f5f9;
+  background-color: var(--marketing-ai-background-color); /* Use prefixed variable */
 }
 
+/* main-content in layout.tsx is the flex column containing Sidebar and content-area */
 .main-content {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  width: 100%;
 }
 
-.content-area {
-  display: flex;
-  flex: 1;
+/* The div wrapping your MarketingAI component's output */
+.content-area2 {
+  flex-grow: 1;
+  padding-top: calc(var(--navbar-actual-height) + var(--extra-top-spacing));
+  padding-left: calc(var(--sidebar-width-desktop) + 20px);
+  padding-right: 20px;
+  padding-bottom: 20px;
+  box-sizing: border-box;
+  transition: padding-left 0.3s ease-in-out;
+  margin-bottom: -520px;
+  margin-left: -120px;
+  width: 100%;
 }
 
-.marketing-content {
-  flex: 1;
-  padding: 20px;
-  max-width: 800px;
+/* Specific styles for the actual MarketingAI page content */
+.marketing-ai-content { /* Renamed */
+  background-color: var(--marketing-ai-card-background); /* Use prefixed variable */
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  max-width: 900px;
+  width: 100%;
   margin: 0 auto;
-  width: 100%;
 }
 
-.marketing-card {
-  background-color: white;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  margin-bottom: 20px;
+/* --- Marketing AI Page Specifics --- */
+.marketing-ai-card { /* Renamed */
+  background-color: var(--marketing-ai-card-background); /* Use prefixed variable */
+  border-radius: var(--marketing-ai-border-radius); /* Use prefixed variable */
+  box-shadow: var(--marketing-ai-shadow-light); /* Use prefixed variable */
+  padding: calc(var(--marketing-ai-spacing-unit) * 1.5); /* Use prefixed variable */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform, box-shadow;
+  margin-bottom: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
 }
 
-.section-title {
-  font-size: 18px;
+.marketing-ai-card:hover { /* Renamed */
+  transform: translateY(-3px);
+  box-shadow: var(--marketing-ai-shadow-medium); /* Use prefixed variable */
+}
+
+.marketing-ai-section-title { /* Renamed */
+  display: flex;
+  align-items: center;
+  font-size: 1.4rem;
+  color: var(--marketing-ai-text-color); /* Use prefixed variable */
+  margin-bottom: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
   font-weight: 600;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
 }
 
-.section-title .info-icon {
+.marketing-ai-info-icon { /* Renamed */
   margin-left: 8px;
-  color: #6e39cb;
-  cursor: pointer;
+  color: var(--marketing-ai-secondary-color); /* Use prefixed variable */
+  cursor: help;
 }
 
-.upload-container {
-  border: 2px dashed #c9b5e2;
-  border-radius: 8px;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.upload-container:hover {
-  border-color: #bb41d0;
-  background-color: rgba(201, 181, 226, 0.05);
-}
-
-.upload-icon {
-  width: 48px;
-  height: 48px;
-  background-color: #c9b5e2;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 16px;
-}
-
-.upload-text {
-  font-size: 16px;
-  margin-bottom: 8px;
-}
-
-.upload-support {
-  font-size: 12px;
-  color: #707070;
-}
-
-.promotion-stats {
-  background-color: #f4f5f9;
-  border-radius: 8px;
-  padding: 16px;
-  margin-top: 20px;
-}
-
-.stats-title {
-  font-size: 16px;
-  font-weight: 500;
-  margin-bottom: 8px;
-}
-
-.stats-value {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-
-.stats-description {
-  font-size: 14px;
-  color: #707070;
-}
-
-.audience-options {
-  margin-top: 20px;
-}
-
-.audience-option {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 0;
-  border-bottom: 1px solid #ededed;
-}
-
-.audience-option:last-child {
-  border-bottom: none;
-}
-
-.option-label {
-  font-size: 16px;
-}
-
-/* Custom Checkbox */
-.custom-checkbox {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 2px solid #ededed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.custom-checkbox.checked {
-  background-color: #bb41d0;
-  border-color: #bb41d0;
-}
-
-.slider-container {
-  margin-top: 20px;
-}
-
-.slider-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.slider-title {
-  font-size: 16px;
-  font-weight: 500;
-}
-
-.slider-track {
-  height: 8px;
-  background-color: #ededed;
-  border-radius: 4px;
-  position: relative;
-  margin-bottom: 12px;
-  cursor: pointer;
-}
-
-.slider-fill {
-  position: absolute;
-  height: 100%;
-  background-color: #bb41d0;
-  border-radius: 4px;
-  pointer-events: none;
-}
-
-.slider-thumb {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background-color: #bb41d0;
-  border-radius: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  cursor: grab;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  pointer-events: none;
-}
-
-.slider-thumb:hover {
-  transform: translate(-50%, -50%) scale(1.1);
-}
-
-.slider-thumb:active {
-  cursor: grabbing;
-}
-
-.slider-options {
-  display: flex;
-  justify-content: space-between;
-}
-
-.slider-option {
-  font-size: 14px;
-  color: #707070;
-}
-
-.price-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.price {
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.price-details {
-  font-size: 14px;
-  color: #707070;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.button-container {
-  margin-top: 24px;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.button-primary {
-  background-color: #bb41d0;
+/* --- Buttons --- */
+.marketing-ai-button-primary { /* Renamed */
+  background-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
   color: white;
-  border: none;
-  border-radius: 8px;
   padding: 12px 24px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  margin-bottom: 140px;
-}
-
-.button-primary:hover {
-  background-color: #a836b9;
-}
-
-/* Modal styles */
-/* Updated Modal Overlay */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: flex-start; /* Align modal to top */
-  overflow: hidden; /* Prevent scrolling */
-}
-
-/* Updated Card Modal (popup) */
-.card-modal {
-  background-color: white;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 500px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  position: relative;
-  margin: 0; /* Remove top margin */
-}
-
-
-.modal-close-button {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: none;
   border: none;
+  border-radius: var(--marketing-ai-border-radius); /* Use prefixed variable */
   cursor: pointer;
-  color: #707070;
-  padding: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease,
+    box-shadow 0.3s ease;
+  box-shadow: var(--marketing-ai-shadow-light); /* Use prefixed variable */
+  width: 100%;
+}
+
+.marketing-ai-button-primary:hover { /* Renamed */
+  background-color: var(--marketing-ai-primary-hover-color); /* Use prefixed variable */
+  transform: translateY(-2px);
+  box-shadow: var(--marketing-ai-shadow-medium); /* Use prefixed variable */
+}
+
+.marketing-ai-button-primary:disabled { /* Renamed */
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.marketing-ai-button-container { /* Renamed */
+  margin-top: calc(var(--marketing-ai-spacing-unit) * 1.5); /* Use prefixed variable */
+  text-align: center;
+}
+
+/* --- Upload Section --- */
+.marketing-ai-upload-container { /* Renamed */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  border: 2px dashed var(--marketing-ai-border-color); /* Use prefixed variable */
+  border-radius: var(--marketing-ai-border-radius); /* Use prefixed variable */
+  padding: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+  cursor: pointer;
+  background-color: #f2f4f6;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.marketing-ai-upload-container:hover { /* Renamed */
+  border-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  background-color: #f0ebf3;
+}
+
+.marketing-ai-upload-icon { /* Renamed */
+  background-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  border-radius: 50%;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  margin-bottom: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
 }
 
-.modal-close-button:hover {
-  color: #333;
-}
-
-/* Card Visualization */
-.card-visualization {
-  background: linear-gradient(135deg, #bb41d0 0%, #8a5bc6 100%);
-  border-radius: 12px;
-  padding: 24px;
-  color: white;
-  margin-bottom: 32px;
-  position: relative;
-  overflow: hidden;
-  height: 200px;
-}
-
-.card-visualization::before {
-  content: "";
-  position: absolute;
-  top: -50px;
-  left: -50px;
-  width: 200px;
-  height: 200px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-}
-
-.card-visualization::after {
-  content: "";
-  position: absolute;
-  bottom: -100px;
-  right: -50px;
-  width: 250px;
-  height: 250px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-}
-
-.card-brand {
-  font-size: 18px;
+.marketing-ai-upload-text { /* Renamed */
+  font-size: 1.1rem;
   font-weight: 500;
-  margin-bottom: 24px;
+  margin-bottom: 8px;
 }
 
-.card-number-display {
-  font-size: 24px;
-  letter-spacing: 2px;
-  margin-bottom: 32px;
+.marketing-ai-upload-support { /* Renamed */
+  font-size: 0.9rem;
+  color: var(--marketing-ai-light-text-color); /* Use prefixed variable */
 }
 
-.card-details-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 16px;
+.marketing-ai-uploaded-image { /* Renamed */
+  text-align: center;
 }
 
-.card-detail-group {
-  display: flex;
-  flex-direction: column;
+.marketing-ai-uploaded-image img { /* Renamed */
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: var(--marketing-ai-border-radius); /* Use prefixed variable */
+  margin-bottom: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
 }
 
-.card-detail-label {
-  font-size: 12px;
-  opacity: 0.8;
+/* --- Promotion Stats --- */
+.marketing-ai-promotion-stats { /* Renamed */
+  background-color: #f3ebf6;
+  border: 1px solid #d1b3d8;
+  border-radius: var(--marketing-ai-border-radius); /* Use prefixed variable */
+  padding: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+  text-align: center;
+  margin-top: calc(var(--marketing-ai-spacing-unit) * 1.5); /* Use prefixed variable */
+  border: 1px solid #d1b3d8;
+}
+
+.marketing-ai-stats-title { /* Renamed */
+  font-size: 0.95rem;
+  color: var(--marketing-ai-primary-color); /* Use prefixed variable */
   margin-bottom: 4px;
 }
 
-.card-detail-value {
-  font-size: 14px;
-}
-
-.card-logo {
-  position: absolute;
-  right: 24px;
-  bottom: 24px;
-}
-
-.mastercard-logo {
-  display: flex;
-  align-items: center;
-}
-
-.circle {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-}
-
-.circle-left {
-  background-color: rgba(255, 255, 255, 0.8);
-  margin-right: -10px;
-  z-index: 1;
-}
-
-.circle-right {
-  background-color: rgba(255, 255, 255, 0.8);
-  z-index: 0;
-}
-
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 0vh;
-  top: 0;
-  margin-bottom: -30px;
-}
-
-.modal-title {
-  font-size: 20px;
-  font-weight: 600;
-  top: 0;
-  margin-bottom: 10px;
-}
-.modal2-title{
-  font-size: 20px;
-  font-weight: 600;
-  top: 0;
-margin-right: 160px;
-
-}
-.modal3-title{
-
-  font-size: 20px;
-  font-weight: 600;
-  top: 0;
-margin-right: 160px;
-
-}
-.modal4-title{
-
-  font-size: 20px;
-  font-weight: 600;
-  top: 0;
-margin-right: 160px;
-}
-.interest-option{
-  row-gap: 300px;
-}
-
-.modal-body{
-  margin-bottom: -50px;
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #707070;
-}
-
-
-
-.audience-estimate {
-  text-align: center;
-  margin: 24px 0;
-}
-
-.audience-number {
-  font-size: 28px;
+.marketing-ai-stats-value { /* Renamed */
+  font-size: 2.2rem;
   font-weight: 700;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: var(--marketing-ai-text-color); /* Use prefixed variable */
 }
 
-.audience-info {
-  margin-left: 8px;
-  color: #707070;
+.marketing-ai-stats-description { /* Renamed */
+  font-size: 0.85rem;
+  color: var(--marketing-ai-light-text-color); /* Use prefixed variable */
 }
 
-.audience-label {
-  font-size: 16px;
-  color: #707070;
-}
-
-.form-group {
-  margin-bottom: 0;
-}
-
-.form-label {
-  display: block;
-  font-size: 14px;
-  color: #333;
-  margin-bottom: 8px;
-}
-
-.form-input {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid #d9d9d9;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 0.2s;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #bb41d0;
-}
-
-.option-group {
-  margin-top: 24px;
-}
-
-.option-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-.option-subtitle {
-  font-size: 14px;
-  color: #707070;
-  margin-bottom: 16px;
-}
-
-.option-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.option-button {
-  background-color: #f4f5f9;
-  border: 1px solid #ededed;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.option-button.selected {
-  background-color: #f0e6f7;
-  border-color: #bb41d0;
-  color: #bb41d0;
-}
-
-.option-button:hover {
-  background-color: #e9e9e9;
-}
-
-/* Payment styles */
-.payment-methods {
+/* --- Audience Options --- */
+.marketing-ai-audience-options { /* Renamed */
   display: flex;
   flex-direction: column;
-  gap: 16px;
-}
-
-.payment-method {
-  border: 1px solid #ededed;
-  border-radius: 12px;
-  padding: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.payment-method:hover {
-  border-color: #bb41d0;
-  background-color: #f9f6fb;
-}
-
-.payment-method.selected {
-  border-color: #bb41d0;
-  background-color: #f9f6fb;
-}
-
-.payment-info {
-  display: flex;
-  align-items: center;
   gap: 12px;
 }
 
-.payment-icon {
-  width: 32px;
-  height: 32px;
+.marketing-ai-audience-option { /* Renamed */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f7f9fb;
+  border: 1px solid var(--marketing-ai-border-color); /* Use prefixed variable */
+  border-radius: var(--marketing-ai-border-radius); /* Use prefixed variable */
+  padding: 14px var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.marketing-ai-audience-option:hover { /* Renamed */
+  border-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  background-color: #f0ebf3;
+  transform: translateY(-2px);
+  box-shadow: var(--marketing-ai-shadow-light); /* Use prefixed variable */
+}
+
+.marketing-ai-audience-option .marketing-ai-option-label { /* Renamed */
+  font-weight: 500;
+  color: var(--marketing-ai-text-color); /* Use prefixed variable */
+}
+
+.marketing-ai-audience-option .lucide-chevron-right {
+  color: var(--marketing-ai-secondary-color); /* Use prefixed variable */
+}
+
+.marketing-ai-custom-checkbox { /* Renamed */
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--marketing-ai-primary-color); /* Use prefixed variable */
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.payment-details {
-  font-size: 14px;
+.marketing-ai-custom-checkbox.checked { /* Renamed */
+  background-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  border-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
 }
 
-.payment-name {
+/* --- Sliders (Duration & Budget) --- */
+.marketing-ai-slider-container { /* Renamed */
+  margin-bottom: calc(var(--marketing-ai-spacing-unit) * 2); /* Use prefixed variable */
+}
+
+.marketing-ai-slider-header { /* Renamed */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+}
+
+.marketing-ai-slider-title { /* Renamed */
+  font-size: 1.1rem;
   font-weight: 500;
+  color: var(--marketing-ai-text-color); /* Use prefixed variable */
+}
+
+.marketing-ai-budget-input-wrapper { /* Renamed */
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--marketing-ai-border-color); /* Use prefixed variable */
+  border-radius: var(--marketing-ai-border-radius); /* Use prefixed variable */
+  background-color: #fcfcfc;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.marketing-ai-budget-input-wrapper:focus-within { /* Renamed */
+  border-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  box-shadow: 0 0 0 3px rgba(187, 65, 208, 0.25);
+}
+
+.marketing-ai-currency-prefix { /* Renamed */
+  padding: 8px 10px;
+  background-color: #eee;
+  color: var(--marketing-ai-light-text-color); /* Use prefixed variable */
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-right: 1px solid var(--marketing-ai-border-color); /* Use prefixed variable */
+}
+
+.marketing-ai-custom-budget-input { /* Renamed */
+  flex-grow: 1;
+  padding: 8px 10px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  color: var(--marketing-ai-text-color); /* Use prefixed variable */
+  text-align: right;
+}
+
+.marketing-ai-custom-budget-input::-webkit-outer-spin-button, /* Renamed */
+.marketing-ai-custom-budget-input::-webkit-inner-spin-button { /* Renamed */
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.marketing-ai-slider-track { /* Renamed */
+  width: 100%;
+  height: 8px;
+  background-color: var(--marketing-ai-border-color); /* Use prefixed variable */
+  border-radius: 4px;
+  position: relative;
+  cursor: grab;
+  margin-bottom: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.marketing-ai-slider-track:active { /* Renamed */
+  cursor: grabbing;
+}
+
+.marketing-ai-slider-fill { /* Renamed */
+  height: 100%;
+  background-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  border-radius: 4px;
+  transition: width 0.1s linear;
+}
+
+.marketing-ai-slider-thumb { /* Renamed */
+  width: 20px;
+  height: 20px;
+  background-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  border: 3px solid white;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: var(--marketing-ai-shadow-light); /* Use prefixed variable */
+  cursor: grab;
+  transition: left 0.1s linear, transform 0.1s linear,
+    background-color 0.3s ease;
+}
+
+.marketing-ai-slider-thumb:hover { /* Renamed */
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.marketing-ai-slider-options { /* Renamed */
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--marketing-ai-light-text-color); /* Use prefixed variable */
+}
+
+.marketing-ai-slider-option { /* Renamed */
+  flex: 1;
+  text-align: center;
+  cursor: pointer;
+  transition: color 0.2s ease, font-weight 0.2s ease;
+}
+
+.marketing-ai-slider-option.selected, /* Renamed */
+.marketing-ai-slider-option[style*="font-weight: bold"] { /* Renamed */
+  color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  font-weight: bold;
+}
+
+/* --- Price Details --- */
+.marketing-ai-price-container { /* Renamed */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: calc(var(--marketing-ai-spacing-unit) * 1.5); /* Use prefixed variable */
+  font-weight: 600;
+}
+
+.marketing-ai-price { /* Renamed */
+  font-size: 1.8rem;
+  color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+}
+
+.marketing-ai-price-details { /* Renamed */
+  display: flex;
+  align-items: center;
+  color: var(--marketing-ai-secondary-color); /* Use prefixed variable */
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+}
+
+.marketing-ai-price-details:hover { /* Renamed */
+  color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+}
+
+/* --- Modals (General) --- */
+.marketing-ai-modal-overlay { /* Renamed */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.marketing-ai-modal { /* Renamed */
+  background-color: var(--marketing-ai-card-background); /* Use prefixed variable */
+  border-radius: var(--marketing-ai-border-radius); /* Use prefixed variable */
+  box-shadow: var(--marketing-ai-shadow-medium); /* Use prefixed variable */
+  width: 90%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  animation: slideInUp 0.3s ease-out forwards;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Specific styling for a compact modal header */
+.marketing-ai-modal-header-compact { /* Renamed */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+  min-height: 40px;
+  border-bottom: 1px solid var(--marketing-ai-border-color); /* Use prefixed variable */
+}
+
+.marketing-ai-modal-title { /* Renamed */
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--marketing-ai-text-color); /* Use prefixed variable */
+  text-align: center;
+  flex-grow: 1;
+  white-space: nowrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.marketing-ai-modal-back-button { /* Renamed */
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--marketing-ai-secondary-color); /* Use prefixed variable */
+  transition: color 0.2s ease, background-color 0.2s ease;
+  padding: 8px 12px;
+  border-radius: var(--marketing-ai-border-radius); /* Use prefixed variable */
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  height: 40px;
+}
+
+.marketing-ai-modal-back-button:hover { /* Renamed */
+  background-color: #f0f2f5;
+  color: var(--marketing-ai-text-color); /* Use prefixed variable */
+}
+
+.marketing-ai-modal-close-button { /* Renamed */
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--marketing-ai-secondary-color); /* Use prefixed variable */
+  transition: color 0.2s ease, transform 0.2s ease;
+  padding: 5px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.marketing-ai-modal-close-button:hover { /* Renamed */
+  color: var(--marketing-ai-text-color); /* Use prefixed variable */
+  transform: scale(1.1);
+}
+
+.marketing-ai-header-spacer { /* Renamed */
+  width: 40px;
+}
+
+.marketing-ai-modal-body { /* Renamed */
+  padding: calc(var(--marketing-ai-spacing-unit) * 1.5); /* Use prefixed variable */
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+/* --- Price Details Modal Specifics --- */
+.marketing-ai-price-details-modal .marketing-ai-modal-body .marketing-ai-price-item { /* Renamed */
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed #f0f0f0;
+}
+
+.marketing-ai-price-details-modal .marketing-ai-modal-body .marketing-ai-price-item:last-child { /* Renamed */
+  border-bottom: none;
+  font-weight: 600;
+  margin-top: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+  padding-top: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+  border-top: 2px solid var(--marketing-ai-border-color); /* Use prefixed variable */
+}
+
+.marketing-ai-price-details-modal .marketing-ai-price-label { /* Renamed */
+  color: var(--marketing-ai-light-text-color); /* Use prefixed variable */
+}
+
+.marketing-ai-price-details-modal .marketing-ai-price-value { /* Renamed */
+  color: var(--marketing-ai-text-color); /* Use prefixed variable */
+  font-weight: 500;
+}
+
+.marketing-ai-price-details-modal .marketing-ai-price-info { /* Renamed */
+  margin-left: 4px;
+  color: var(--marketing-ai-secondary-color); /* Use prefixed variable */
+}
+
+/* --- Create Audience Modal Specifics --- */
+.marketing-ai-audience-estimate { /* Renamed */
+  background-color: #f3ebf6;
+  border: 1px solid #d1b3d8;
+  border-radius: var(--marketing-ai-border-radius); /* Use prefixed variable */
+  padding: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+  text-align: center;
+  margin-bottom: calc(var(--marketing-ai-spacing-unit) * 1.5); /* Use prefixed variable */
+}
+
+.marketing-ai-audience-number { /* Renamed */
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 4px;
 }
 
-.payment-number {
-  color: #707070;
+.marketing-ai-audience-info { /* Renamed */
+  margin-left: 8px;
+  color: var(--marketing-ai-primary-color); /* Use prefixed variable */
 }
 
-.payment-logo {
-  height: 24px;
+.marketing-ai-audience-label { /* Renamed */
+  font-size: 0.9rem;
+  color: var(--marketing-ai-light-text-color); /* Use prefixed variable */
 }
 
-.credit-card {
-  background-color: #bb41d0;
-  border-radius: 12px;
-  padding: 24px;
+.marketing-ai-form-group { /* Renamed */
+  margin-bottom: calc(var(--marketing-ai-spacing-unit) * 1.5); /* Use prefixed variable */
+}
+
+.marketing-ai-form-label { /* Renamed */
+  display: block;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--marketing-ai-text-color); /* Use prefixed variable */
+  font-size: 0.9rem;
+}
+
+.marketing-ai-form-input { /* Renamed */
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--marketing-ai-border-color); /* Use prefixed variable */
+  border-radius: var(--marketing-ai-border-radius); /* Use prefixed variable */
+  font-size: 1rem;
+  color: var(--marketing-ai-text-color); /* Use prefixed variable */
+  background-color: #fcfcfc;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.marketing-ai-form-input::placeholder { /* Renamed */
+  color: var(--marketing-ai-light-text-color); /* Use prefixed variable */
+}
+
+.marketing-ai-form-input:focus { /* Renamed */
+  outline: none;
+  border-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  box-shadow: 0 0 0 3px rgba(187, 65, 208, 0.25);
+}
+
+/* Validation Error Styles */
+.marketing-ai-input-error { /* Renamed */
+  border-color: var(--marketing-ai-error-color) !important; /* Use prefixed variable */
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2) !important;
+}
+
+.marketing-ai-error-message { /* Renamed */
+  color: var(--marketing-ai-error-color); /* Use prefixed variable */
+  font-size: 0.85rem;
+  margin-top: 5px;
+  margin-bottom: 0;
+  font-weight: 500;
+}
+
+.marketing-ai-option-group { /* Renamed */
+  margin-bottom: calc(var(--marketing-ai-spacing-unit) * 1.5); /* Use prefixed variable */
+}
+
+.marketing-ai-option-title { /* Renamed */
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--marketing-ai-text-color); /* Use prefixed variable */
+  margin-bottom: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+}
+
+.marketing-ai-option-subtitle { /* Renamed */
+  font-size: 0.85rem;
+  color: var(--marketing-ai-light-text-color); /* Use prefixed variable */
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.marketing-ai-option-buttons { /* Renamed */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.marketing-ai-option-button { /* Renamed */
+  background-color: #f0f2f5;
+  color: var(--marketing-ai-text-color); /* Use prefixed variable */
+  padding: 10px 18px;
+  border: 1px solid var(--marketing-ai-border-color); /* Use prefixed variable */
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.marketing-ai-option-button:hover { /* Renamed */
+  background-color: #e0e4e9;
+  border-color: var(--marketing-ai-secondary-color); /* Use prefixed variable */
+}
+
+.marketing-ai-option-button.selected { /* Renamed */
+  background-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
   color: white;
-  margin-bottom: 24px;
+  border-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  box-shadow: var(--marketing-ai-shadow-light); /* Use prefixed variable */
 }
 
-.card-number {
-  font-size: 20px;
-  letter-spacing: 2px;
-  margin-bottom: 24px;
+.marketing-ai-option-button.selected:hover { /* Renamed */
+  background-color: var(--marketing-ai-primary-hover-color); /* Use prefixed variable */
+  border-color: var(--marketing-ai-primary-hover-color); /* Use prefixed variable */
 }
 
-.card-details {
+.marketing-ai-interest-options { /* Renamed */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.marketing-ai-interest-option label { /* Renamed */
+  display: flex;
+  align-items: center;
+  background-color: #f7f9fb;
+  border: 1px solid var(--marketing-ai-border-color); /* Use prefixed variable */
+  border-radius: var(--marketing-ai-border-radius); /* Use prefixed variable */
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.marketing-ai-interest-option label:hover { /* Renamed */
+  border-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  background-color: #f0ebf3;
+}
+
+.marketing-ai-interest-option input[type="checkbox"] { /* Renamed */
+  margin-right: 10px;
+  accent-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.marketing-ai-progress-indicator { /* Renamed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+  margin-bottom: calc(var(--marketing-ai-spacing-unit) * 1.5); /* Use prefixed variable */
+  gap: 8px;
+}
+
+.marketing-ai-progress-dot { /* Renamed */
+  width: 10px;
+  height: 10px;
+  background-color: var(--marketing-ai-border-color); /* Use prefixed variable */
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.marketing-ai-progress-dot.active { /* Renamed */
+  background-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  transform: scale(1.2);
+}
+
+/* --- Payment Page Specifics --- */
+.marketing-ai-payment-methods { /* Renamed */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+}
+
+.marketing-ai-payment-method { /* Renamed */
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--marketing-ai-border-color); /* Use prefixed variable */
+  border-radius: var(--marketing-ai-border-radius); /* Use prefixed variable */
+  padding: 14px var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.card-label {
-  font-size: 12px;
+.marketing-ai-payment-method:hover { /* Renamed */
+  border-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  background-color: #f0ebf3;
+  transform: translateY(-2px);
+  box-shadow: var(--marketing-ai-shadow-light); /* Use prefixed variable */
+}
+
+.marketing-ai-payment-method.selected { /* Renamed */
+  border-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  background-color: #f0ebf3;
+  box-shadow: 0 0 0 2px var(--marketing-ai-primary-color); /* Use prefixed variable */
+}
+
+.marketing-ai-payment-info { /* Renamed */
+  display: flex;
+  align-items: center;
+}
+
+.marketing-ai-payment-icon { /* Renamed */
+  margin-right: 12px;
+  color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+}
+
+.marketing-ai-payment-details { /* Renamed */
+  display: flex;
+  flex-direction: column;
+}
+
+.marketing-ai-payment-name { /* Renamed */
+  font-weight: 600;
+  color: var(--marketing-ai-text-color); /* Use prefixed variable */
+  margin-bottom: 2px;
+}
+
+.marketing-ai-payment-number { /* Renamed */
+  font-size: 0.9rem;
+  color: var(--marketing-ai-light-text-color); /* Use prefixed variable */
+}
+
+.marketing-ai-payment-logo { /* Renamed */
+  height: 24px;
+  max-width: 40px;
+  object-fit: contain;
+}
+
+/* In-page Add New Card Section */
+.marketing-ai-add-new-card-section { /* Renamed */
+  padding-top: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+}
+
+.marketing-ai-card-visualization-new { /* Renamed */
+  background: linear-gradient(
+    135deg,
+    var(--marketing-ai-primary-color) 0%, /* Use prefixed variable */
+    #d870ed 100%
+  );
+  border-radius: var(--marketing-ai-border-radius); /* Use prefixed variable */
+  padding: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+  color: white;
+  margin-bottom: calc(var(--marketing-ai-spacing-unit) * 1.5); /* Use prefixed variable */
+  box-shadow: var(--marketing-ai-shadow-medium); /* Use prefixed variable */
+  position: relative;
+  overflow: hidden;
+}
+
+.marketing-ai-card-visualization-new::before, /* Renamed */
+.marketing-ai-card-visualization-new::after { /* Renamed */
+  content: "";
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  filter: blur(20px);
+}
+
+.marketing-ai-card-visualization-new::before { /* Renamed */
+  width: 100px;
+  height: 100px;
+  top: -30px;
+  left: -30px;
+}
+
+.marketing-ai-card-visualization-new::after { /* Renamed */
+  width: 150px;
+  height: 150px;
+  bottom: -50px;
+  right: -50px;
+}
+
+.marketing-ai-card-brand-new { /* Renamed */
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.marketing-ai-card-number-display-new { /* Renamed */
+  font-family: "Space Mono", monospace;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  margin-bottom: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  min-height: 1.5em;
+}
+
+.marketing-ai-card-details-row-new { /* Renamed */
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+.marketing-ai-card-detail-group-new { /* Renamed */
+  text-align: left;
+}
+
+.marketing-ai-card-detail-label-new { /* Renamed */
   opacity: 0.8;
   margin-bottom: 4px;
 }
 
-.card-value {
-  font-size: 14px;
+.marketing-ai-card-detail-value-new { /* Renamed */
+  font-weight: 600;
+  text-transform: uppercase;
+  min-height: 1.2em;
 }
 
-.card-logo {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 8px;
+.marketing-ai-card-logo-new { /* Renamed */
+  position: absolute;
+  bottom: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+  right: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
 }
 
-.card-form {
-  margin-top: 24px;
+/* Master card logo within visualization */
+.marketing-ai-mastercard-logo-new { /* Renamed */
+  position: relative;
+  width: 40px;
+  height: 25px;
 }
 
-.form-row {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 16px;
+.marketing-ai-mastercard-logo-new .circle-left-new, /* Renamed */
+.marketing-ai-mastercard-logo-new .circle-right-new { /* Renamed */
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
 }
 
-.form-col {
-  flex: 1;
+.marketing-ai-mastercard-logo-new .circle-left-new { /* Renamed */
+  background-color: #ff5f00;
+  left: 0;
+  z-index: 1;
 }
 
-/* Price details modal */
-.price-details-modal .price-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 16px 0;
-  border-bottom: 1px solid #ededed;
+.marketing-ai-mastercard-logo-new .circle-right-new { /* Renamed */
+  background-color: #eb001b;
+  right: 0;
+  mix-blend-mode: multiply;
+  z-index: 2;
 }
 
-.price-details-modal .price-item:last-child {
-  border-bottom: none;
-  font-weight: 700;
-  font-size: 18px;
-}
-
-.price-details-modal .price-label {
-  display: flex;
-  align-items: center;
-}
-
-.price-details-modal .price-info {
-  margin-left: 8px;
-  color: #707070;
-}
-
-.price-details-modal .price-value {
-  font-weight: 500;
-}
-
-/* Form Fields */
-.card-form-fields {
+.marketing-ai-card-form-fields-new { /* Renamed */
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 }
 
-.card-number-input-container {
+.marketing-ai-form-group-new { /* Renamed */
+  margin-bottom: 0;
+}
+
+.marketing-ai-form-label-new { /* Renamed */
+  display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: var(--marketing-ai-text-color); /* Use prefixed variable */
+  font-size: 0.9rem;
+}
+
+.marketing-ai-form-input-new { /* Renamed */
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--marketing-ai-border-color); /* Use prefixed variable */
+  border-radius: var(--marketing-ai-border-radius); /* Use prefixed variable */
+  font-size: 1rem;
+  color: var(--marketing-ai-text-color); /* Use prefixed variable */
+  background-color: #fcfcfc;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.marketing-ai-form-input-new::placeholder { /* Renamed */
+  color: var(--marketing-ai-light-text-color); /* Use prefixed variable */
+}
+
+.marketing-ai-form-input-new:focus { /* Renamed */
+  outline: none;
+  border-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  box-shadow: 0 0 0 3px rgba(187, 65, 208, 0.2);
+}
+
+.marketing-ai-card-number-input-container-new { /* Renamed */
   position: relative;
 }
 
-.card-icon-container {
+.marketing-ai-card-icon-container-new { /* Renamed */
   position: absolute;
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
 }
 
-.pay-now-button {
-  background-color: #bb41d0;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 14px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  width: 100%;
-  margin-top: 8px;
+.marketing-ai-card-icon-container-new img { /* Renamed */
+  height: 20px;
+  width: auto;
 }
 
-.pay-now-button:hover {
-  background-color: #a836b9;
+.marketing-ai-form-row-new { /* Renamed */
+  display: flex;
+  gap: 15px;
 }
-.search-container1{
-    margin-right: 30px;
+
+.marketing-ai-form-col-new { /* Renamed */
+  flex: 1;
+}
+
+.marketing-ai-pay-now-button-new { /* Renamed */
+  background-color: var(--marketing-ai-primary-color); /* Use prefixed variable */
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--marketing-ai-border-radius); /* Use prefixed variable */
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease,
+    box-shadow 0.3s ease;
+  box-shadow: var(--marketing-ai-shadow-light); /* Use prefixed variable */
+  width: 100%;
+  margin-top: calc(var(--marketing-ai-spacing-unit) * 1.5); /* Use prefixed variable */
+}
+
+.marketing-ai-pay-now-button-new:hover { /* Renamed */
+  background-color: var(--marketing-ai-primary-hover-color); /* Use prefixed variable */
+  transform: translateY(-2px);
+  box-shadow: var(--marketing-ai-shadow-medium); /* Use prefixed variable */
+}
+
+/* Success Message for Card Addition */
+.marketing-ai-success-message { /* Renamed */
+  background-color: var(--marketing-ai-success-color); /* Use prefixed variable */
+  color: white;
+  padding: 12px;
+  border-radius: var(--marketing-ai-border-radius); /* Use prefixed variable */
+  text-align: center;
+  margin-bottom: var(--marketing-ai-spacing-unit); /* Use prefixed variable */
+  font-weight: 500;
+  animation: fadeInDown 0.5s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animations (these are generic and can be placed in a global CSS file or duplicated) */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px) scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.marketing-ai-animate-fade-in { /* Renamed */
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.marketing-ai-animate-slide-up { /* Renamed */
+  animation: slideInUp 0.5s ease-out forwards;
+}
+
+/* Specific for MarketingAI.module.css */
+/* Ensure the search-container1 in MarketingAI.module.css is uniquely styled */
+.marketing-ai-search-container1 { /* Renamed */
+  position: relative;
+}
+
+/* Example: Ensure the progress dots for Marketing AI are only for marketing AI */
+
+/* Responsive Adjustments for layout.tsx wrapper elements */
+@media (max-width: 1023px) {
+  .content-area2 {
+    padding-left: 20px;
+    padding-top: calc(var(--navbar-actual-height) + var(--extra-top-spacing));
+    margin-left: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .content-area2 {
+    padding-left: 15px;
+    padding-right: 15px;
+    /* Consider adjusting --navbar-actual-height in :root if mobile navbar is different */
+  }
 }

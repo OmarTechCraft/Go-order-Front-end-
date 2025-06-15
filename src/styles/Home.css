@@ -1040,9 +1040,8 @@ img {
 
 /* --- NEW MODIFIED FOR FOOTER ORDER --- */
 [dir="rtl"] .footer-section.goorder-section {
-  order: 3; /* Makes it appear first from the right in RTL */
+  order: 1; /* Makes it appear first from the right in RTL */
   margin-top: -50px;
-  margin-right: -40px;
 }
 
 [dir="rtl"] .footer-section.contact-section {
@@ -1051,7 +1050,7 @@ img {
 }
 
 [dir="rtl"] .footer-section.help-section {
-  order: 1; /* Makes it appear last from the right in RTL */
+  order: 3; /* Makes it appear last from the right in RTL */
     margin-top: -20px;
 
 }

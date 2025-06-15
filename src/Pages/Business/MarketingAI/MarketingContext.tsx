@@ -1,3 +1,5 @@
+// marketingContext.tsx
+// This file remains largely the same, no major functional changes needed here for the requested features.
 "use client"
 
 import { createContext, useContext, useState, type ReactNode } from "react"
@@ -16,11 +18,11 @@ export interface MarketingCampaign {
   estimatedViews?: string
   audience: AudienceSettings
   duration: number
-  budget: number
+  budget: number // This will now be a continuous value
   step: number
-paymentMethod?: string 
-  }
-  
+  paymentMethod?: string
+}
+
 interface MarketingContextType {
   campaign: MarketingCampaign
   setCampaign: (campaign: MarketingCampaign) => void
@@ -36,7 +38,7 @@ const defaultCampaign: MarketingCampaign = {
     isDefault: true,
   },
   duration: 1,
-  budget: 7000,
+  budget: 10000, // Adjusted default budget to a middle value in the new range
   step: 1,
 }
 

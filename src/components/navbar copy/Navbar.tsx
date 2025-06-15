@@ -15,6 +15,16 @@ import {
   BusinessProfile,
 } from "../../service/Profile_B_service";
 
+// Declare global properties for Google Translate to prevent TypeScript errors
+declare global {
+  interface Window {
+    google: any; // Google's global object
+    googleTranslateElementInit: () => void; // Callback function for Google Translate
+    doGTranslate: (lang_pair: string) => void; // Unofficial API function used for programmatic translation
+    hideGoogleTranslateToolbar: () => void; // Our custom function to hide toolbar
+  }
+}
+
 const fetchNotifications = async () => {
   try {
     const response = await fetch("/api/notifications");
@@ -82,13 +92,16 @@ const SearchBar = () => {
           const parent = node.parentElement;
           if (!parent) return NodeFilter.FILTER_REJECT;
 
-          // Skip script, style elements and the search input itself
+          // Exclude script, style elements, and elements related to search bar itself or Google Translate
           if (
             parent.tagName === "SCRIPT" ||
             parent.tagName === "STYLE" ||
             parent.tagName === "NOSCRIPT" ||
             parent.classList.contains("search-input") ||
-            parent.classList.contains("search-results-info")
+            parent.classList.contains("search-results-info") ||
+            parent.closest("#google_translate_element") || // Exclude Google Translate widget container
+            parent.closest(".goog-tooltip") || // Exclude Google Translate tooltips
+            parent.closest(".skiptranslate") // Exclude elements used by Google Translate for skipping translation
           ) {
             return NodeFilter.FILTER_REJECT;
           }
@@ -265,6 +278,45 @@ const Navbar: React.FC<NavbarProps> = ({ sidebarToggle, isSidebarOpen }) => {
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [businessProfile, setBusinessProfile] =
     useState<BusinessProfile | null>(null);
+  // State to track current language. Defaults to false (English)
+  const [isArabic, setIsArabic] = useState<boolean>(false);
+
+  // Function to delete a cookie
+  const deleteCookie = (name: string) => {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;';
+  };
+
+  // Function to hide Google Translate elements
+  const hideGoogleTranslateElements = () => {
+    const elementsToHide = [
+      '#goog-gt-tt',
+      '.goog-te-banner-frame',
+      '.goog-te-ftab-frame',
+      '.goog-tooltip',
+      '.goog-tooltip-wrapper',
+      '.goog-te-balloon-frame',
+      '.goog-te-menu-frame',
+      '.goog-te-spinner-pos',
+      '.skiptranslate.goog-te-gadget'
+    ];
+
+    elementsToHide.forEach(selector => {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach(el => {
+        (el as HTMLElement).style.display = 'none';
+        (el as HTMLElement).style.visibility = 'hidden';
+        (el as HTMLElement).style.opacity = '0';
+        (el as HTMLElement).style.position = 'absolute';
+        (el as HTMLElement).style.left = '-9999px';
+        (el as HTMLElement).style.top = '-9999px';
+      });
+    });
+
+    // Ensure body positioning is correct
+    document.body.style.marginTop = '0';
+    document.body.style.top = '0';
+    document.body.style.position = 'static';
+  };
 
   useEffect(() => {
     const loadNotifications = async () => {
@@ -293,6 +345,38 @@ const Navbar: React.FC<NavbarProps> = ({ sidebarToggle, isSidebarOpen }) => {
     loadNotifications();
     loadUserProfile();
     loadBusinessProfile();
+
+    // Check translation state
+    const checkTranslationState = () => {
+      const googtransCookie = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('googtrans='));
+      
+      if (googtransCookie && googtransCookie.includes('/ar')) {
+        setIsArabic(true);
+      } else {
+        setIsArabic(false);
+      }
+    };
+
+    // Check immediately
+    checkTranslationState();
+    
+    // Set up interval to monitor cookie changes
+    const translationMonitor = setInterval(checkTranslationState, 500);
+    
+    // Cleanup function to hide Google Translate elements periodically
+    const hideTranslateElements = setInterval(() => {
+      hideGoogleTranslateElements();
+    }, 1000);
+
+    // Initial cleanup
+    setTimeout(hideGoogleTranslateElements, 100);
+
+    return () => {
+      clearInterval(translationMonitor);
+      clearInterval(hideTranslateElements);
+    };
   }, []);
 
   const toggleDropdown = () => {
@@ -302,6 +386,41 @@ const Navbar: React.FC<NavbarProps> = ({ sidebarToggle, isSidebarOpen }) => {
   const handleToggleSidebar = () => {
     if (sidebarToggle) {
       sidebarToggle();
+    }
+  };
+
+  // Enhanced function to handle language translation toggle
+  const handleTranslateToggle = () => {
+    if (isArabic) {
+      // If currently in Arabic, revert to original (English)
+      deleteCookie('googtrans'); // Delete the main translation cookie
+      deleteCookie('googtrans_session'); // Delete session cookie
+      
+      // Force page reload to revert to original content
+      window.location.reload();
+    } else {
+      // If currently in English, translate to Arabic
+      if (window.doGTranslate) {
+        window.doGTranslate('en|ar'); // Translate from English to Arabic
+        setIsArabic(true); // Set state to Arabic
+        
+        // Additional cleanup after translation
+        setTimeout(() => {
+          hideGoogleTranslateElements();
+        }, 1000);
+
+        // Continue hiding elements periodically after translation
+        setTimeout(() => {
+          hideGoogleTranslateElements();
+        }, 2000);
+
+        setTimeout(() => {
+          hideGoogleTranslateElements();
+        }, 3000);
+      } else {
+        console.warn("Google Translate function (doGTranslate) not found. Ensure the script is loaded correctly in index.html.");
+        alert("Translation service not ready. Please try again or check your internet connection.");
+      }
     }
   };
 
@@ -327,6 +446,13 @@ const Navbar: React.FC<NavbarProps> = ({ sidebarToggle, isSidebarOpen }) => {
       </div>
 
       <div className="header-actions">
+        {/* Translate Button: No icon, text changes based on language view */}
+        <button className="translate-button" onClick={handleTranslateToggle}>
+          <span className="translate-button-text">
+            {isArabic ? "English" : "عربي"} {/* Text changes here */}
+          </span>
+        </button>
+
         <div className="notification-bell" onClick={toggleDropdown}>
           <NotificationBell count={notifications.length} />
         </div>

@@ -4,16 +4,23 @@
   border-radius: var(--border-radius-medium);
   overflow: hidden; /* Ensures rounded corners apply to content */
   box-shadow: var(--shadow-light);
-  margin-top: 20px; /* Space from filter buttons */
+  /* CRITICAL CHANGE: Set margin-top to 0 to eliminate gap below fixed header */
+  margin-top: 0; 
   position: relative; /* For loading overlay positioning */
   border: 1px solid rgba(234, 234, 234, 0.8); /* Subtle border */
   animation: fadeIn 0.8s ease-out; /* Fade in table */
+  width: 100%; /* Ensure it takes full width available, will match parent's padding */
+  max-width: 100%; /* Prevents overflow */
+  margin-bottom: 20px; /* Consistent gap below the table (adjust if needed) */
+  overflow-x: auto; /* Enables horizontal scrolling if table content is wider than container */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 .orders-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed; /* Helps with column width consistency */
+  table-layout: auto; /* Use auto for better content fit, or fixed if column widths are strict */
+  min-width: 700px; /* Minimum width for desktop table to avoid squishing before mobile layout */
 }
 
 .orders-table thead {
@@ -122,8 +129,8 @@
 
 /* Details button */
 .details-button {
-  width: 36px; /* Slightly larger */
-  height: 36px; /* Slightly larger */
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background-color: var(--primary-color);
   color: white;
@@ -132,19 +139,19 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease; /* All properties for smoother transition */
+  transition: all 0.3s ease;
   margin: 0 auto;
-  box-shadow: 0 2px 8px rgba(110, 57, 203, 0.2); /* Subtle shadow */
+  box-shadow: 0 2px 8px rgba(110, 57, 203, 0.2);
 }
 
 .details-button:hover {
   background-color: var(--secondary-color);
-  transform: scale(1.1); /* Pop effect on hover */
-  box-shadow: 0 4px 15px rgba(110, 57, 203, 0.4); /* Stronger shadow */
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(110, 57, 203, 0.4);
 }
 
 .details-button svg {
-  width: 18px; /* Slightly larger icon */
+  width: 18px;
   height: 18px;
 }
 
@@ -154,27 +161,23 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px 0; /* More padding */
+  padding: 60px 0;
   color: var(--primary-color);
-  font-size: 18px; /* Larger font */
+  font-size: 18px;
   font-weight: 600;
   background-color: var(--white-bg);
   border-radius: var(--border-radius-medium);
   box-shadow: var(--shadow-light);
-  gap: 15px; /* Space between icon and text */
+  gap: 15px;
 }
 
 .loading-container .animate-spin {
-  animation: spin 1s linear infinite; /* Spin animation for loader */
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .loading-overlay {
@@ -183,18 +186,18 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.8); /* Slightly less opaque */
+  background-color: rgba(255, 255, 255, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10;
-  animation: fadeIn 0.3s ease-out; /* Fade in overlay */
+  animation: fadeIn 0.3s ease-out;
 }
 
 .loading-overlay .animate-spin {
   color: var(--primary-color);
   animation: spin 1s linear infinite;
-  width: 30px; /* Larger spinner */
+  width: 30px;
   height: 30px;
 }
 
@@ -202,7 +205,7 @@
 .error-message,
 .no-orders-message {
   text-align: center;
-  padding: 50px 20px; /* More padding */
+  padding: 50px 20px;
   color: var(--text-color);
   background-color: var(--white-bg);
   border-radius: var(--border-radius-medium);
@@ -214,8 +217,8 @@
 }
 
 .error-message {
-  color: #cf1322; /* Specific red for errors */
-  border-left: 5px solid #cf1322; /* Accent border */
+  color: #cf1322;
+  border-left: 5px solid #cf1322;
   background-color: #fff1f0;
 }
 
@@ -225,17 +228,17 @@
   background-color: #f9f9f9;
 }
 
-/* Responsive Table for smaller screens */
+/* Responsive Table for smaller screens (Mobile "Card" View) */
 @media (max-width: 768px) {
   .orders-table-container {
-    overflow-x: auto; /* Enable horizontal scrolling for table */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    overflow-x: hidden;
+    margin-bottom: 15px; /* Adjusted margin for mobile */
   }
 
   .orders-table {
-    display: block; /* Makes table behave like a block element */
+    display: block;
     width: 100%;
-    min-width: 600px; /* Ensure a minimum width to prevent squishing */
+    min-width: unset;
   }
 
   .orders-table thead,
@@ -243,29 +246,33 @@
   .orders-table th,
   .orders-table td,
   .orders-table tr {
-    display: block; /* Ensures elements stack properly */
+    display: block;
   }
 
   .orders-table thead tr {
     position: absolute;
-    top: -9999px; /* Hide table header */
+    top: -9999px;
     left: -9999px;
   }
 
   .orders-table tr {
-    border: 1px solid #f0f0f0; /* Border for each row */
-    margin-bottom: 10px; /* Space between rows */
+    border: 1px solid #f0f0f0;
+    margin-bottom: 15px;
     border-radius: var(--border-radius-medium);
     overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    padding: 10px;
   }
 
   .orders-table td {
-    border: none; /* Remove individual cell borders */
-    border-bottom: 1px solid #eee; /* Add back bottom border for clarity */
+    border: none;
+    border-bottom: 1px solid #eee;
     position: relative;
-    padding-left: 50%; /* Space for pseudo-element labels */
+    padding-left: 50%;
     text-align: right;
     font-size: 14px;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 
   .orders-table td:last-child {
@@ -273,59 +280,37 @@
   }
 
   .orders-table td::before {
-    content: attr(data-label); /* Use data-label for content */
+    content: attr(data-label);
     position: absolute;
     left: 10px;
-    width: calc(50% - 20px); /* Adjust width */
+    width: calc(50% - 20px);
     padding-right: 10px;
     white-space: nowrap;
     text-align: left;
     font-weight: 600;
     color: var(--primary-color);
+    box-sizing: border-box;
   }
-
-  /* Specific labels for each column for mobile view */
-  .orders-table td:nth-of-type(1)::before {
-    content: "Order ID:";
-  }
-  .orders-table td:nth-of-type(2)::before {
-    content: "Customer:";
-  }
-  .orders-table td:nth-of-type(3)::before {
-    content: "Status:";
-  }
-  .orders-table td:nth-of-type(4)::before {
-    content: "Date:";
-  }
-  .orders-table td:nth-of-type(5)::before {
-    content: "Total:";
-  }
-  .orders-table td:nth-of-type(6)::before {
-    content: "Details:";
-  } /* For the button column */
 
   .details-button {
-    margin-left: auto; /* Push to right for better alignment */
+    margin-left: auto;
     margin-right: 0;
   }
 
   .status-badge {
-    margin-left: auto; /* Push to right for alignment */
+    margin-left: auto;
   }
 }
 
 @media (max-width: 480px) {
-  .orders-table {
-    min-width: unset; /* Allow table to shrink further on very small screens */
-  }
-
   .orders-table td {
-    padding-left: 45%; /* Adjust padding for smaller screens */
+    padding-left: 45%;
     font-size: 13px;
   }
 
   .orders-table td::before {
-    width: calc(45% - 20px);
+    width: calc(45% - 15px);
+    left: 8px;
   }
 
   .details-button {
@@ -351,19 +336,21 @@
     background: none;
     margin-top: 0;
     overflow-x: visible;
+    margin-bottom: 0 !important;
   }
 
   .orders-table {
     border-collapse: collapse;
     width: 100%;
-    display: table; /* Revert to default table display */
+    display: table;
     table-layout: auto;
+    min-width: unset;
   }
 
   .orders-table thead {
     background: #e0e0e0 !important;
     border-bottom: 2px solid #555 !important;
-    position: static; /* No sticky header for print */
+    position: static;
   }
 
   .orders-table th {
@@ -386,11 +373,11 @@
     background: white !important;
     color: #000 !important;
     text-align: left !important;
-    padding-left: 8px !important; /* Reset padding-left */
+    padding-left: 8px !important;
   }
 
   .orders-table td::before {
-    display: none !important; /* Hide labels */
+    display: none !important;
   }
 
   /* Hide buttons, loaders, error messages */
@@ -409,7 +396,7 @@
     box-shadow: none !important;
     font-size: 10px !important;
     padding: 2px 5px !important;
-    display: inline !important; /* Allow it to flow naturally */
+    display: inline !important;
     white-space: normal !important;
   }
 }

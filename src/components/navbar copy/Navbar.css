@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: 60px; /* Explicit Navbar Height */
   padding: 0 16px;
   background-color: #eff0f4;
   border-bottom: 1px solid #e2e2e2;
@@ -14,6 +14,42 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   font-family: "Arial", sans-serif;
 }
+
+/* * Styles to Hide Google Translate Pop-up/Toolbar and related elements.
+ * IMPORTANT: These selectors target elements that Google Translate *might* inject
+ * into your main page's DOM. They CANNOT hide the actual Google Translate toolbar
+ * if it's rendered inside an iframe, which is typical.
+ */
+body > .skiptranslate.goog-te-gadget {
+  display: none !important;
+}
+body > .goog-tooltip-wrapper {
+  display: none !important;
+}
+.goog-tooltip {
+  display: none !important;
+}
+.goog-text-highlight {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+/* These specifically target the top banner/toolbar that Google Translate injects.
+ * If these don't work, it's because the toolbar is inside an iframe, which you
+ * cannot control with CSS from your main document due to security policies. */
+#goog-gt-vt {
+    display: none !important;
+}
+.goog-te-banner-frame.skiptranslate {
+    display: none !important;
+}
+.VIpgJd-yAWLgf { /* Another common class for the main widget container */
+    display: none !important;
+}
+/* Hide the default language selection dropdown that Google places if it appears */
+.goog-te-combo {
+    display: none !important;
+}
+
 
 .header-left {
   display: flex;
@@ -44,7 +80,7 @@
   cursor: pointer;
   color: #495057;
   padding: 10px 12px;
-  display: none;
+  display: none; /* Hidden by default, shown on mobile */
   margin-right: 12px;
   transition: all 0.2s ease;
   min-width: 44px;
@@ -93,9 +129,41 @@
   gap: 20px;
 }
 
+/* Translate Button Styles */
+.translate-button {
+  background: #6a1b9a; /* A shade of purple */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center; /* Ensures text is vertically centered */
+  justify-content: center; /* Ensures text is horizontally centered */
+  gap: 8px; /* For spacing, even without an icon */
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.translate-button:hover {
+  background-color: #4a148c; /* Darker purple on hover */
+  transform: translateY(-1px);
+}
+
+.translate-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.translate-button-text {
+  white-space: nowrap; /* Prevents text from wrapping */
+}
+
 .notification-dropdown {
   position: absolute;
-  top: 60px;
+  top: 60px; /* Below the navbar */
   right: 0;
   width: 300px;
   background-color: white;
@@ -149,7 +217,7 @@
 }
 
 .search-toggle {
-  display: none;
+  display: none; /* Hidden by default, shown on mobile */
   background: #f8f9fa;
   border: 1px solid #dee2e6;
   border-radius: 6px;
@@ -279,26 +347,30 @@
 }
 
 /* Main Layout */
-.main-container {
+.main-container { /* This is the top-level container in your App.tsx, not the one in layout.tsx */
   display: flex;
   min-height: 100vh;
-  padding-top: 60px; /* Match navbar height */
+  /* padding-top is not needed here as content-area handles it */
 }
 
+/* This .main-content is the flex container within layout.tsx
+   It holds Sidebar_2 and the content-area. */
 .main-content {
-  flex: 1;
-  padding: 20px;
-  margin-left: 240px; /* Same as sidebar width */
-  transition: margin-left 0.3s ease;
+  flex: 1; /* Allows it to take remaining horizontal space */
+  display: flex; /* Makes its children (Sidebar_2 and content-area) flex items */
+  width: 100%; /* Ensures it takes full width of its parent */
+  padding: 0; /* No padding or margin on this flex container itself */
+  margin: 0;
+  transition: margin-left 0.3s ease; /* Keep for potential sidebar collapse animation */
 }
 
-/* Fixed sidebar style */
+/* Fixed sidebar style (Sidebar_2 component) */
 .sidebar {
   position: fixed;
   top: 60px; /* Below the navbar */
   left: 0;
-  width: 240px;
-  height: calc(100vh - 60px);
+  width: 240px; /* Explicit Sidebar Width */
+  height: calc(100vh - 60px); /* Fill remaining height */
   background-color: #eff0f4;
   border-right: 1px solid #e2e2e2;
   z-index: 900;
@@ -314,23 +386,25 @@
   transform: translateX(-100%);
 }
 
+/* RESPONSIVE STYLES for Navbar and Sidebar behavior */
+
+/* Desktop view: Sidebar remains visible (default), no special margins on main-content here */
 @media (min-width: 1024px) {
   .sidebar {
-    transform: translateX(0) !important;
-  }
-
-  .main-content {
-    margin-left: 240px;
+    transform: translateX(0) !important; /* Ensure sidebar is visible on desktop */
   }
 }
 
+/* Tablets and Mobile Phones: Sidebar is likely hidden or an overlay.
+   main-content needs no left margin from sidebar. */
 @media (max-width: 1023px) {
   .main-content {
-    margin-left: 0;
+    margin-left: 0; /* Remove fixed sidebar push for smaller screens */
+  }
+  .menu-toggle {
+    display: flex; /* Show menu toggle button */
   }
 }
-
-/* RESPONSIVE STYLES */
 
 /* Large Desktops (1200px+) */
 @media (min-width: 1200px) {
@@ -343,31 +417,19 @@
   }
 }
 
-/* Laptops and Desktops (1024px+) */
-@media (min-width: 1024px) {
-  .header {
-    left: 0;
-    width: 100%;
-  }
-}
-
 /* Tablets (768px to 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
-  .menu-toggle {
-    display: flex;
-  }
-
   .header-center {
     max-width: 300px;
+  }
+
+  .translate-button .translate-button-text {
+    display: none; /* Hide text on smaller tablets to save space */
   }
 }
 
 /* Small Tablets (577px to 767px) */
 @media (min-width: 577px) and (max-width: 767px) {
-  .menu-toggle {
-    display: flex;
-  }
-
   .logo {
     font-size: 24px;
   }
@@ -389,51 +451,51 @@
     padding-right: 8px;
   }
 
-  /* Match navbar on mobile */
   .header {
     background-color: #eff0f4;
     border-bottom: 1px solid #e2e2e2;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .translate-button .translate-button-text {
+    display: none; /* Hide text on small tablets */
   }
 }
 
 /* Mobile Phones (up to 576px) */
 @media (max-width: 576px) {
   .header {
-    height: 56px;
+    height: 56px; /* Slightly shorter for mobile */
     padding: 0 12px;
-    background-color: #eff0f4; /* Match sidebar background */
-    border-bottom: 1px solid #e2e2e2; /* Match sidebar border */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Match sidebar shadow */
-    font-family: "Arial", sans-serif; /* Match sidebar font */
+    background-color: #eff0f4;
+    border-bottom: 1px solid #e2e2e2;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: "Arial", sans-serif;
   }
 
   .menu-toggle {
-    display: flex;
     padding: 8px 10px;
     margin-right: 8px;
     min-width: 40px;
     min-height: 40px;
-    background: #f8f9fa; /* Match sidebar toggle button background */
-    color: #495057; /* Match sidebar toggle button color */
-    border: 1px solid #dee2e6; /* Match sidebar toggle button border */
-    border-radius: 8px; /* Match sidebar toggle button border radius */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Match sidebar toggle button shadow */
-    transition: all 0.2s ease; /* Match sidebar toggle button transition */
+    background: #f8f9fa;
+    color: #495057;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
   }
 
   .menu-toggle:hover {
-    background: #e9ecef; /* Match sidebar toggle button hover background */
-    border-color: #ced4da; /* Match sidebar toggle button hover border */
-    transform: translateY(
-      -1px
-    ); /* Match sidebar toggle button hover transform */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Match sidebar toggle button hover shadow */
+    background: #e9ecef;
+    border-color: #ced4da;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   }
 
   .menu-toggle:active {
-    transform: translateY(0); /* Match sidebar toggle button active transform */
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Match sidebar toggle button active shadow */
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 
   .menu-toggle:focus {
@@ -457,7 +519,7 @@
   .search-container.expanded {
     display: flex;
     position: absolute;
-    top: 56px;
+    top: 56px; /* Adjust top for new mobile navbar height */
     left: 0;
     right: 0;
     width: 100%;
@@ -483,5 +545,96 @@
     right: 0;
     margin: 0;
     box-sizing: border-box;
+    top: 56px; /* Adjust top for new mobile navbar height */
   }
+
+  .translate-button {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  .translate-button .translate-button-text {
+    display: none;
+  }
+}
+/* Google Translate specific overrides */
+#google_translate_element,
+.goog-te-gadget,
+.goog-te-gadget-simple,
+.goog-te-gadget-icon,
+.goog-te-banner-frame,
+.goog-te-ftab-frame,
+.goog-te-menu-frame,
+.goog-te-balloon-frame,
+.skiptranslate.goog-te-gadget,
+.goog-tooltip,
+.goog-tooltip-wrapper,
+.goog-te-spinner-pos,
+#goog-gt-tt,
+.VIpgJd-yAWLgf,
+.goog-te-combo {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  z-index: -9999 !important;
+}
+
+body {
+  top: 0 !important;
+  margin-top: 0 !important;
+  position: static !important;
+}
+
+body.translated-ltr,
+body.translated-rtl {
+  margin-top: 0 !important;
+  top: 0 !important;
+  position: static !important;
+}
+
+.goog-text-highlight {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+body > .skiptranslate,
+body > .goog-te-banner-frame,
+body > .goog-te-ftab-frame {
+  display: none !important;
+}
+
+iframe.goog-te-banner-frame,
+iframe.goog-te-ftab-frame,
+iframe[src*="translate.google"] {
+  display: none !important;
+  visibility: hidden !important;
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+}
+
+[class*="goog-te"],
+[id*="goog-gt"],
+[class*="VIpgJd"] {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+html {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+body[style*="margin-top"] {
+  margin-top: 0 !important;
+}
+
+body[style*="top"] {
+  top: 0 !important;
 }

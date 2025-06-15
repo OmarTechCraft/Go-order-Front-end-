@@ -1,21 +1,20 @@
-// src/Pages/Business/Orders/orders.tsx
 "use client";
 
 import { useState, useEffect } from "react";
-import OrderTable from "../../../components/OrderTable/OrderTable";
+import { Info, Loader2 } from "lucide-react"; // Import necessary icons
 import "./orders.css";
 import Nav_2 from "../../../components/navbar copy/Navbar";
 import Sidebar_2 from "../../../components/Sidebar_2/Sidebar_2";
 // Import all necessary types from your service file
-import { getOrders, updateOrderStatus, Order, OrderStatus, OrderItem, Ingredient } from "../../../service/orders_service"; 
+import { getOrders, updateOrderStatus, Order, OrderItem, Ingredient, OrderStatus } from "../../../service/orders_service";
 
-interface UserData { // Keep this here as it's specific to this file
+interface UserData {
   id: string;
   name: string;
   email: string;
 }
 
-const ORDER_STATUSES: (OrderStatus | "All")[] = [ // Allow "All" for the filter UI
+const ORDER_STATUSES: (OrderStatus | "All")[] = [
   "All",
   "Pending",
   "In progress",
@@ -24,28 +23,27 @@ const ORDER_STATUSES: (OrderStatus | "All")[] = [ // Allow "All" for the filter 
   "Delivered",
 ];
 
-// Define state transitions using OrderStatus
 const STATE_TRANSITIONS: { [key in OrderStatus]?: OrderStatus | null } = {
   Pending: "In progress",
   "In progress": "Cooked",
   Cooked: "Out to delivery",
   "Out to delivery": "Delivered",
-  Delivered: null, // Cannot move to any other state
-  Canceled: null, // Canceled orders cannot transition
+  Delivered: null,
+  Canceled: null,
 };
 
 export default function AllOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedStatus, setSelectedStatus] = useState<OrderStatus | "All">("All"); // Use OrderStatus for filter
+  const [selectedStatus, setSelectedStatus] = useState<OrderStatus | "All">("All");
   const [showCancelDialog, setShowCancelDialog] = useState<boolean>(false);
   const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
   const [showDetailsPopup, setShowDetailsPopup] = useState<boolean>(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   // Fetch orders based on selected status
-  const fetchOrders = async (status?: OrderStatus | "All") => { // Parameter expects OrderStatus or "All"
+  const fetchOrders = async (status?: OrderStatus | "All") => {
     try {
       setLoading(true);
       setError(null);
@@ -88,13 +86,13 @@ export default function AllOrders() {
     return () => clearInterval(interval);
   }, [selectedStatus]);
 
-  const handleStatusChange = (status: OrderStatus | "All") => { // Parameter expects OrderStatus or "All"
+  const handleStatusChange = (status: OrderStatus | "All") => {
     setSelectedStatus(status);
   };
 
   const handleUpdateOrderStatus = async (
     orderId: number,
-    newStatus: OrderStatus // Use OrderStatus for newStatus
+    newStatus: OrderStatus
   ) => {
     try {
       await updateOrderStatus(orderId, newStatus);
@@ -180,25 +178,104 @@ export default function AllOrders() {
     return price ? price.toFixed(2) : "0.00";
   };
 
+  // Inlined OrderTable component logic
+  const renderOrderTable = () => {
+    if (error) {
+      return <div className="error-message">{error}</div>;
+    }
+
+    if (loading && orders.length === 0) {
+      return (
+        <div className="loading-container">
+          <Loader2 className="animate-spin" size={24} aria-label="Loading orders" />
+          <p>Loading orders...</p>
+        </div>
+      );
+    }
+
+    if (orders.length === 0 && !loading) { // Ensure "No orders found" only shows when not loading and empty
+      return <div className="no-orders-message">No orders found</div>;
+    }
+
+    return (
+      <div className="orders-table-container" role="region" aria-labelledby="orders-table-caption" tabIndex={0}>
+        <h2 id="orders-table-caption" className="sr-only">List of Orders</h2> {/* Screen reader only caption */}
+        {loading && (
+          <div className="loading-overlay" aria-live="polite" aria-busy="true">
+            <Loader2 className="animate-spin" size={24} />
+            <span className="sr-only">Loading...</span>
+          </div>
+        )}
+        <table className="orders-table">
+          <thead>
+            <tr>
+              <th scope="col">Order ID</th>
+              <th scope="col">Customer</th>
+              <th scope="col">Status</th>
+              <th scope="col">Date</th>
+              <th scope="col">Total</th>
+              <th scope="col">Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order.id} tabIndex={0} aria-label={`Order ${order.id} from ${order.customerName}`}>
+                {/* Add data-label attributes to each <td> for mobile view */}
+                <td data-label="Order ID">#{order.id}</td>
+                <td data-label="Customer">{order.customerName}</td>
+                <td data-label="Status">
+                  <span
+                    className={`status-badge status-${order.status
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")}`}
+                  >
+                    {order.status}
+                  </span>
+                </td>
+                <td data-label="Date">{order.date}</td>
+                <td data-label="Total">${order.totalPrice?.toFixed(2) || "0.00"}</td>
+                <td data-label="Details">
+                  <button
+                    className="details-button"
+                    onClick={() => handleViewDetails(order.id)}
+                    aria-label={`View details for Order ${order.id}`}
+                  >
+                    <Info size={16} aria-hidden="true" />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
   return (
     <div className="app-container">
       <div className="main-content">
-        <Nav_2 />
-        <Sidebar_2 />
-        <div className="content-area">
-          <div className="orders-content">
+        <Nav_2 /> {/* This component likely has position: fixed; top: 0; */}
+        <Sidebar_2 /> {/* This component likely has position: fixed; top: var(--navbar-height); left: 0; */}
+
+        {/* This div represents the main content area, to the right of the sidebar and below the navbar */}
+        <div className="content-area1">
+
+          {/* NEW: Fixed Orders Page Header (Title + Refresh + Filters) */}
+          {/* This wrapper will be fixed to the top of content-area1's visible space */}
+          <div className="fixed-orders-page-header">
             <div className="page-header">
               <h1 className="page-title">Orders</h1>
               <button
                 className="refresh-button"
                 onClick={refreshOrders}
                 disabled={loading}
+                aria-label="Refresh Orders"
               >
                 Refresh
               </button>
             </div>
 
-            {/* Status Filter Buttons */}
+            {/* Status Filter Buttons - now part of the fixed orders header */}
             <div className="status-filter-container">
               {ORDER_STATUSES.map((status) => (
                 <button
@@ -207,27 +284,25 @@ export default function AllOrders() {
                     selectedStatus === status ? "active" : ""
                   }`}
                   onClick={() => handleStatusChange(status)}
+                  aria-pressed={selectedStatus === status}
                 >
                   {status}
                 </button>
               ))}
             </div>
+          </div>
 
-            <OrderTable
-              orders={orders}
-              loading={loading}
-              error={error}
-              onAccept={handleAccept}
-              onCancel={handleCancel}
-              onDone={handleDone}
-              onViewDetails={handleViewDetails}
-            />
+          {/* NEW: Scrollable Orders Content (Order Table and Modals) */}
+          {/* This div will handle its own scrolling */}
+          <div className="orders-scrollable-content">
+            {renderOrderTable()} {/* Render the inlined OrderTable */}
 
+            {/* Modals are already position: fixed, so they will naturally overlay */}
             {showCancelDialog && (
-              <div className="modal-overlay">
+              <div className="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="cancel-order-title">
                 <div className="modal">
                   <div className="modal-header">
-                    <h3>Cancel Order</h3>
+                    <h3 id="cancel-order-title">Cancel Order</h3>
                   </div>
                   <div className="modal-body">
                     <p>
@@ -251,13 +326,14 @@ export default function AllOrders() {
             )}
 
             {showDetailsPopup && selectedOrder && (
-              <div className="modal-overlay">
+              <div className="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="order-details-title">
                 <div className="modal">
                   <div className="modal-header">
-                    <h3>Order Details</h3>
+                    <h3 id="order-details-title">Order Details</h3>
                     <button
                       className="close-button"
                       onClick={closeDetailsPopup}
+                      aria-label="Close details"
                     >
                       &times;
                     </button>
@@ -330,9 +406,8 @@ export default function AllOrders() {
                                     <>
                                       <h5>Ingredients:</h5>
                                       <ul>
-                                        {/* Ingredient type inferred correctly now */}
                                         {item.product.ingredients.map(
-                                          (ingredient: Ingredient) => ( 
+                                          (ingredient: Ingredient) => (
                                             <li key={ingredient.id}>
                                               {ingredient.name}
                                             </li>
@@ -348,7 +423,34 @@ export default function AllOrders() {
                       </>
                     )}
 
-                    {/* Order Status Update Section - Only show next state */}
+                    {/* Action buttons (Accept, Cancel, Mark as Delivered) directly in the details modal */}
+                    <div className="modal-action-buttons">
+                      {selectedOrder.status === "Pending" && (
+                        <button
+                          className="btn-primary"
+                          onClick={() => handleAccept(selectedOrder.id)}
+                        >
+                          Accept Order
+                        </button>
+                      )}
+                      {selectedOrder.status !== "Delivered" && selectedOrder.status !== "Canceled" && (
+                        <button
+                          className="btn-secondary cancel-button"
+                          onClick={() => handleCancel(selectedOrder.id)}
+                        >
+                          Cancel Order
+                        </button>
+                      )}
+                      {selectedOrder.status === "Out to delivery" && (
+                        <button
+                          className="btn-primary"
+                          onClick={() => handleDone(selectedOrder.id)}
+                        >
+                          Mark as Delivered
+                        </button>
+                      )}
+                    </div>
+
                     {getNextStatus(selectedOrder.status) && (
                       <div className="status-update-section">
                         <h4>Move Order to Next State</h4>

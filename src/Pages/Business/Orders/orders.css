@@ -19,12 +19,26 @@
   --border-radius-small: 8px;
   --border-radius-medium: 12px;
   --border-radius-large: 20px;
+
+  /* --- CRUCIAL LAYOUT VARIABLES (VERIFY THESE VALUES WITH YOUR ACTUAL COMPONENTS) --- */
+  /* You MUST measure the computed height/width of your Nav_2 and Sidebar_2 components
+       in your browser's developer tools and adjust these variables precisely. */
+  --navbar-height: 60px; /* Actual computed height of your top Navbar (Nav_2) */
+  --sidebar-width-desktop: 250px; /* Actual computed width of your Sidebar_2 on desktop */
+
+  /* Estimated heights for the fixed orders header (page title + filters + its own padding).
+       Adjust these values AFTER applying changes and inspecting the .fixed-orders-page-header
+       element in browser dev tools on different screen sizes to get the precise computed height. */
+  --fixed-orders-header-desktop-height: 130px; /* Approx combined height on desktop */
+  --fixed-orders-header-tablet-height: 160px; /* Approx for tablets (buttons might wrap once) */
+  --fixed-orders-header-mobile-height: 200px; /* Approx for smallest mobile (buttons might wrap twice) */
 }
 
 * {
   box-sizing: border-box;
 }
 
+/* Base Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -35,7 +49,6 @@
     transform: translateY(0);
   }
 }
-
 @keyframes slideInFromTop {
   from {
     opacity: 0;
@@ -46,7 +59,6 @@
     transform: translateY(0);
   }
 }
-
 @keyframes slideInFromLeft {
   from {
     opacity: 0;
@@ -57,7 +69,6 @@
     transform: translateX(0);
   }
 }
-
 @keyframes pulse {
   0% {
     transform: scale(1);
@@ -69,7 +80,6 @@
     transform: scale(1);
   }
 }
-
 @keyframes shimmer {
   0% {
     background-position: -200px 0;
@@ -78,7 +88,6 @@
     background-position: calc(200px + 100%) 0;
   }
 }
-
 @keyframes modalSlideIn {
   from {
     opacity: 0;
@@ -90,7 +99,7 @@
   }
 }
 
-/* Main layout */
+/* --- Main Layout Structure --- */
 .app-container {
   display: flex;
   min-height: 100vh;
@@ -99,48 +108,138 @@
     var(--light-bg) 0%,
     var(--lighter-bg) 100%
   );
-  margin-top: -50px; /* Adjust as per your layout needs if this causes issues */
   animation: fadeIn 0.6s ease-out;
 }
 
 .main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+  flex: 1; /* Allows main-content to take remaining horizontal space if app-container is flexed row */
+  display: flex; /* Arranges main sections (Navbar, Sidebar, Content Area) */
+  flex-direction: column; /* Stack Nav_2 on top */
+  width: 100%; /* Spans full width */
 }
 
-.content-area {
-  display: flex;
-  flex: 1;
-  width: 100%;
+/* IMPORTANT: Your Nav_2 component MUST have these (or similar) styles in its own CSS file.
+    If Nav_2 is not fixed, the layout will break. */
+/* Example for Nav_2's root element:
+    .navbar-root {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--navbar-height);
+      z-index: 1000; // Highest z-index
+      background: white; // Or your navbar's actual background
+      box-shadow: var(--shadow-light); // Or its own shadow
+    }
+*/
+
+/* IMPORTANT: Your Sidebar_2 component MUST have these (or similar) styles in its own CSS file.
+    If Sidebar_2 is not fixed, the layout will break. */
+/* Example for Sidebar_2's root element:
+    .sidebar-root {
+      position: fixed;
+      top: var(--navbar-height); // Starts below the top navbar
+      left: 0;
+      bottom: 0; // Extends to the bottom of the viewport
+      width: var(--sidebar-width-desktop); // Uses desktop width by default
+      z-index: 950; // Between Navbar and main content
+      background: var(--white-bg); // Or your sidebar's actual background
+      box-shadow: var(--shadow-light); // Or its own shadow
+      overflow-y: auto; // If sidebar content itself scrolls
+    }
+*/
+
+/* The main content area that sits beside the sidebar and below the navbar */
+.content-area1 {
+  flex: 1; /* Takes all available horizontal space not taken by sidebar */
+  display: flex; /* Flex container for the fixed orders header and scrollable orders content */
+  flex-direction: column; /* Stacks the fixed header and scrollable content vertically */
+
+  /* Position this area to clear the fixed Navbar and Sidebar */
+  margin-top: var(--navbar-height); /* Pushes content down to clear the top Navbar */
+  margin-left: var(
+    --sidebar-width-desktop
+  ); /* Pushes content to the right to clear the Sidebar */
+
+  height: calc(
+    100vh - var(--navbar-height)
+  ); /* Make this area take the remaining viewport height below navbar */
+  overflow: hidden; /* Important: Prevents this container itself from having scrollbars, its children will scroll */
+  position: relative; /* For z-index context or absolutely positioned children if needed */
+  background: var(--light-bg); /* Match overall background if it shows through */
 }
 
-/* Orders content */
-.orders-content {
-  flex: 1;
-  padding: 16px;
-  overflow: auto;
-  animation: slideInFromLeft 0.5s ease-out;
-  max-width: 100%;
+/* --- NEW: Fixed Orders Page Header (Title + Refresh + Filters) --- */
+.fixed-orders-page-header {
+  position: fixed; /* Fixed relative to the viewport */
+  top: var(--navbar-height); /* Starts directly below the main Navbar */
+  left: var(--sidebar-width-desktop); /* Starts directly to the right of the Sidebar */
+  width: calc(
+    100% - var(--sidebar-width-desktop)
+  ); /* Spans the remaining width of the viewport */
+  z-index: 900; /* Stays above the scrolling orders content */
+  background: var(--light-bg); /* Solid background to cover content beneath */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* Subtle shadow for separation */
+  backdrop-filter: blur(8px); /* Subtle blur effect */
+  /* ADJUSTED: Reduced padding-bottom for tighter fit (0px for no gap) */
+  padding-bottom: 0px;
+
+  padding-left: 24px;
+  padding-right: 24px;
+  box-sizing: border-box; /* Ensure padding is included in the width calculation */
 }
 
-/* Page header */
-.page-header {
-  display: flex;
+/* Adjustments for children of the new fixed wrapper */
+.fixed-orders-page-header .page-header,
+.fixed-orders-page-header .status-filter-container {
+  background: none; /* Remove individual backgrounds/shadows as the parent handles them */
+  box-shadow: none;
+  margin-bottom: 0; /* Remove previous margins to let parent padding control spacing */
+  padding-left: 0; /* These paddings are now on the .fixed-orders-page-header itself */
+  padding-right: 0;
+}
+
+.fixed-orders-page-header .page-header {
+  padding-top: 20px; /* Add internal padding for header title area */
+  padding-bottom: 12px; /* Space between title/refresh and filter buttons */
+  display: flex; /* Ensure internal layout for page-header is flex */
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
-  padding: 16px 20px;
-  background: var(--white-bg);
-  backdrop-filter: blur(10px);
-  border-radius: var(--border-radius-medium);
-  box-shadow: var(--shadow-light);
-  animation: slideInFromTop 0.5s ease-out;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Allows title/button to wrap on small screens */
   gap: 12px;
+  animation: slideInFromTop 0.5s ease-out;
 }
 
+.fixed-orders-page-header .status-filter-container {
+  /* No position/layout props, now contained by fixed-orders-page-header */
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap; /* Allows filter buttons to wrap on smaller screens */
+  justify-content: flex-start; /* Default alignment */
+  animation: fadeIn 0.8s ease-out;
+}
+
+/* --- NEW: Scrollable Orders Content (OrderTable and Modals) --- */
+.orders-scrollable-content {
+  flex: 1; /* Takes all remaining vertical space within .content-area1 */
+  overflow-y: auto; /* Enables vertical scrolling within THIS container */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+
+  /* Crucial: Push content down to clear the fixed orders header.
+     This needs to be the EXACT height of the fixed-orders-page-header. */
+  padding-top: var(--fixed-orders-header-desktop-height);
+
+  /* ADJUSTED: Set specific horizontal paddings to match header width */
+  padding-left: 24px; /* Matches header's padding-left */
+  padding-right: 24px; /* Matches header's padding-right */
+  padding-bottom: 24px; /* Consistent padding at the bottom of the scrollable area */
+
+  animation: slideInFromLeft 0.5s ease-out;
+  max-width: 100%; /* Ensure it doesn't overflow horizontally */
+  min-height: 0; /* Essential for flex items with overflow, prevents content from being squashed */
+}
+
+/* --- General Page Elements (retained) --- */
 .page-title {
   font-size: clamp(18px, 4vw, 24px);
   font-weight: 600;
@@ -204,17 +303,6 @@
   box-shadow: none;
 }
 
-/* Status Filter Container */
-.status-filter-container {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 24px;
-  padding: 0 20px;
-  flex-wrap: wrap;
-  animation: fadeIn 0.8s ease-out;
-}
-
-/* Status Filter Buttons */
 .status-filter-button {
   background: var(--white-bg);
   color: #6c757d;
@@ -231,6 +319,8 @@
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(10px);
+  flex-grow: 1; /* Allow buttons to grow */
+  flex-shrink: 0; /* Prevent them from shrinking too much */
 }
 
 .status-filter-button::before {
@@ -418,7 +508,7 @@
   color: var(--text-color);
   line-height: 1.6;
   padding: 20px 28px;
-  flex-grow: 1; /* Allows body to expand and footer to stick */
+  flex-grow: 1;
 }
 
 .modal-body p {
@@ -504,6 +594,17 @@
 
 .btn-primary:hover::before {
   left: 100%;
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .btn-secondary {
@@ -670,6 +771,7 @@
   letter-spacing: 0.5px;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* Added subtle shadow */
 }
 
 .status-badge::before {
@@ -714,13 +816,11 @@
 }
 
 .status-accepted {
-  /* Reusing in-progress style as it's similar to "Accepted" conceptually */
   background: linear-gradient(135deg, #e6f7ff 0%, #bfdbfe 100%);
   color: #0958d9;
 }
 
 .status-completed {
-  /* Reusing delivered style as it's similar to "Completed" conceptually */
   background: linear-gradient(135deg, #e6fff0 0%, #bbf7d0 100%);
   color: #00864e;
 }
@@ -730,190 +830,582 @@
   color: #cf1322;
 }
 
-/* Responsive Design */
+/* --- Orders table (full width under orders header) --- */
+.orders-table-container {
+  background-color: var(--white-bg);
+  border-radius: var(--border-radius-medium);
+  overflow: hidden;
+  box-shadow: var(--shadow-light);
+  margin-top: 0;
+  border: 1px solid rgba(234, 234, 234, 0.8);
+  animation: fadeIn 0.8s ease-out;
+  width: 100%; /* Full width of parent container */
+  max-width: none; /* Remove max-width restriction */
+  overflow-x: auto; /* Horizontal scrolling if needed */
+}
 
-/* Mobile First (Small phones - 480px and below) */
-@media (max-width: 480px) {
-  .orders-content {
-    padding: 12px;
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  min-width: 1200px; /* Ensure minimum width for all columns to be visible */
+}
+
+.orders-table thead {
+  background: linear-gradient(135deg, #e0e7ff 0%, #d1d9ff 100%);
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.orders-table th {
+  padding: 18px 15px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--primary-color);
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: sticky;
+  top: 0;
+  background: inherit;
+  z-index: 2;
+  white-space: nowrap; /* Prevent header text wrapping */
+}
+
+.orders-table td {
+  padding: 16px 15px;
+  background-color: white;
+  border-bottom: 1px solid #f0f0f0;
+  color: var(--text-color);
+  font-size: 14px;
+  vertical-align: middle;
+  word-wrap: break-word;
+  min-width: 120px; /* Ensure minimum column width */
+}
+
+.orders-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.orders-table tbody tr:hover {
+  background-color: rgba(110, 57, 203, 0.05);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease-in-out;
+}
+
+/* Details button */
+.details-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 0 auto;
+  box-shadow: 0 2px 8px rgba(110, 57, 203, 0.2);
+}
+
+.details-button:hover {
+  background-color: var(--secondary-color);
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(110, 57, 203, 0.4);
+}
+
+.details-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Responsive Table for smaller screens (Mobile "Card" View) */
+@media (max-width: 768px) {
+  .orders-table-container {
+    overflow-x: hidden;
+    margin-bottom: 15px;
   }
 
-  .page-header {
+  .orders-table {
+    display: block;
+    width: 100%;
+    min-width: unset;
+  }
+
+  .orders-table thead,
+  .orders-table tbody,
+  .orders-table th,
+  .orders-table td,
+  .orders-table tr {
+    display: block;
+  }
+
+  .orders-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .orders-table tr {
+    border: 1px solid #f0f0f0;
+    margin-bottom: 15px;
+    border-radius: var(--border-radius-medium);
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    padding: 10px;
+  }
+
+  .orders-table td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+    text-align: right;
+    font-size: 14px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    min-width: unset;
+  }
+
+  .orders-table td:last-child {
+    border-bottom: none;
+  }
+
+  .orders-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    width: calc(50% - 20px);
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: 600;
+    color: var(--primary-color);
+    box-sizing: border-box;
+  }
+
+  .details-button {
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  .status-badge {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .orders-table td {
+    padding-left: 45%;
+    font-size: 13px;
+  }
+
+  .orders-table td::before {
+    width: calc(45% - 15px);
+    left: 8px;
+  }
+
+  .details-button {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .details-button svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .status-badge {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+}
+/* Details button */
+.details-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 0 auto;
+  box-shadow: 0 2px 8px rgba(110, 57, 203, 0.2);
+}
+
+.details-button:hover {
+  background-color: var(--secondary-color);
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(110, 57, 203, 0.4);
+}
+
+.details-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Loading states */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  color: var(--primary-color);
+  font-size: 18px;
+  font-weight: 600;
+  background-color: var(--white-bg);
+  border-radius: var(--border-radius-medium);
+  box-shadow: var(--shadow-light);
+  gap: 15px;
+}
+
+.loading-container .animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.loading-overlay .animate-spin {
+  color: var(--primary-color);
+  animation: spin 1s linear infinite;
+  width: 30px;
+  height: 30px;
+}
+
+/* Error and empty states */
+.error-message,
+.no-orders-message {
+  text-align: center;
+  padding: 50px 20px;
+  color: var(--text-color);
+  background-color: var(--white-bg);
+  border-radius: var(--border-radius-medium);
+  box-shadow: var(--shadow-light);
+  font-size: 16px;
+  font-weight: 500;
+  border: 1px solid #f0f0f0;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.error-message {
+  color: #cf1322;
+  border-left: 5px solid #cf1322;
+  background-color: #fff1f0;
+}
+
+.no-orders-message {
+  color: #6c757d;
+  border-left: 5px solid #6c757d;
+  background-color: #f9f9f9;
+}
+
+/* Responsive Table for smaller screens (Mobile "Card" View) */
+@media (max-width: 768px) {
+  .orders-table-container {
+    overflow-x: hidden;
+    margin-bottom: 15px; /* Adjusted margin for mobile */
+  }
+
+  .orders-table {
+    display: block;
+    width: 100%;
+    min-width: unset;
+  }
+
+  .orders-table thead,
+  .orders-table tbody,
+  .orders-table th,
+  .orders-table td,
+  .orders-table tr {
+    display: block;
+  }
+
+  .orders-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .orders-table tr {
+    border: 1px solid #f0f0f0;
+    margin-bottom: 15px;
+    border-radius: var(--border-radius-medium);
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    padding: 10px;
+  }
+
+  .orders-table td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+    text-align: right;
+    font-size: 14px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .orders-table td:last-child {
+    border-bottom: none;
+  }
+
+  .orders-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    width: calc(50% - 20px);
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: 600;
+    color: var(--primary-color);
+    box-sizing: border-box;
+  }
+
+  .details-button {
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  .status-badge {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .orders-table td {
+    padding-left: 45%;
+    font-size: 13px;
+  }
+
+  .orders-table td::before {
+    width: calc(45% - 15px);
+    left: 8px;
+  }
+
+  .details-button {
+    width: 32px;
+    height: 32px;
+  }
+  .details-button svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .status-badge {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+}
+
+/* --- Responsive Design Adjustments --- */
+
+/* Mobile First (Smallest phones - 480px and below) */
+@media (max-width: 480px) {
+  /* Adjust CSS variables for mobile layout */
+  :root {
+    --sidebar-width-desktop: 0px; /* Sidebar is assumed hidden/collapsed on mobile */
+    /* Mobile header height. Fine-tune this. */
+    --fixed-orders-header-mobile-height: 200px;
+  }
+
+  /* Adjust main content area offsets for mobile (no sidebar) */
+  .content-area1 {
+    margin-left: 0; /* No margin-left as sidebar is hidden */
+    height: calc(100vh - var(--navbar-height)); /* Take full height below navbar */
+  }
+
+  /* Adjust fixed orders header for mobile (full width) */
+  .fixed-orders-page-header {
+    left: 0; /* Align with left edge of viewport */
+    width: 100%; /* Span full width */
+    padding-left: 16px; /* Smaller horizontal padding for header content */
+    padding-right: 16px;
+  }
+
+  /* Adjust scrollable content padding for mobile */
+  .orders-scrollable-content {
+    padding-top: var(
+      --fixed-orders-header-mobile-height
+    ); /* Apply mobile-specific padding */
+    padding-left: 16px; /* Match header's mobile padding */
+    padding-right: 16px; /* Match header's mobile padding */
+    padding-bottom: 16px; /* Consistent padding at the bottom of the scrollable area */
+  }
+
+  .fixed-orders-page-header .page-header {
     flex-direction: column;
     align-items: stretch;
-    gap: 16px;
-    padding: 16px;
-    border-radius: var(--border-radius-medium);
   }
-
-  .page-title {
+  .fixed-orders-page-header .page-title {
     text-align: center;
     font-size: 20px;
   }
-
-  .refresh-button {
+  .fixed-orders-page-header .refresh-button {
     width: 100%;
     padding: 12px;
   }
-
-  .status-filter-container {
-    padding: 0;
-    gap: 8px;
-    justify-content: center; /* Center buttons for better flow on small screens */
+  .fixed-orders-page-header .status-filter-container {
+    justify-content: center;
   }
-
-  .status-filter-button {
+  .fixed-orders-page-header .status-filter-button {
     min-width: auto;
-    flex: 1; /* Allow buttons to grow and shrink */
-    padding: 12px 8px;
-    font-size: 12px;
+    flex: 1 1 auto;
+    padding: 10px 8px;
+    font-size: 11px;
   }
 
-  .modal {
-    margin: 10px;
-    max-height: 85vh;
-    border-radius: var(--border-radius-large);
-  }
-
-  .modal-header,
-  .modal-body,
-  .modal-footer {
-    padding: 16px 20px;
-  }
-
-  .modal-body p {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-    padding-bottom: 8px; /* Reduce padding */
-  }
-
-  .modal-body p span {
-    text-align: left;
-  }
-
-  .status-buttons {
-    grid-template-columns: 1fr; /* Single column for status buttons */
-    gap: 8px;
-  }
-
-  .status-update-button {
-    padding: 12px;
-  }
-
-  .modal-footer {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .btn-primary,
-  .btn-secondary {
-    width: 100%;
-    padding: 14px;
-  }
-
-  .order-item {
-    padding: 16px;
-  }
+  /* ... (rest of mobile-specific styles) ... */
 }
 
 /* Tablet Portrait (481px to 768px) */
 @media (min-width: 481px) and (max-width: 768px) {
-  .orders-content {
-    padding: 16px;
+  /* Adjust CSS variables for tablet layout */
+  :root {
+    --sidebar-width-desktop: 0px;
+    --fixed-orders-header-tablet-height: 160px;
   }
 
-  .page-header {
-    flex-wrap: wrap;
-    gap: 16px;
+  .content-area1 {
+    margin-left: 0;
   }
 
-  .status-filter-container {
-    justify-content: center;
+  .fixed-orders-page-header {
+    left: 0;
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
-  .status-filter-button {
+  .orders-scrollable-content {
+    padding-top: var(--fixed-orders-header-tablet-height);
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+  }
+
+  .fixed-orders-page-header .status-filter-container {
+    justify-content: flex-start;
+  }
+  .fixed-orders-page-header .status-filter-button {
     min-width: 120px;
-    flex: unset; /* Don't force equal width */
+    flex: unset;
   }
-
-  .modal {
-    margin: 20px;
-    max-width: calc(100% - 40px);
-  }
-
-  .modal-header,
-  .modal-body,
-  .modal-footer {
-    padding: 20px 24px;
-  }
-
-  .status-buttons {
-    grid-template-columns: repeat(2, 1fr); /* Two columns for status buttons */
-  }
+  /* ... (rest of tablet styles) ... */
 }
 
 /* Tablet Landscape & Small Desktop (769px to 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
-  .orders-content {
-    padding: 20px;
+  /* Adjust CSS variables for smaller desktop layout */
+  :root {
+    --sidebar-width-desktop: 200px;
+    --fixed-orders-header-desktop-height: 130px;
   }
 
-  .status-filter-container {
-    justify-content: flex-start;
+  .content-area1 {
+    margin-left: var(--sidebar-width-desktop);
   }
 
-  .status-buttons {
-    grid-template-columns: repeat(
-      3,
-      1fr
-    ); /* Three columns for status buttons */
+  .fixed-orders-page-header {
+    left: var(--sidebar-width-desktop);
+    width: calc(100% - var(--sidebar-width-desktop));
+    padding-left: 24px;
+    padding-right: 24px;
   }
 
-  .modal-header,
-  .modal-body,
-  .modal-footer {
-    padding: 24px 28px;
+  .orders-scrollable-content {
+    padding-top: var(--fixed-orders-header-desktop-height);
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 24px;
   }
+  /* ... (rest of small desktop styles) ... */
 }
 
 /* Large Desktop (1025px and up) */
 @media (min-width: 1025px) {
-  .orders-content {
-    padding: 24px;
+  /* Default desktop values */
+  :root {
+    --sidebar-width-desktop: 250px;
+    --fixed-orders-header-desktop-height: 130px;
   }
 
-  .page-header {
-    padding: 20px 24px;
+  .content-area1 {
+    margin-left: var(--sidebar-width-desktop);
   }
 
-  .status-filter-container {
-    padding: 0 24px;
+  .fixed-orders-page-header {
+    left: var(--sidebar-width-desktop);
+    width: calc(100% - var(--sidebar-width-desktop));
+    padding-left: 24px;
+    padding-right: 24px;
   }
 
-  .status-buttons {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  .orders-scrollable-content {
+    padding-top: var(--fixed-orders-header-desktop-height);
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 24px;
   }
+  /* ... (rest of large desktop styles) ... */
 }
 
-/* Print styles */
+/* --- Print Styles --- */
 @media print {
   .app-container {
     background: white;
   }
-
   .modal-overlay {
     position: static;
     background: none;
     backdrop-filter: none;
+    display: block;
+    width: auto;
+    height: auto;
+    overflow: visible;
   }
-
   .modal {
     box-shadow: none;
     border: 1px solid #ccc;
+    max-width: 100%;
+    max-height: unset;
+    overflow: visible;
+    margin: 0;
   }
 
-  /* Hide elements not needed in print */
+  .fixed-orders-page-header, /* Hiding the new fixed orders header */
+  /* Assuming Nav_2 and Sidebar_2 have root classes like .navbar-root, .sidebar-root */
+  .navbar-root,
+  .sidebar-root,
   .status-filter-container,
   .refresh-button,
   .modal-footer,
@@ -930,25 +1422,117 @@
     padding: 0 !important;
     box-shadow: none !important;
   }
-
   .page-title,
   .modal-header h3 {
     -webkit-text-fill-color: #333 !important;
     background: none !important;
   }
-
   .modal-body p {
     border-bottom: 1px solid #eee !important;
   }
-
   .order-item {
     border: 1px solid #eee !important;
     box-shadow: none !important;
     background: #f9f9f9 !important;
   }
+
+  .content-area1 {
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .orders-scrollable-content {
+    padding-top: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* Print styles for OrderTable - ensure visibility */
+  .orders-table-container {
+    box-shadow: none;
+    border: none;
+    background: none;
+    margin-top: 0;
+    overflow-x: visible;
+    margin-bottom: 0 !important;
+  }
+
+  .orders-table {
+    border-collapse: collapse;
+    width: 100%;
+    display: table;
+    table-layout: auto;
+    min-width: unset;
+  }
+
+  .orders-table thead {
+    background: #e0e0e0 !important;
+    border-bottom: 2px solid #555 !important;
+    position: static;
+  }
+
+  .orders-table th {
+    color: #333 !important;
+    background: #e0e0e0 !important;
+    padding: 10px !important;
+    font-size: 12px !important;
+  }
+
+  .orders-table tbody tr {
+    border: 1px solid #ddd !important;
+    margin-bottom: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .orders-table td {
+    border: 1px solid #ddd !important;
+    padding: 8px !important;
+    font-size: 11px !important;
+    background: white !important;
+    color: #000 !important;
+    text-align: left !important;
+    padding-left: 8px !important;
+  }
+
+  .orders-table td::before {
+    display: none !important;
+  }
+
+  /* Hide buttons, loaders, error messages */
+  .details-button,
+  .loading-container,
+  .loading-overlay,
+  .error-message,
+  .no-orders-message {
+    display: none !important;
+  }
+
+  .status-badge {
+    background: none !important;
+    color: #000 !important;
+    border: 1px solid #888 !important;
+    box-shadow: none !important;
+    font-size: 10px !important;
+    padding: 2px 5px !important;
+    display: inline !important;
+    white-space: normal !important;
+  }
 }
 
-/* Accessibility improvements */
+/* --- Accessibility Improvements --- */
+.sr-only {
+  /* Hidden from visual users, but available to screen readers */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -958,27 +1542,81 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  .orders-table tbody tr:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  .details-button:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  .status-badge::before {
+    animation: none !important;
+  }
 }
 
-/* High contrast mode */
 @media (prefers-contrast: high) {
+  .orders-table-container {
+    border: 2px solid WindowText;
+    box-shadow: none;
+    background: Canvas;
+  }
+  .orders-table thead {
+    background: CanvasText;
+    border-bottom: 2px solid WindowText;
+  }
+  .orders-table th {
+    color: Canvas;
+    background: CanvasText;
+    border: 1px solid WindowText;
+  }
+  .orders-table td {
+    color: ButtonText;
+    background: Canvas;
+    border: 1px solid WindowText;
+  }
+  .orders-table td::before {
+    color: ButtonText;
+  }
+
+  .details-button {
+    background: ButtonFace;
+    color: ButtonText;
+    border: 2px solid ButtonText;
+    box-shadow: none;
+  }
+  .details-button:hover {
+    background: Highlight;
+    color: HighlightText;
+    border-color: HighlightText;
+  }
+
+  .loading-container,
+  .error-message,
+  .no-orders-message {
+    border: 2px solid WindowText;
+    background: Canvas;
+    color: ButtonText;
+    box-shadow: none;
+  }
+  .loading-overlay {
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+
   .status-filter-button,
   .status-update-button,
   .btn-primary,
   .btn-secondary {
     border-width: 2px;
-    border-color: currentColor; /* Use current text color for borders */
+    border-color: currentColor;
   }
-
   .modal {
     border: 2px solid #000;
   }
-
   .status-badge {
     outline: 2px solid currentColor;
-    background: none !important; /* Remove gradients for clarity */
+    background: none !important;
   }
-
   .status-pending {
     color: orange;
   }
@@ -1000,6 +1638,15 @@
 }
 
 /* Focus styles for accessibility */
+.orders-table tr:focus-visible {
+  outline: 3px solid var(--primary-color);
+  outline-offset: -2px;
+}
+.details-button:focus-visible {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(110, 57, 203, 0.3);
+}
 .status-filter-button:focus-visible,
 .status-update-button:focus-visible,
 .btn-primary:focus-visible,
@@ -1008,5 +1655,26 @@
 .close-button:focus-visible {
   outline: 3px solid var(--primary-color);
   outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(110, 57, 203, 0.3); /* Add a subtle glow */
+  box-shadow: 0 0 0 4px rgba(110, 57, 203, 0.3);
+}
+
+/* New styles for modal action buttons */
+.modal-action-buttons {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  gap: 10px; /* Space between buttons */
+  margin-top: 20px; /* Space from content above */
+  padding-top: 20px;
+  border-top: 1px solid rgba(234, 234, 234, 0.7);
+}
+
+.modal-action-buttons .cancel-button {
+  background-color: #dc3545; /* Red color for cancel */
+  color: white;
+  border-color: #dc3545;
+}
+
+.modal-action-buttons .cancel-button:hover {
+  background-color: #c82333;
+  border-color: #c82333;
 }

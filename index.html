@@ -23,5 +23,33 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-  </body>
+
+    <div id="google_translate_element" style="display: none;"></div>
+
+    <script type="text/javascript">
+      // This function needs to be globally accessible for Google Translate script
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement(
+          { pageLanguage: 'en', autoDisplay: false }, // autoDisplay: false helps hide initial widget
+          'google_translate_element'
+        );
+      }
+      // WARNING: This doGTranslate function is an unofficial API. It might not work in all scenarios or indefinitely.
+      // It attempts to programmatically trigger translation.
+      window.doGTranslate = function(lang_pair) {
+          if(lang_pair.value) lang_pair = lang_pair.value;
+          if(lang_pair === '') return;
+          var lang=lang_pair.split('|')[1];
+          var teCombo = document.querySelector('.goog-te-combo'); // Attempts to find the hidden select element
+          if (teCombo) {
+              teCombo.value = lang;
+              teCombo.dispatchEvent(new Event('change')); // Triggers the change event
+          } else {
+              // Fallback: If the widget's internal select isn't found, reload with translation parameters
+              window.location.href = `https://translate.google.com/translate?sl=auto&tl=${lang}&u=${encodeURIComponent(window.location.href)}`;
+          }
+      };
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    </body>
 </html>
