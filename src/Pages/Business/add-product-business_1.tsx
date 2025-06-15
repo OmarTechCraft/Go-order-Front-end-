@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Sidebar_2 from "../../components/Sidebar_2/Sidebar_2";
 import Navbar from "../../components/navbar copy/Navbar";
+import { FaEllipsisV } from "react-icons/fa"; // Import for three dots menu
 
 import "../../styles/add-product-business_1.css";
 import productService, {
@@ -9,7 +10,193 @@ import productService, {
   Product,
   Variant,
   NewProduct,
+  UpdateProductDto,
 } from "../../service/add-product-service";
+
+interface EditProductFormProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (productId: number, data: UpdateProductDto) => Promise<void>;
+  isLoading: boolean;
+  product: Product | null;
+}
+
+const EditProductForm: React.FC<EditProductFormProps> = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  isLoading,
+  product,
+}) => {
+  const [name, setName] = useState(product?.name || "");
+  const [price, setPrice] = useState(product?.price || 0);
+  const [stock, setStock] = useState(product?.stock || 0);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isOpen && product) {
+      setName(product.name);
+      setPrice(product.price);
+      setStock(product.stock);
+      setError(null);
+    }
+  }, [isOpen, product]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!product) return;
+
+    if (!name.trim()) {
+      setError("Product name is required.");
+      return;
+    }
+    if (price <= 0) {
+      setError("Price must be greater than 0.");
+      return;
+    }
+    if (stock < 0) {
+      setError("Stock cannot be negative.");
+      return;
+    }
+
+    setError(null);
+    try {
+      await onSubmit(product.id, { name, price, stock });
+      onClose(); // Close on successful submission
+    } catch (err) {
+      // Error handling is managed by parent component's onSubmit prop
+      console.error("Submission error:", err);
+    }
+  };
+
+  if (!isOpen || !product) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h2>Edit Product</h2>
+          <button type="button" className="close-button" onClick={onClose}>
+            &times;
+          </button>
+        </div>
+        <form onSubmit={handleSubmit}>
+          {error && <p className="error-message">{error}</p>}
+          <div className="form-group">
+            <label htmlFor="edit-name">Product Name</label>
+            <input
+              type="text"
+              id="edit-name"
+              name="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              disabled={isLoading}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="edit-price">Price</label>
+            <input
+              type="number"
+              id="edit-price"
+              name="price"
+              value={price}
+              onChange={(e) => setPrice(parseFloat(e.target.value))}
+              step="0.01"
+              min="0"
+              required
+              disabled={isLoading}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="edit-stock">Stock</label>
+            <input
+              type="number"
+              id="edit-stock"
+              name="stock"
+              value={stock}
+              onChange={(e) => setStock(parseInt(e.target.value))}
+              min="0"
+              required
+              disabled={isLoading}
+            />
+          </div>
+
+          <div className="form-actions">
+            <button
+              type="submit"
+              className="submit-button"
+              disabled={isLoading}
+            >
+              {isLoading ? "Updating..." : "Update Product"}
+            </button>
+            <button
+              type="button"
+              className="cancel-button"
+              onClick={onClose}
+              disabled={isLoading}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+interface DeleteConfirmationModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  itemName: string;
+  isLoading: boolean;
+}
+
+const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  itemName,
+  isLoading,
+}) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h2>Confirm Deletion</h2>
+          <button type="button" className="close-button" onClick={onClose}>
+            &times;
+          </button>
+        </div>
+        <p>
+          Are you sure you want to delete "<strong>{itemName}</strong>"? This
+          action cannot be undone.
+        </p>
+        <div className="form-actions">
+          <button
+            className="cancel-button"
+            onClick={onClose}
+            disabled={isLoading}
+          >
+            Cancel
+          </button>
+          <button
+            className="submit-button delete-confirm-button"
+            onClick={onConfirm}
+            disabled={isLoading}
+          >
+            {isLoading ? "Deleting..." : "Delete"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const AddProductBusiness_1: React.FC = () => {
   // Define states
@@ -40,6 +227,37 @@ const AddProductBusiness_1: React.FC = () => {
     images: [],
   });
 
+  // State for edit product form
+  const [showEditProductForm, setShowEditProductForm] =
+    useState<boolean>(false);
+  const [currentEditProduct, setCurrentEditProduct] = useState<Product | null>(
+    null
+  );
+
+  // State for delete confirmation modal
+  const [showDeleteConfirmation, setShowDeleteConfirmation] =
+    useState<boolean>(false);
+  const [productToDelete, setProductToDelete] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
+
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null); // State for three dots menu
+
+  // Effect to close menu when clicking outside
+  const menuRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setOpenMenuId(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   // Fetch categories on component mount
   useEffect(() => {
     fetchCategories();
@@ -49,9 +267,16 @@ const AddProductBusiness_1: React.FC = () => {
   const fetchCategories = async () => {
     try {
       setLoading(true);
+      setError(null); // Clear previous errors
       const categoriesData = await productService.getCategories();
       setCategories(categoriesData);
       setLoading(false);
+      setViewMode("categories");
+      setSelectedCategoryId(null);
+      setSelectedSubCategoryId(null);
+      setSelectedCategoryName("");
+      setProducts([]);
+      setSubCategories([]);
     } catch (err) {
       setError("Failed to fetch categories");
       setLoading(false);
@@ -63,11 +288,17 @@ const AddProductBusiness_1: React.FC = () => {
   const fetchSubCategories = async (parentId: number) => {
     try {
       setLoading(true);
+      setError(null); // Clear previous errors
       const subCategoriesData = await productService.getSubCategories(parentId);
       setSubCategories(subCategoriesData);
       setSelectedCategoryId(parentId);
       setSelectedSubCategoryId(null); // Reset subcategory ID when viewing subcategories
       setLoading(false);
+
+      // Find parent category name for the title
+      const parentCategory = categories.find((cat) => cat.id === parentId);
+      const parentName = parentCategory ? parentCategory.name : "";
+      setSelectedCategoryName(parentName);
 
       // Check if there are subcategories
       if (subCategoriesData.length > 0) {
@@ -83,10 +314,11 @@ const AddProductBusiness_1: React.FC = () => {
     }
   };
 
-  // Fetch products for a specific category
+  // Fetch products for a specific category or subcategory
   const fetchProducts = async (categoryId: number) => {
     try {
       setLoading(true);
+      setError(null); // Clear previous errors
       const productsData = await productService.getProducts(categoryId);
       setProducts(productsData);
       setLoading(false);
@@ -100,21 +332,8 @@ const AddProductBusiness_1: React.FC = () => {
 
   // Handle category click
   const handleCategoryClick = (categoryId: number, categoryName: string) => {
-    if (selectedCategoryId === categoryId && viewMode !== "categories") {
-      // If clicking the same category again, go back to all categories
-      setSelectedCategoryId(null);
-      setSelectedSubCategoryId(null);
-      setSelectedCategoryName("");
-      setSubCategories([]);
-      setViewMode("categories");
-    } else {
-      // Save the category name for better UI context
-      setSelectedCategoryName(categoryName);
-
-      // Fetch subcategories for the selected category
-      // The logic to show products or subcategories is handled in fetchSubCategories
-      fetchSubCategories(categoryId);
-    }
+    setSelectedCategoryName(categoryName);
+    fetchSubCategories(categoryId);
   };
 
   // Handle subcategory click
@@ -122,145 +341,71 @@ const AddProductBusiness_1: React.FC = () => {
     subCategoryId: number,
     subCategoryName: string
   ) => {
-    setSelectedCategoryName(subCategoryName);
     setSelectedSubCategoryId(subCategoryId); // Store the selected subcategory ID
+    setSelectedCategoryName(subCategoryName); // Update for product view title
     fetchProducts(subCategoryId);
   };
 
-  // State for edit product form
-  const [showEditProductForm, setShowEditProductForm] =
-    useState<boolean>(false);
-  const [currentEditProduct, setCurrentEditProduct] = useState<{
-    id: number;
-    name: string;
-    categoryId: number;
-    price: number;
-    stock: number;
-  } | null>(null);
-
   // Open edit product form
-  const openEditProductForm = (product: Product) => {
-    setCurrentEditProduct({
-      id: product.id,
-      name: product.name,
-      categoryId:
-        product.category?.id ||
-        selectedSubCategoryId ||
-        (selectedCategoryId as number),
-      price: product.price,
-      stock: product.stock,
-    });
+  const handleEditClick = (product: Product) => {
+    setCurrentEditProduct(product);
     setShowEditProductForm(true);
-  };
-
-  // Handle input change for edit product form
-  const handleEditInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (!currentEditProduct) return;
-
-    setCurrentEditProduct({
-      ...currentEditProduct,
-      [name]: name === "price" || name === "stock" ? parseFloat(value) : value,
-    });
+    setOpenMenuId(null); // Close three dots menu
   };
 
   // Submit edit product
-  const handleSubmitEditProduct = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!currentEditProduct) return;
-
+  const handleSubmitEditProduct = async (
+    productId: number,
+    productData: UpdateProductDto
+  ) => {
     try {
       setLoading(true);
-
-      // Call the service method to update the product
-      await productService.updateProduct(currentEditProduct.id, {
-        name: currentEditProduct.name,
-        categoryId: currentEditProduct.categoryId,
-        price: currentEditProduct.price,
-        stock: currentEditProduct.stock,
-      });
-
-      // Close form and refresh products
+      await productService.updateProduct(productId, productData);
+      alert("Product updated successfully!");
       setShowEditProductForm(false);
       setCurrentEditProduct(null);
 
-      // Refresh products in the current view - use the correct ID
+      // Refresh products in the current view
       const currentCategoryId = selectedSubCategoryId || selectedCategoryId;
       if (currentCategoryId) {
-        fetchProducts(currentCategoryId);
+        await fetchProducts(currentCategoryId);
       }
-
+    } catch (err) {
+      console.error("Error updating product:", err);
+      setError("Failed to update product. Please try again.");
+    } finally {
       setLoading(false);
-    } catch (err: unknown) {
-      setLoading(false);
-
-      let errorMessage = "Failed to update product. Please try again.";
-
-      if (err && typeof err === "object" && "response" in err) {
-        const errorResponse = err as {
-          response: { status: number; data: unknown };
-        };
-        console.error("Response error:", {
-          status: errorResponse.response.status,
-          data: errorResponse.response.data,
-        });
-
-        if (typeof errorResponse.response.data === "string") {
-          errorMessage = `Error ${errorResponse.response.status}: ${errorResponse.response.data}`;
-        } else if (typeof errorResponse.response.data === "object") {
-          const errorData = JSON.stringify(errorResponse.response.data);
-          errorMessage = `Error ${errorResponse.response.status}: ${errorData}`;
-        }
-      }
-
-      setError(errorMessage);
-      console.error("Full error object:", err);
     }
   };
 
-  // Delete product
-  const handleDeleteProduct = async (productId: number) => {
-    if (!window.confirm("Are you sure you want to delete this product?")) {
-      return;
-    }
+  // Open delete confirmation modal
+  const handleDeleteClick = (product: Product) => {
+    setProductToDelete({ id: product.id, name: product.name });
+    setShowDeleteConfirmation(true);
+    setOpenMenuId(null); // Close three dots menu
+  };
+
+  // Confirm delete product
+  const confirmDeleteProduct = async () => {
+    if (!productToDelete) return;
 
     try {
       setLoading(true);
+      await productService.deleteProduct(productToDelete.id);
+      alert("Product deleted successfully!");
+      setShowDeleteConfirmation(false);
+      setProductToDelete(null);
 
-      // Call the service method to delete the product
-      await productService.deleteProduct(productId);
-
-      // Refresh products in the current view - use the correct ID
+      // Refresh products in the current view
       const currentCategoryId = selectedSubCategoryId || selectedCategoryId;
       if (currentCategoryId) {
-        fetchProducts(currentCategoryId);
+        await fetchProducts(currentCategoryId);
       }
-
+    } catch (err) {
+      console.error("Error deleting product:", err);
+      setError("Failed to delete product. Please try again.");
+    } finally {
       setLoading(false);
-    } catch (err: unknown) {
-      setLoading(false);
-
-      let errorMessage = "Failed to delete product. Please try again.";
-
-      if (err && typeof err === "object" && "response" in err) {
-        const errorResponse = err as {
-          response: { status: number; data: unknown };
-        };
-        console.error("Response error:", {
-          status: errorResponse.response.status,
-          data: errorResponse.response.data,
-        });
-
-        if (typeof errorResponse.response.data === "string") {
-          errorMessage = `Error ${errorResponse.response.status}: ${errorResponse.response.data}`;
-        } else if (typeof errorResponse.response.data === "object") {
-          const errorData = JSON.stringify(errorResponse.response.data);
-          errorMessage = `Error ${errorResponse.response.status}: ${errorData}`;
-        }
-      }
-
-      setError(errorMessage);
-      console.error("Full error object:", err);
     }
   };
 
@@ -312,7 +457,6 @@ const AddProductBusiness_1: React.FC = () => {
       updatedVariants[index][field] = Number(value);
     } else if (field === "image") {
       if (value instanceof File) {
-        // Handle File type for image field
         updatedVariants[index][field] = value as File & string;
       } else {
         updatedVariants[index][field] = value as string;
@@ -367,11 +511,8 @@ const AddProductBusiness_1: React.FC = () => {
     e.preventDefault();
     try {
       setLoading(true);
-
-      // Call the service method to add the product
       await productService.addProduct(newProduct);
-
-      // Reset form and close it
+      alert("Product added successfully!");
       setNewProduct({
         name: "",
         categoryId: 0,
@@ -386,14 +527,12 @@ const AddProductBusiness_1: React.FC = () => {
       // Refresh products in the current view - use the correct ID
       const currentCategoryId = selectedSubCategoryId || selectedCategoryId;
       if (currentCategoryId) {
-        fetchProducts(currentCategoryId);
+        await fetchProducts(currentCategoryId);
       }
     } catch (err: unknown) {
       setLoading(false);
-
       let errorMessage =
         "Failed to add product. Please check your inputs and try again.";
-
       if (err && typeof err === "object") {
         if ("response" in err) {
           const errorResponse = err as {
@@ -403,7 +542,6 @@ const AddProductBusiness_1: React.FC = () => {
             status: errorResponse.response.status,
             data: errorResponse.response.data,
           });
-
           if (typeof errorResponse.response.data === "string") {
             errorMessage = `Error ${errorResponse.response.status}: ${errorResponse.response.data}`;
           } else if (typeof errorResponse.response.data === "object") {
@@ -420,7 +558,6 @@ const AddProductBusiness_1: React.FC = () => {
           errorMessage = `Error: ${(err as { message: string }).message}`;
         }
       }
-
       setError(errorMessage);
       console.error("Full error object:", err);
     }
@@ -438,12 +575,7 @@ const AddProductBusiness_1: React.FC = () => {
 
   // Go back to categories from current view
   const backToCategories = () => {
-    setViewMode("categories");
-    setSelectedCategoryId(null);
-    setSelectedSubCategoryId(null);
-    setSelectedCategoryName("");
-    setProducts([]);
-    setSubCategories([]);
+    fetchCategories(); // Re-fetch categories to ensure data is fresh
   };
 
   // Go back to subcategories from products view
@@ -509,23 +641,26 @@ const AddProductBusiness_1: React.FC = () => {
                 )}
                 <div className="product-actions">
                   <button
-                    className="edit-button"
+                    className="menu-button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      openEditProductForm(product);
+                      setOpenMenuId(
+                        openMenuId === product.id ? null : product.id
+                      );
                     }}
                   >
-                    Edit
+                    <FaEllipsisV />
                   </button>
-                  <button
-                    className="delete-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteProduct(product.id);
-                    }}
-                  >
-                    Delete
-                  </button>
+                  {openMenuId === product.id && (
+                    <div className="dropdown-menu" ref={menuRef}>
+                      <button onClick={() => handleEditClick(product)}>
+                        Edit
+                      </button>
+                      <button onClick={() => handleDeleteClick(product)}>
+                        Delete
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))
@@ -641,7 +776,13 @@ const AddProductBusiness_1: React.FC = () => {
       <Navbar />
 
       {/* Main content container */}
-      <div className="page-content">
+      <div
+        className={`page-content ${
+          showAddProductForm || showEditProductForm || showDeleteConfirmation
+            ? "blurred"
+            : ""
+        }`}
+      >
         {/* Sidebar */}
         <Sidebar_2 />
 
@@ -688,6 +829,7 @@ const AddProductBusiness_1: React.FC = () => {
                       value={newProduct.name}
                       onChange={handleInputChange}
                       required
+                      disabled={loading}
                     />
                   </div>
 
@@ -702,6 +844,7 @@ const AddProductBusiness_1: React.FC = () => {
                       step="0.01"
                       min="0"
                       required
+                      disabled={loading}
                     />
                   </div>
 
@@ -715,6 +858,7 @@ const AddProductBusiness_1: React.FC = () => {
                       onChange={handleInputChange}
                       min="0"
                       required
+                      disabled={loading}
                     />
                   </div>
 
@@ -734,6 +878,7 @@ const AddProductBusiness_1: React.FC = () => {
                         accept="image/*"
                         onChange={handleFileChange}
                         className="file-input"
+                        disabled={loading}
                       />
                     </div>
 
@@ -779,6 +924,7 @@ const AddProductBusiness_1: React.FC = () => {
                       type="button"
                       onClick={addVariant}
                       className="add-button"
+                      disabled={loading}
                     >
                       Add Variant
                     </button>
@@ -791,6 +937,7 @@ const AddProductBusiness_1: React.FC = () => {
                             type="button"
                             className="remove-variant"
                             onClick={() => removeVariant(vIndex)}
+                            disabled={loading}
                           >
                             Remove
                           </button>
@@ -814,6 +961,7 @@ const AddProductBusiness_1: React.FC = () => {
                             step="0.01"
                             min="0"
                             required
+                            disabled={loading}
                           />
                         </div>
 
@@ -834,6 +982,7 @@ const AddProductBusiness_1: React.FC = () => {
                             }
                             min="0"
                             required
+                            disabled={loading}
                           />
                         </div>
 
@@ -852,6 +1001,7 @@ const AddProductBusiness_1: React.FC = () => {
                                 e.target.value
                               )
                             }
+                            disabled={loading}
                           />
                         </div>
 
@@ -868,6 +1018,7 @@ const AddProductBusiness_1: React.FC = () => {
                                 e.target.value
                               )
                             }
+                            disabled={loading}
                           />
                         </div>
 
@@ -886,6 +1037,7 @@ const AddProductBusiness_1: React.FC = () => {
                                 e.target.value
                               )
                             }
+                            disabled={loading}
                           />
                         </div>
 
@@ -900,6 +1052,7 @@ const AddProductBusiness_1: React.FC = () => {
                             onChange={(e) => handleFileChange(e, vIndex)}
                             className="file-input"
                             required
+                            disabled={loading}
                           />
                           {variant.image instanceof File && (
                             <div className="file-name">
@@ -932,84 +1085,26 @@ const AddProductBusiness_1: React.FC = () => {
               </div>
             </div>
           )}
-
-          {/* Edit Product Form Modal */}
-          {showEditProductForm && currentEditProduct && (
-            <div className="modal-overlay">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h2>Edit Product</h2>
-                  <button
-                    className="close-button"
-                    onClick={() => setShowEditProductForm(false)}
-                  >
-                    &times;
-                  </button>
-                </div>
-
-                <form onSubmit={handleSubmitEditProduct}>
-                  <div className="form-group">
-                    <label htmlFor="edit-name">Product Name</label>
-                    <input
-                      type="text"
-                      id="edit-name"
-                      name="name"
-                      value={currentEditProduct.name}
-                      onChange={handleEditInputChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="edit-price">Price</label>
-                    <input
-                      type="number"
-                      id="edit-price"
-                      name="price"
-                      value={currentEditProduct.price}
-                      onChange={handleEditInputChange}
-                      step="0.01"
-                      min="0"
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="edit-stock">Stock</label>
-                    <input
-                      type="number"
-                      id="edit-stock"
-                      name="stock"
-                      value={currentEditProduct.stock}
-                      onChange={handleEditInputChange}
-                      min="0"
-                      required
-                    />
-                  </div>
-
-                  <div className="form-actions">
-                    <button
-                      type="submit"
-                      className="submit-button"
-                      disabled={loading}
-                    >
-                      {loading ? "Updating..." : "Update Product"}
-                    </button>
-                    <button
-                      type="button"
-                      className="cancel-button"
-                      onClick={() => setShowEditProductForm(false)}
-                      disabled={loading}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          )}
         </div>
       </div>
+
+      {/* Edit Product Form Modal */}
+      <EditProductForm
+        isOpen={showEditProductForm}
+        onClose={() => setShowEditProductForm(false)}
+        onSubmit={handleSubmitEditProduct}
+        isLoading={loading}
+        product={currentEditProduct}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmationModal
+        isOpen={showDeleteConfirmation}
+        onClose={() => setShowDeleteConfirmation(false)}
+        onConfirm={confirmDeleteProduct}
+        itemName={productToDelete?.name || ""}
+        isLoading={loading}
+      />
     </div>
   );
 };

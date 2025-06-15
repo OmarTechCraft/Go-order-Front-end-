@@ -31,7 +31,8 @@
 /* Base styles for smooth transitions across all elements */
 * {
   transition: color var(--transition-duration) var(--transition-timing-function),
-    background-color var(--transition-duration) var(--transition-timing-function),
+    background-color var(--transition-duration)
+      var(--transition-timing-function),
     transform var(--transition-duration) var(--transition-timing-function),
     box-shadow var(--transition-duration) var(--transition-timing-function),
     border-color var(--transition-duration) var(--transition-timing-function),
@@ -42,7 +43,11 @@
 .sidebar_2 {
   width: var(--sidebar-width-desktop);
   height: calc(100vh - var(--navbar-height));
-  background: linear-gradient(180deg, var(--background-lighter), var(--background-light));
+  background: linear-gradient(
+    180deg,
+    var(--background-lighter),
+    var(--background-light)
+  );
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
@@ -65,7 +70,8 @@
 /* Main content adjustment to account for fixed sidebar */
 .main-content {
   margin-left: var(--sidebar-width-desktop);
-  transition: margin-left var(--transition-duration) var(--transition-timing-function);
+  transition: margin-left var(--transition-duration)
+    var(--transition-timing-function);
   padding-top: var(--navbar-height);
 }
 
@@ -84,7 +90,11 @@
 }
 
 .sidebar_2-top::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, var(--primary-purple), var(--light-purple));
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple),
+    var(--light-purple)
+  );
   border-radius: 10px;
 }
 
@@ -128,7 +138,11 @@
   transform: translateY(-50%);
   height: 80%;
   width: 4px;
-  background: linear-gradient(135deg, var(--primary-purple), var(--light-purple));
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple),
+    var(--light-purple)
+  );
   border-radius: 0 4px 4px 0;
   /* Subtle animation on entry/exit of active state */
   transition: all var(--transition-duration) var(--transition-timing-function);
@@ -147,7 +161,8 @@
   position: relative;
   overflow: hidden;
   /* Enhanced hover/focus transition for links */
-  transition: all 0.3s var(--transition-timing-function), transform 0.2s ease-out;
+  transition: all 0.3s var(--transition-timing-function),
+    transform 0.2s ease-out;
 }
 
 /* Hover effect on menu items */
@@ -165,20 +180,20 @@
   transform: translateX(0); /* Ensure active item doesn't have transform */
 }
 
-/* Icons next to text */
+/* Icons next to text - FIXED TO INHERIT COLOR FROM PARENT */
 .sidebar_2-icon {
   margin-right: 12px;
   font-size: 17px;
-  color: var(--text-light);
+  color: inherit !important; /* Force inherit color from parent link */
   min-width: 17px;
   /* Animation for icon on hover/active */
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Bounce effect */
 }
 
-/* Change icon color on hover or active link */
+/* Change icon color on hover or active link - SIMPLIFIED */
 .sidebar_2-menu li a:hover .sidebar_2-icon,
 .sidebar_2-menu li.active .sidebar_2-icon {
-  color: var(--primary-purple);
+  color: inherit !important; /* Ensure it inherits the link's color */
   transform: scale(1.15) rotate(5deg); /* Slightly larger scale and rotation */
 }
 
@@ -188,7 +203,8 @@
   margin: 2px 10px;
   border-radius: 10px;
   position: relative; /* For the active state marker if needed */
-  transition: background var(--transition-duration) var(--transition-timing-function),
+  transition: background var(--transition-duration)
+      var(--transition-timing-function),
     transform 0.2s ease-out;
 }
 
@@ -215,14 +231,15 @@
 /* Chevron arrow icon on the right */
 .sidebar_2-chevron-icon {
   margin-left: auto;
-  color: var(--text-light);
+  color: inherit !important; /* Inherit from parent */
   font-size: 13px;
-  transition: transform var(--transition-duration) var(--transition-timing-function),
+  transition: transform var(--transition-duration)
+      var(--transition-timing-function),
     color var(--transition-duration) var(--transition-timing-function);
 }
 
 .sidebar_2-orders:hover .sidebar_2-chevron-icon {
-  color: var(--primary-purple);
+  color: inherit !important; /* Inherit from parent */
   transform: scale(1.1) rotate(90deg); /* Rotate for open/close indication */
 }
 .sidebar_2-orders.orders-open .sidebar_2-chevron-icon {
@@ -262,7 +279,11 @@
 }
 
 .sidebar_2-orders-submenu li.active {
-  background: linear-gradient(135deg, var(--primary-purple), var(--light-purple));
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple),
+    var(--light-purple)
+  );
   box-shadow: 0 2px 6px rgba(138, 91, 198, 0.2);
 }
 
@@ -275,7 +296,8 @@
   border-radius: 8px;
   display: block;
   /* Enhanced hover for submenu links */
-  transition: all 0.3s var(--transition-timing-function), transform 0.1s ease-out;
+  transition: all 0.3s var(--transition-timing-function),
+    transform 0.1s ease-out;
 }
 
 .sidebar_2-orders-submenu li a:hover {
@@ -460,7 +482,11 @@
   .sidebar_2 {
     width: var(--sidebar-width-mobile);
     transform: translateX(-100%);
-    background: linear-gradient(180deg, var(--background-lighter), var(--background-light));
+    background: linear-gradient(
+      180deg,
+      var(--background-lighter),
+      var(--background-light)
+    );
     border-right: 1px solid var(--border-color);
     box-shadow: 0 4px 8px var(--shadow-medium);
     height: 100vh;
