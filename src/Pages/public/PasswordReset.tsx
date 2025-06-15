@@ -83,9 +83,7 @@ const PasswordReset: React.FC = () => {
         setConfirmPassword("");
 
         // 3. Redirect to /register after a short delay
-        setTimeout(() => {
-          window.location.href = "/register"; // Redirect to the registration page
-        }, 3000); // Redirect after 3 seconds
+        setSuccessMessage("complete the Login Process"); // Redirect after 3 seconds
       } else {
         // Handle unexpected success responses if API behaves differently
         setError("An unexpected issue occurred. Please try again.");
